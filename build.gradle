@@ -5,6 +5,17 @@ plugins {
 
 version '0.0.1'
 
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // 将 AGP 版本升级到 8.2.1 或更高版本
+        classpath 'com.android.tools.build:gradle:8.5.0'
+    }
+}
+
 sourceSets {
     main {
         java {
