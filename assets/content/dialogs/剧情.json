@@ -1,0 +1,138 @@
+{
+  "dialogue_name": "工厂初遇",
+  "type": "此次对话的类型",
+  "tags": ["主线", "新手引导","一些标题"],
+  "trigger_conditions触发条件": {
+    "location": "factory_entrance",
+    "quest_completed": null,
+    "time_of_day": "any"
+  },
+  "nodes": [
+    {
+      "node_id": "start",
+      "speaker": {
+        "name": "厂长·老李",
+        "avatar": "textures/npcs/foreman_li.png",
+        "side": "left"
+      },
+      "text": "新来的？欢迎来到橡塑工厂。这里可不像表面看起来那么简单...",
+      "emotion": "neutral",
+      "audio": "sounds/dialogue/foreman_welcome.ogg",
+      "background": "textures/bg/factory_gate.png",
+      "choices": [
+        {
+          "choice_id": "c1",
+          "text": "我想了解一下工厂的情况",
+          "next_node": "factory_info",
+          "conditions": null,
+          "effects": {
+            "reputation": 5,
+            "unlock_journal": "factory_overview"
+          }
+        },
+        {
+          "choice_id": "c2",
+          "text": "直接带我去工作岗位",
+          "next_node": "work_assignment",
+          "conditions": null,
+          "effects": {
+            "reputation": 0
+          }
+        },
+        {
+          "choice_id": "c3",
+          "text": "这里有什么危险吗？",
+          "next_node": "warning_hint",
+          "conditions": {
+            "stat_perception": ">= 8"
+          },
+          "effects": {
+            "reputation": 10,
+            "flag_set": "suspicious_nature"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "factory_info",
+      "speaker": {
+        "name": "厂长·老李",
+        "avatar": "textures/npcs/foreman_li.png",
+        "side": "left"
+      },
+      "text": "我们工厂有三条生产线：橡胶原材、塑料成型和合成加工。每条线都有自己的秘密...",
+      "emotion": "thoughtful",
+      "audio": "sounds/dialogue/factory_info.ogg",
+      "choices": [
+        {
+          "choice_id": "c4",
+          "text": "橡胶线有什么特别？",
+          "next_node": "rubber_line",
+          "effects": {
+            "knowledge_rubber": 1
+          }
+        },
+        {
+          "choice_id": "c5",
+          "text": "我想回去重新选择",
+          "next_node": "start",
+          "effects": null
+        }
+      ]
+    },
+    {
+      "node_id": "work_assignment",
+      "speaker": {
+        "name": "厂长·老李",
+        "avatar": "textures/npcs/foreman_li.png",
+        "side": "left"
+      },
+      "text": "很好，直接去B区报到吧。记住，不要问太多问题。",
+      "emotion": "stern",
+      "choices": [
+        {
+          "choice_id": "c6",
+          "text": "结束对话",
+          "next_node": "end",
+          "effects": {
+            "teleport": "zone_b_entrance",
+            "quest_start": "first_day_work"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "warning_hint",
+      "speaker": {
+        "name": "厂长·老李",
+        "avatar": "textures/npcs/foreman_li.png",
+        "side": "left"
+      },
+      "text": "（压低声音）你眼光很毒...晚上来仓库找我，现在别多问。",
+      "emotion": "secretive",
+      "choices": [
+        {
+          "choice_id": "c7",
+          "text": "我明白了",
+          "next_node": "end",
+          "effects": {
+            "flag_set": "night_meeting_unlocked",
+            "reputation": 15
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "end",
+      "speaker": null,
+      "text": null,
+      "choices": []
+    }
+  ],
+  "global_effects": {
+    "on_complete": {
+      "experience": 50,
+      "unlock_dialogue": ["factory_daily_001", "worker_rumors_001"]
+    }
+  }
+}

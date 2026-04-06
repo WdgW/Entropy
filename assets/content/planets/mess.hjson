@@ -1,0 +1,200 @@
+// 父星球（可选），若为根星球则省略
+parent: "sun"
+
+// sun{radius:4.0}
+// erekir{radius:1.0, sectorSize:2}
+//serpulo{radius:1.0, sectorSize:3}
+// 星球半径（世界单位）
+radius: 2.0
+// 星球网格分割数（决定扇区数量），大于0时生成可着陆表面 Int整数
+sectorSize: 3
+
+// 星球生成器（决定地形、资源等）
+generator: {
+}
+
+// 星球在太阳系中的显示与行为
+orbitSpacing: 14.0          // 与父星球的轨道间距
+drawOrbit: true             // 是否绘制轨道线
+minZoom: 0.3                // 最小相机缩放
+maxZoom: 12                // 最大相机缩放
+tidalLock: false            // 是否潮汐锁定（始终一面朝向母星）
+rotateTime: 1000           // 自转周期（秒）
+orbitTime: 2800          // 公转周期（秒）
+
+// 大气与视觉效果
+hasAtmosphere: true
+atmosphereColor: "6d8ab5"   // 大气层颜色
+atmosphereRadIn: 0.02       // 大气内半径偏移（相对于星球半径）
+atmosphereRadOut: 0.08      // 大气外半径偏移
+landCloudColor: "ffffff80"  // 着陆时的云层颜色（带透明度）
+lightColor: "fff5d0"        // 光源颜色（仅对恒星有效）
+iconColor: "ffcc66"         // 星球选择界面的图标颜色
+
+// 可着陆性相关
+accessible: true            // 是否在星球选择界面显示
+allowLaunchToNumbered: true // 是否允许着陆到编号扇区
+startSector: 0              // 默认起始扇区索引
+defaultCore: "core-shard"   // 默认核心方块
+
+//常量         十进制  二进制       注释
+//terrestrial  1     0000 0001   第0位：位于星球表面
+//space        2     0000 0010   第1位：太空环境，无大气
+//underwater   4     0000 0100   第2位：水下
+//spores       8     0000 1000   第3位：存在孢子
+//scorching    16    0001 0000   第4位：灼热环境
+//groundOil    32    0010 0000   第5位：地下石油
+//groundWater  64    0100 0000   第6位：地下水
+//oxygen       128   1000 0000   第7位：大气含氧
+//any          -1    1111 1111   所有位为1（所有标志）
+ //none        0     0000 0000   无标志
+// 默认环境与属性
+defaultEnv: 225  // 位掩码 把需要的环境十进制数数字加起来
+  
+  
+defaultAttributes: {
+  oil: 0.5
+  water: 0.6
+  spores: 0.3
+}
+
+// 光照与昼夜循环
+updateLighting: true
+lightSrcFrom: 0.0           // 光源起始强度（白天）
+lightSrcTo: 0.8             // 光源最大强度
+lightDstFrom: 0.2           // 暗部起始强度
+lightDstTo: 1.0             // 暗部最大强度
+
+// 战斗与规则
+allowSectorInvasion: true   // 允许扇区入侵
+enemyBuildSpeedMultiplier: 1.0 //敌人建造速度倍率
+enemyInfiniteItems: true    // 敌人无限物品
+prebuildBase: true          // 着陆时预建基地
+allowCampaignRules: false   // 是否允许玩家修改战役规则
+showRtsAIRule: false
+
+// 声音与图标
+launchMusic: "launch"       // 选星球时的背景音乐
+icon: "planet"              // 图标名称（从图集中查找）
+
+// 网格与云层（高级）
+mesh: {
+  type: "MultiMesh",
+  meshes: [
+    {//雪地
+      type: "NoiseMesh",
+      planet: "rubicon",
+      seed: 149,//种子
+      color1: "EAEAEA",//颜色1
+      color2: "D2DDE6",//颜色2
+      alpha: 0,
+      divisions: 6,//分段数
+      radius: 1.99,//半径
+      octaves: 19,//分形次数
+      persistence: 0.5,//持续性
+      scale: 1.2,
+      mag: 0.52
+    },
+    {//雪地
+      type: "NoiseMesh",
+      planet: "rubicon",
+      seed: 32,
+      color1: "EAEAEA",
+      color2: "D2DDE6",
+      alpha: 0,
+      divisions: 6,
+      radius: 1.99,
+      octaves: 15,
+      persistence: 0.5,
+      scale: 0.7,
+      mag: 0.52
+    },
+    {//沙漠
+      type: "NoiseMesh",
+      planet: "rubicon",
+      seed:209,
+      color1: "EEB489",
+      color2: "CB9B71",
+      alpha: 0,
+      divisions: 6,
+      radius: 1.971,
+      octaves: 12,
+      persistence: 0.5,
+      scale: 0.6,
+      mag: 0.5
+    },
+    {//海
+      type: "NoiseMesh",
+      planet: "rubicon",
+      seed: 19,
+      color1: "687888",
+      color2: "566172",
+      alpha: 0,
+      divisions: 6,
+      radius:1.97,
+      octaves: 9,
+      persistence: 0.5,
+      scale: 2,
+      mag: 0.6
+    },
+    {//海
+      type: "NoiseMesh",
+      planet: "rubicon",
+      seed: 238,
+      color1: "687888",
+      color2: "566172",
+      alpha: 0,
+      divisions: 6,
+      radius:1.97,
+      octaves: 13,
+      persistence: 0.5,
+      scale: 1.2,
+      mag: 0.7
+    },
+    {//岩石
+      type: "NoiseMesh",
+      planet: "rubicon",
+      seed: 1005,
+      color1: "63666B",
+      color2: "4A4D51",
+      alpha: 0,
+      divisions: 6,
+      radius: 1.977,
+      octaves: 6,
+      persistence: 0.9,
+      scale: 0.6,
+      mag: 0.52
+    },
+    {//草地
+      type: "NoiseMesh",
+      planet: "rubicon",
+      seed: 754,
+      color1: "6C7E57",
+      color2: "4B5839",
+      alpha: 0,
+      divisions: 6,
+      radius: 1.98,
+      octaves: 8,
+      persistence: 0.7,
+      scale: 0.3,
+      mag: 0.51
+    }
+  ]
+},
+cloudMesh: {
+  type: "NoiseMesh"
+  color: "ffffff"
+  // 可留空表示无云层
+}
+hidden: false
+alwaysUnlocked: true
+
+// 技术树（可选）
+// 如果该星球有自己的科技树，可在此指定根节点
+//techTree: "entropy-iron"
+
+// 解锁后自动解锁的内容（内容名数组）
+//unlockedOnLand: [
+//  "item",
+//  "block"
+//]

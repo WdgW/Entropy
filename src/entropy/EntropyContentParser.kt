@@ -1,0 +1,5 @@
+package entropy
+
+class EntropyContentParser {
+
+}

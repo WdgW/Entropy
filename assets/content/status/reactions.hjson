@@ -1,0 +1,73 @@
+name: "火",
+displayName: "示例反应状态",
+description: "可以与其他状态催化反应的状态",
+type: "ReactiveStatus",
+// 原版通用字段（部分示例）
+damage: 0,
+damageMultiplier: 1.0,
+speedMultiplier: 1.0,
+reloadMultiplier: 1.0,
+healthMultiplier: 1.0,
+color: "ffffff",
+effect: "none",
+applyEffect: "none",
+permanent: false,
+//reactive: false,          // 若设为true，此状态只能由反应生成，不能直接施加
+// ========== 自定义反应系统 ==========
+reactions: [
+  {
+    comment: "示例：燃烧 + 燃油 + 氧气（催化剂）→ 爆炸，并造成范围伤害",
+    reactants: [           // 必需状态列表（至少2个）
+      "burning",             // 状态名（mod内唯一标识）
+      "fuel-oil"
+    ],
+    catalyst: "oxygen",    // 可选催化剂状态（可省略或设为null）
+    product: "explosion",  // 反应生成的新状态
+    consumeReactants: true,// 是否消耗反应物（移除它们）
+    consumeCatalyst: false,// 是否消耗催化剂（默认false）
+    cooldown: 60,          // 反应冷却时间（ticks），防止频繁触发
+    // 反应触发的效果
+    effects: {
+      damage: {            // 范围伤害
+        amount: 50,
+        radius: 64,
+        pierceArmor: false,
+        affectSelf: true   // 是否对自身造成伤害
+      },
+      applyStatus: {       // 范围施加状态
+        status: "stun",
+        duration: 60,      // 施加状态的持续时间（ticks）
+        radius: 48,
+        chance: 1.0        // 施加概率
+      },
+      effect: {            // 范围特效
+        type: "explosion", // 特效类型（Fx名称）
+        color: "ff5500",
+        size: 32,
+        amount: 3
+      },
+      sound: "explosion"   // 播放音效（可选）
+    }
+  },
+  {
+    comment: "另一个反应：电击 + 水（催化剂）→ 麻痹，范围电击特效",
+    reactants: ["shock"],
+    catalyst: "water",
+    product: "paralyze",
+    consumeReactants: false,
+    cooldown: 30,
+    effects: {
+      damage: {
+        amount: 10,
+        radius: 40,
+        lightning: true,   // 是否生成闪电
+        lightningCount: 3
+      },
+      effect: {
+        type: "lightning",
+        color: "88aaff",
+        size: 20
+      }
+    }
+  }
+]

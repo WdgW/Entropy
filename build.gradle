@@ -1,37 +1,49 @@
-apply plugin: "java"
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm' version '2.2.0'
+}
 
-version '1.0'
+version '0.0.1'
 
-sourceSets.main.java.srcDirs = ["src"]
+sourceSets {
+    main {
+        java {
+            srcDir 'src'       // 追加目录
+        }
+    }
+}
 
-repositories{
+repositories {
     mavenCentral()
-    maven{ url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
-    maven{ url 'https://www.jitpack.io' }
+    maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+    maven { url 'https://www.jitpack.io' }
 }
 
-java{
-    targetCompatibility = 8
-    sourceCompatibility = JavaVersion.VERSION_17
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
-ext{
+tasks.withType(JavaCompile).configureEach {
+//    options.release = 8
+    options.compilerArgs.addAll(['--release', '21'])
+    // 如果使用 Jabel，可能需要额外的参数
+}
+
+
+ext {
     //the build number that this mod is made for
-    mindustryVersion = 'v150.1'
+    mindustryVersion = 'v156'
     jabelVersion = "93fde537c7"
     //windows sucks
     isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 }
 
-//java 8 backwards compatibility flag
-allprojects{
-    tasks.withType(JavaCompile){
-        options.compilerArgs.addAll(['--release', '8'])
-    }
-}
-
-dependencies{
+dependencies {
     compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
     compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
 
@@ -39,7 +51,7 @@ dependencies{
 }
 
 //force arc version
-configurations.all{
+configurations.configureEach {
     resolutionStrategy.eachDependency { details ->
         if(details.requested.group == 'com.github.Anuken.Arc'){
             details.useVersion "$mindustryVersion"
@@ -47,54 +59,84 @@ configurations.all{
     }
 }
 
-task jarAndroid{
-    dependsOn "jar"
+tasks.register('jarAndroid') {
+    dependsOn 'jar'
 
-    doLast{
-        if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.");
+    doLast {
+        if (!sdkRoot || !new File(sdkRoot).exists())
+            throw new GradleException("No valid Android SDK found")
 
-        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists()}
+        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find { f ->
+            new File(f, "android.jar").exists()
+        }
+        if (!platformRoot)
+            throw new GradleException("No android.jar found")
 
-        if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
-
-        //collect dependencies needed for desugaring
-        def dependencies = (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList() + [new File(platformRoot, "android.jar")]).collect{ "--classpath $it.path" }.join(" ")
+        def libsDir = layout.buildDirectory.dir("libs").get().asFile
+        def desktopJar = file("$libsDir/${project.name}Desktop.jar")
+        if (!desktopJar.exists()) {
+            throw new GradleException("Desktop jar not found: ${desktopJar}")
+        }
 
         def d8 = isWindows ? "d8.bat" : "d8"
+        def outputJar = "$libsDir/${project.name}Android.jar"
 
-        //dex and desugar files - this requires d8 in your PATH
-        "$d8 $dependencies --min-api 14 --output ${project.archivesBaseName}Android.jar ${project.archivesBaseName}Desktop.jar"
-            .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
+        // 构建 d8 命令
+        def command = [d8]
+        // 指定 Android 运行时库
+        command.add("--lib")
+        command.add(new File(platformRoot, "android.jar").path)
+        // 添加所有依赖作为 classpath
+        configurations.runtimeClasspath.files.each { file ->
+            command.add("--classpath")
+            command.add(file.path)
+        }
+        command.add("--min-api")
+        command.add("14")
+        command.add("--output")
+        command.add(outputJar)
+        // 输入：你的桌面版 jar
+        command.add(desktopJar.path)
+
+        logger.lifecycle("Executing: ${command.join(' ')}")
+        def proc = command.execute(null, libsDir)
+        proc.waitForProcessOutput(System.out, System.err)
+        if (proc.exitValue() != 0) {
+            throw new GradleException("d8 failed with exit code ${proc.exitValue()}")
+        }
     }
 }
 
-jar{
-    archiveFileName = "${base.archivesBaseName}Desktop.jar"
+tasks.named('jar') {
+    archiveFileName = "${project.name}Desktop.jar"
 
-    from{
-        configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
+    from {
+        configurations.runtimeClasspath.files.collect { file ->
+            if (file.isDirectory()) file else zipTree(file)
+        }
     }
 
-    from(projectDir){
+    from(projectDir) {
         include "mod.hjson"
     }
 
-    from("assets/"){
+    from("assets/") {
         include "**"
     }
 }
 
-task deploy(type: Jar){
-    dependsOn jarAndroid
-    dependsOn jar
-    archiveFileName = "${base.archivesBaseName}.jar"
+tasks.register('deploy', Jar) {
+    dependsOn 'jarAndroid', 'jar'
+    archiveFileName = "${project.name}.jar"
 
-    from{ [zipTree("$buildDir/libs/${project.archivesBaseName}Desktop.jar"), zipTree("$buildDir/libs/${project.archivesBaseName}Android.jar")] }
+    // 使用 layout.buildDirectory 代替 buildDir
+    def libsDir = layout.buildDirectory.dir("libs").get().asFile
 
-    doLast{
-        delete{
-            delete "$buildDir/libs/${project.archivesBaseName}Desktop.jar"
-            delete "$buildDir/libs/${project.archivesBaseName}Android.jar"
-        }
+    from zipTree(file("$libsDir/${project.name}Desktop.jar")),
+            zipTree(file("$libsDir/${project.name}Android.jar"))
+
+    doLast {
+        delete file("$libsDir/${project.name}Desktop.jar"),
+                file("$libsDir/${project.name}Android.jar")
     }
 }
