@@ -43,7 +43,7 @@ public class BuilderAI extends AIController {
         if (rebuildPeriod == defaultRebuildPeriod && unit.team.rules().buildAi) {
             rebuildPeriod = 10f;
         }
-        Log.infoTag("Entropy","已加载")
+        Log.infoTag("Entropy","已加载");
     }
 
     // ----- 核心重写部分 start -----
