@@ -1,5 +1,7 @@
 package entropy
 
 class EntropyContentParser {
-    fun parser()
+    fun parser():Unit{
+    //TODO
+    }
 }
