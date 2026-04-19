@@ -17,7 +17,7 @@ public class BuilderAI extends AIController {
     public static float buildRadius = 1500, retreatDst = 110f, retreatDelay = Time.toSeconds * 2f, defaultRebuildPeriod = 60f * 2f;
 
     // 核心修改: 定义空闲时跟随玩家的距离，单位: 世界单位 (tilesize = 8)
-    public static float idleFollowDistance = 10f * tilesize;
+    public static float idleFollowDistance = 20f * tilesize;
 
     public @Nullable Unit assistFollowing;
     public @Nullable Unit following;
@@ -43,6 +43,7 @@ public class BuilderAI extends AIController {
         if (rebuildPeriod == defaultRebuildPeriod && unit.team.rules().buildAi) {
             rebuildPeriod = 10f;
         }
+        Log.infoTag("Entropy","已加载")
     }
 
     // ----- 核心重写部分 start -----
