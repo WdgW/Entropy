@@ -15,14 +15,14 @@ class Entropy : Mod() {
     val mod: Mods.LoadedMod = Vars.mods.getMod(Entropy::class.java)
     val contentRoot: Fi = mod.root.child("content")
    // val configs
-    var isLoadExamples: Boolean = contentRoot.exists {
+    var isLoadExamples: Boolean = contentRoot.exists(false) {
         // TODO
         return@exists false
     }
     
-    fun<T> Fi.exists(func:()->T):T{
-        if (this.exists()) {return func()}
-    }
+    fun <T> Fi.existsOrDefault(default: T, func: () -> T): T {
+    return if (exists()) func() else default
+}
 
     init {
         "-----------------------------------".log()
