@@ -17,10 +17,11 @@ class Entropy : Mod() {
    // val configs
     var isLoadExamples: Boolean = contentRoot.exists {
         // TODO
+        return false
     }
     
-    fun Fi.exists(func:()->Unit){
-        if (this.exists()) {func()}
+    fun<T> Fi.exists(func:()->T):T{
+        if (this.exists()) {return func()}
     }
 
     init {
