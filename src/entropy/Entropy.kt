@@ -12,8 +12,8 @@ import entropy.EntropyContentType as ECT
 
 
 class Entropy : Mod() {
-    val mod: Mods.LoadedMod = Vars.mods.getMod(Entropy::class.java)
-    val contentRoot: Fi = mod.root.child("content")
+    val mod: Mods.LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
+    val contentRoot: Fi by lazy {mod.root.child("content") }
    // val configs
     //var isLoadExamples: Boolean = contentRoot.exists(false) {
      //   // TODO
