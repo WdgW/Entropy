@@ -8,7 +8,11 @@ import mindustry.Vars
 import mindustry.mod.Mod
 import mindustry.mod.Mods
 import mindustry.mod.Mods.LoadedMod
+import mindustry.input.Binding
+import mindustry.ai.UnitCommand
+import mindustry.ai.types.BuilderAI
 import entropy.EntropyContentType as ECT
+
 
 
 class Entropy : Mod() {
@@ -53,6 +57,9 @@ class Entropy : Mod() {
     override fun loadContent() {
         "Loading some entropy content.".log()
         loadCustomJsonContent()
+        
+        UnitCommand.rebuildCommand = new UnitCommand("rebuild", "hammer", Binding.unitCommandRebuild, u -> new BuilderAI());
+        
     }
 
     fun loadCustomJsonContent() {
