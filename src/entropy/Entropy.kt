@@ -58,7 +58,7 @@ class Entropy : Mod() {
         "Loading some entropy content.".log()
         loadCustomJsonContent()
         
-        UnitCommand.rebuildCommand = UnitCommand("rebuild", "hammer", Binding.unitCommandRebuild, u -> BuilderAI())
+        UnitCommand.rebuildCommand = UnitCommand("rebuild", "hammer", Binding.unitCommandRebuild){BuilderAI()}
         
     }
 
