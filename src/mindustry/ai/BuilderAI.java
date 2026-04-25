@@ -28,11 +28,16 @@ public class BuilderAI extends AIController {
     public boolean onlyAssist;
     boolean found = false;
     float retreatTimer;
+    
+    static {
+    Log.infoTag("Entropy","已加载");
+    }
 
     // 构造函数保持不变
     public BuilderAI(boolean alwaysFlee, float fleeRange) {
         this.alwaysFlee = alwaysFlee;
         this.fleeRange = fleeRange;
+        Log.infoTag("Entropy","已加载");
     }
 
     public BuilderAI() {
