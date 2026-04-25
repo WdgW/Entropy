@@ -41,6 +41,7 @@ public class BuilderAI extends AIController {
     }
 
     public BuilderAI() {
+    Log.infoTag("Entropy","已加载");
     }
 
     @Override
