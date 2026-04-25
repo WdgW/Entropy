@@ -11,6 +11,7 @@ import mindustry.mod.Mods.LoadedMod
 import mindustry.input.Binding
 import mindustry.ai.UnitCommand
 import mindustry.ai.types.BuilderAI
+import mindustry.content.UnitTypes
 import entropy.EntropyContentType as ECT
 
 
@@ -59,6 +60,8 @@ class Entropy : Mod() {
         loadCustomJsonContent()
         
         UnitCommand.rebuildCommand = UnitCommand("rebuild", "hammer", Binding.unitCommandRebuild){BuilderAI()}
+        UnitTypes.poly.defaultCommand = UnitCommand.rebuildCommand
+        
         
     }
 
