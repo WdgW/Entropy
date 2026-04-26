@@ -128,7 +128,7 @@ class BuilderAIn extends BuilderAI{
             if(assistFollowing != null && !hold){
                 //对跟随半径进行调整
                 moveTo(assistFollowing, assistFollowing.type.hitSize + unit.type.hitSize*3/4f + 60f);
-                moving = !unit.within(assistFollowing, assistFollowing.type.hitSize + unit.type.hitSize/2f + 65f);
+                moving = !unit.within(assistFollowing, assistFollowing.type.hitSize + unit.type.hitSize*3/4f + 65f);
             }
 
             //follow someone and help them build
