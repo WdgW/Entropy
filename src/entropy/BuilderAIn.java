@@ -3,7 +3,7 @@ package entropy;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.ai.*;
-import mindustry.ai.type.*;
+import mindustry.ai.types.*;
 import mindustry.entities.*;
 import mindustry.entities.units.*;
 import mindustry.game.Teams.*;
