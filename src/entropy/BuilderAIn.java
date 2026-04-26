@@ -1,4 +1,4 @@
-package entropy
+package entropy;
 
 import arc.struct.*;
 import arc.util.*;
