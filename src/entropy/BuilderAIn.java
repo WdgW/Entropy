@@ -14,15 +14,15 @@ import static mindustry.Vars.*;
 
 class BuilderAIn extends BuilderAI{
 
-    public BuilderAI(boolean alwaysFlee, float fleeRange){
+    public BuilderAIn(boolean alwaysFlee, float fleeRange){
         super(alwaysFlee,fleeRange);
     }
     
-    public BuilderAI(boolean onlyAssist){
+    public BuilderAIn(boolean onlyAssist){
         this.onlyAssist = onlyAssist;
     }
 
-    public BuilderAI(){
+    public BuilderAIn(){
     }
 
     @Override
