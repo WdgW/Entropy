@@ -14,6 +14,9 @@ import static mindustry.Vars.*;
 
 class BuilderAIn extends BuilderAI{
 
+    boolean found = false;
+    float retreatTimer;
+    
     public BuilderAIn(boolean alwaysFlee, float fleeRange){
         super(alwaysFlee,fleeRange);
     }
