@@ -13,7 +13,7 @@ import mindustry.ai.UnitCommand
 import mindustry.ai.types.BuilderAI
 import mindustry.content.UnitTypes
 import entropy.EntropyContentType as ECT
-
+import entropy.*
 
 
 class Entropy : Mod() {
