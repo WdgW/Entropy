@@ -219,7 +219,8 @@ class BuilderAIn extends BuilderAI{
         }
     }
 
-    protected boolean nearEnemy(int x, int y){
-        return Units.nearEnemy(unit.team, x * tilesize - fleeRange/2f, y * tilesize - fleeRange/2f, fleeRange, fleeRange);
-    }
+//    protected boolean nearEnemy(int x, int y){
+//        return super.nearEnemy(x, y);
+////        return Units.nearEnemy(unit.team, x * tilesize - fleeRange/2f, y * tilesize - fleeRange/2f, fleeRange, fleeRange);
+//    }
 }
