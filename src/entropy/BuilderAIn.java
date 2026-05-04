@@ -1,15 +1,17 @@
 package entropy;
 
-import arc.struct.*;
-import arc.util.*;
-import mindustry.ai.*;
-import mindustry.ai.types.*;
-import mindustry.entities.*;
-import mindustry.entities.units.*;
-import mindustry.game.Teams.*;
-import mindustry.gen.*;
-import mindustry.world.*;
-import mindustry.world.blocks.ConstructBlock.*;
+import arc.util.Time;
+import mindustry.ai.UnitStance;
+import mindustry.ai.types.BuilderAI;
+import mindustry.entities.Units;
+import mindustry.entities.units.BuildPlan;
+import mindustry.game.Teams.BlockPlan;
+import mindustry.gen.Building;
+import mindustry.gen.Groups;
+import mindustry.gen.Player;
+import mindustry.world.Build;
+import mindustry.world.blocks.ConstructBlock.ConstructBuild;
+
 import static mindustry.Vars.*;
 
 class BuilderAIn extends BuilderAI{

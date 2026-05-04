@@ -4,21 +4,21 @@ import arc.files.Fi
 import arc.func.Boolf
 import arc.struct.Seq
 import arc.util.Log
+import arc.util.serialization.Json
 import mindustry.Vars
+import mindustry.ai.UnitCommand
+import mindustry.input.Binding
 import mindustry.mod.Mod
 import mindustry.mod.Mods
 import mindustry.mod.Mods.LoadedMod
-import mindustry.input.Binding
-import mindustry.ai.UnitCommand
-import mindustry.ai.types.BuilderAI
-import mindustry.content.UnitTypes
 import entropy.EntropyContentType as ECT
-import entropy.BuilderAIn
 
 
 class Entropy : Mod() {
     val mod: Mods.LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
     val contentRoot: Fi by lazy {mod.root.child("content") }
+    val modJsonFi: Fi by lazy {if (mod.root.child("mod.json").exists()) mod.root.child("mod.json")else mod.root.child("mod.hjson") }
+    val json : Json = Json()
    // val configs
     //var isLoadExamples: Boolean = contentRoot.exists(false) {
      //   // TODO
@@ -59,7 +59,9 @@ class Entropy : Mod() {
         "Loading some entropy content.".log()
         loadCustomJsonContent()
         
-        UnitCommand.assistCommand = UnitCommand("assist", "players", Binding.unitCommandAssist){BuilderAIn(true)}  
+        UnitCommand.assistCommand = UnitCommand("assist", "players", Binding.unitCommandAssist){BuilderAIn(true)}
+        modJsonFi.readString().log()
+//        val modjson = json.readField()
         
     }
 
@@ -72,7 +74,7 @@ class Entropy : Mod() {
             val lower = type.name.lowercase()
             val folder = contentRoot.child(lower + (if (lower.endsWith("s")) "" else "s"))
             if (folder.exists()) {
-                for (file in folder.findAll(Boolf { f: Fi? -> f!!.extension() == "json" || f.extension() == "hjson" })) {
+                for (file in folder.findAll { f: Fi -> f.extension() == "json" || f.extension() == "hjson" }) {
                     file.name().log()
                     runs.add(LoadRun(type, file, mod))
                 }
@@ -82,7 +84,7 @@ class Entropy : Mod() {
 
         for (l in runs) {
             val current = Vars.content.lastAdded
-            l.log()
+//            l.log()
             //TODO(还没写完:~:)
             when (l.type){
                 ECT.reaction -> {
@@ -110,7 +112,7 @@ class Entropy : Mod() {
     }
 
     fun <T>  T.log(){
-        Log.infoTag("Entropy",this.toString())
+        Log.infoTag("Entropy", this.toString())
     }
 
     data class LoadRun(val type: ECT, val file: Fi, val mod: LoadedMod) : Comparable<LoadRun> {
