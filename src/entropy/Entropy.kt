@@ -17,55 +17,39 @@ import entropy.BuilderAIn
 
 
 class Entropy : Mod() {
-    val mod: Mods.LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
-    val contentRoot: Fi by lazy {mod.root.child("content") }
+    private var mod: Mods.LoadedMod? = null
+    private var contentRoot: Fi? = null
+    private var modMeta: EntropyModMeta? = null
     
-    val modMeta: EntropyModMeta? by lazy {
-        EntropyModMeta.read(mod.root.child("mod.json")) ?: EntropyModMeta.read(mod.root.child("mod.hjson"))
-    }
-   // val configs
-    //var isLoadExamples: Boolean = contentRoot.exists(false) {
-     //   // TODO
-    //    false
-    //}
+    // val configs
+    // var isLoadExamples: Boolean = contentRoot.exists(false) {
+    //     // TODO
+    //     false
+    // }
     
-    //fun <T> Fi.existsOrDefault(default: T, func: () -> T): T {
-    //return if (exists()) func() else default
-//}
-
-    init {
-        "-----------------------------------".log()
-        modMeta.log()
-        
-        // 获取自定义contents字段
-        modMeta?.contents?.forEach { contentType ->
-            "Loading content type: $contentType".log()
-        }
-        
-//        Vars.mods.addParseListener { type, values, any ->
-//            Log.info("11111111111111111111111")
-//            type.log()
-//            values.log()
-//            if (type == Reaction::class.java) {
-//                Log.info("Found reaction: $any")//
-//            }
-//        }
-
-        //listen for game load event
-//        Events.on<ClientLoadEvent?>(ClientLoadEvent::class.java, Cons { e: ClientLoadEvent? ->
-//            //show dialog upon startup
-//            Time.runTask(10f, Runnable {
-//                val dialog = BaseDialog("frog")
-//                dialog.cont.add("behold").row()
-//                //mod sprites are prefixed with the mod name (this mod is called 'entropy-java-mod' in its config)
-//                dialog.cont.image(Core.atlas.find("entropy-java-mod-frog")).pad(20f).row()
-//                dialog.cont.button("I see", Runnable { dialog.hide() }).size(100f, 50f)
-//                dialog.show()
-//            })
-//        })
-    }
+    // fun <T> Fi.existsOrDefault(default: T, func: () -> T): T {
+    // return if (exists()) func() else default
+// }
 
     override fun loadContent() {
+        "-----------------------------------".log()
+        
+        // 此时模块已经完全加载，可以安全访问了
+        mod = Vars.mods.getMod(Entropy::class.java)
+        mod?.let { loadedMod ->
+            contentRoot = loadedMod.root.child("content")
+            
+            modMeta = EntropyModMeta.read(loadedMod.root.child("mod.json")) 
+                ?: EntropyModMeta.read(loadedMod.root.child("mod.hjson"))
+            
+            modMeta.log()
+            
+            // 获取自定义contents字段
+            modMeta?.contents?.forEach { contentType ->
+                "Loading content type: $contentType".log()
+            }
+        }
+        
         "Loading some entropy content.".log()
         loadCustomJsonContent()
         
@@ -75,6 +59,17 @@ class Entropy : Mod() {
 
     fun loadCustomJsonContent() {
         "Loading custom entropy json content.".log()
+        
+        val loadedMod = mod ?: run {
+            "Mod not loaded yet, skipping.".log()
+            return
+        }
+        
+        val root = contentRoot ?: run {
+            "Content root not found, skipping.".log()
+            return
+        }
+        
         val runs: Seq<LoadRun> = Seq<LoadRun>()
         
         val allowedContents = modMeta?.contents?.toSet() ?: ECT.all.map { it.name.lowercase() }.toSet()
@@ -85,11 +80,11 @@ class Entropy : Mod() {
                 "Skipping content type: $lower (not in contents list)".log()
                 continue
             }
-            val folder = contentRoot.child(lower + (if (lower.endsWith("s")) "" else "s"))
+            val folder = root.child(lower + (if (lower.endsWith("s")) "" else "s"))
             if (folder.exists()) {
                 for (file in folder.findAll(Boolf { f: Fi? -> f!!.extension() == "json" || f.extension() == "hjson" })) {
                     file.name().log()
-                    runs.add(LoadRun(type, file, mod))
+                    runs.add(LoadRun(type, file, loadedMod))
                 }
             }
         }
