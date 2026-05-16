@@ -19,6 +19,10 @@ import entropy.BuilderAIn
 class Entropy : Mod() {
     val mod: Mods.LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
     val contentRoot: Fi by lazy {mod.root.child("content") }
+    
+    val modMeta: EntropyModMeta? by lazy {
+        EntropyModMeta.read(mod.root.child("mod.json")) ?: EntropyModMeta.read(mod.root.child("mod.hjson"))
+    }
    // val configs
     //var isLoadExamples: Boolean = contentRoot.exists(false) {
      //   // TODO
@@ -31,7 +35,13 @@ class Entropy : Mod() {
 
     init {
         "-----------------------------------".log()
-
+        modMeta.log()
+        
+        // 获取自定义contents字段
+        modMeta?.contents?.forEach { contentType ->
+            "Loading content type: $contentType".log()
+        }
+        
 //        Vars.mods.addParseListener { type, values, any ->
 //            Log.info("11111111111111111111111")
 //            type.log()
@@ -65,11 +75,16 @@ class Entropy : Mod() {
 
     fun loadCustomJsonContent() {
         "Loading custom entropy json content.".log()
-//        val parser = ContentParser()
         val runs: Seq<LoadRun> = Seq<LoadRun>()
+        
+        val allowedContents = modMeta?.contents?.toSet() ?: ECT.all.map { it.name.lowercase() }.toSet()
 
         for (type in ECT.all) {
             val lower = type.name.lowercase()
+            if (lower !in allowedContents) {
+                "Skipping content type: $lower (not in contents list)".log()
+                continue
+            }
             val folder = contentRoot.child(lower + (if (lower.endsWith("s")) "" else "s"))
             if (folder.exists()) {
                 for (file in folder.findAll(Boolf { f: Fi? -> f!!.extension() == "json" || f.extension() == "hjson" })) {
@@ -83,29 +98,11 @@ class Entropy : Mod() {
         for (l in runs) {
             val current = Vars.content.lastAdded
             l.log()
-            //TODO(还没写完:~:)
             when (l.type){
                 ECT.reaction -> {
 
                 }
             }
-//            try {
-//                //this binds the content but does not load it entirely
-//                val loaded: Content? =
-//                    parser.parse(l.mod, l.file.nameWithoutExtension(), l.file.readString("UTF-8"), l.file, l.type)
-//                Log.debug(
-//                    "[@] Loaded '@'.",
-//                    l.mod.meta.name,
-//                    (if (loaded is UnlockableContent) loaded.localizedName else loaded)
-//                )
-//            } catch (e: Throwable) {
-//                if (current !== Vars.content.lastAdded && Vars.content.lastAdded != null) {
-//                    parser.markError(Vars.content.lastAdded, l.mod, l.file, e)
-//                } else {
-//                    val error = ErrorContent()
-//                    parser.markError(error, l.mod, l.file, e)
-//                }
-//            }
         }
     }
 
