@@ -4,8 +4,8 @@ import arc.files.Fi
 import arc.struct.Seq
 import arc.util.Log
 import arc.util.io.PropertiesUtils
-import arc.util.serialization.JSONValue
-import arc.util.serialization.Jread
+import arc.util.serialization.Json
+import arc.util.serialization.JsonValue
 
 class EntropyModMeta {
     var name: String = ""
@@ -29,36 +29,43 @@ class EntropyModMeta {
     var contents: Array<String> = emptyArray()
 
     companion object {
+        private val json = Json()
+
         fun read(file: Fi): EntropyModMeta? {
             if (!file.exists()) {
-                Log.warnTag("Entropy", "Mod meta file not found: ${file.path()}")
+                Log.warn("[Entropy] Mod meta file not found: ${file.path()}")
                 return null
             }
 
             return try {
-                val json = parseFile(file)
-                json?.let { fromJSON(it) }
+                val content = file.readString("UTF-8")
+                parseContent(content, file.extension())
             } catch (e: Exception) {
-                Log.errTag("Entropy", "Failed to read mod meta: ${file.path()}", e)
+                Log.err("[Entropy] Failed to read mod meta: ${file.path()}")
+                e.printStackTrace()
                 null
             }
         }
 
-        private fun parseFile(file: Fi): JSONValue? {
-            return when (file.extension()) {
-                "json" -> Jread.json(file.readString("UTF-8"))
-                "hjson" -> Jread.hjson(file.readString("UTF-8"))
-                "properties" -> {
-                    val props = PropertiesUtils.load(file.readString("UTF-8"))
-                    val map = mutableMapOf<String, Any>()
-                    props.forEach { k, v -> map[k.toString()] = v }
-                    JSONValue(map)
+        private fun parseContent(content: String, extension: String): EntropyModMeta? {
+            val root: JsonValue? = when (extension) {
+                "json" -> json.parse(content)
+                "hjson" -> {
+                    val cleaned = content.lines()
+                        .filter { !it.trimStart().startsWith("//") && !it.trimStart().startsWith("#") }
+                        .joinToString("\n")
+                    json.parse(cleaned)
                 }
-                else -> null
+                else -> {
+                    Log.warn("[Entropy] Unsupported file extension: $extension")
+                    return null
+                }
             }
+
+            return root?.let { fromJsonValue(it) }
         }
 
-        private fun fromJSON(json: JSONValue): EntropyModMeta {
+        private fun fromJsonValue(json: JsonValue): EntropyModMeta {
             return EntropyModMeta().apply {
                 name = json.getString("name", "")
                 displayName = json.getString("displayName", "")
@@ -75,10 +82,21 @@ class EntropyModMeta {
                 iosCompatible = json.getBoolean("iosCompatible", false)
                 texturescale = json.getFloat("texturescale", 1f)
                 repo = json.getString("repo", "")
-                dependencies = Seq.with(json.getArray("dependencies") { it.asString() })
-                softDependencies = Seq.with(json.getArray("softDependencies") { it.asString() })
-                contentOrder = json.getArray("contentOrder") { it.asString() }.toTypedArray()
-                contents = json.getArray("contents") { it.asString() }.toTypedArray()
+                
+                dependencies = Seq<String>().apply {
+                    json.get("dependencies")?.forEach { 
+                        add(it.string)
+                    }
+                }
+                
+                softDependencies = Seq<String>().apply {
+                    json.get("softDependencies")?.forEach { 
+                        add(it.string)
+                    }
+                }
+                
+                contentOrder = json.get("contentOrder")?.map { it.string }?.toTypedArray() ?: emptyArray()
+                contents = json.get("contents")?.map { it.string }?.toTypedArray() ?: emptyArray()
             }
         }
     }
