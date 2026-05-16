@@ -3,8 +3,8 @@ package entropy
 import arc.files.Fi
 import arc.struct.Seq
 import arc.util.Log
-import arc.util.io.PropertiesUtils
 import arc.util.serialization.Json
+import arc.util.serialization.JsonReader
 import arc.util.serialization.JsonValue
 
 class EntropyModMeta {
@@ -29,6 +29,7 @@ class EntropyModMeta {
     var contents: Array<String> = emptyArray()
 
     companion object {
+        private val reader = JsonReader()
         private val json = Json()
 
         fun read(file: Fi): EntropyModMeta? {
@@ -49,12 +50,11 @@ class EntropyModMeta {
 
         private fun parseContent(content: String, extension: String): EntropyModMeta? {
             val root: JsonValue? = when (extension) {
-                "json" -> json.parse(content)
-                "hjson" -> {
+                "json", "hjson" -> {
                     val cleaned = content.lines()
                         .filter { !it.trimStart().startsWith("//") && !it.trimStart().startsWith("#") }
                         .joinToString("\n")
-                    json.parse(cleaned)
+                    reader.parse(cleaned)
                 }
                 else -> {
                     Log.warn("[Entropy] Unsupported file extension: $extension")
@@ -84,19 +84,30 @@ class EntropyModMeta {
                 repo = json.getString("repo", "")
                 
                 dependencies = Seq<String>().apply {
-                    json.get("dependencies")?.forEach { 
-                        add(it.string)
+                    val deps = json.get("dependencies")
+                    deps?.let {
+                        for (child in it) {
+                            add(child.asString())
+                        }
                     }
                 }
                 
                 softDependencies = Seq<String>().apply {
-                    json.get("softDependencies")?.forEach { 
-                        add(it.string)
+                    val softDeps = json.get("softDependencies")
+                    softDeps?.let {
+                        for (child in it) {
+                            add(child.asString())
+                        }
                     }
                 }
                 
-                contentOrder = json.get("contentOrder")?.map { it.string }?.toTypedArray() ?: emptyArray()
-                contents = json.get("contents")?.map { it.string }?.toTypedArray() ?: emptyArray()
+                contentOrder = json.get("contentOrder")?.let { arr ->
+                    arr.map { it.asString() }.toTypedArray()
+                } ?: emptyArray()
+                
+                contents = json.get("contents")?.let { arr ->
+                    arr.map { it.asString() }.toTypedArray()
+                } ?: emptyArray()
             }
         }
     }
