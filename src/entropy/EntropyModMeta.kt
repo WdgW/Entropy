@@ -3,9 +3,9 @@ package entropy
 import arc.files.Fi
 import arc.struct.Seq
 import arc.util.Log
-import arc.util.serialization.Json
 import arc.util.serialization.JsonReader
 import arc.util.serialization.JsonValue
+import mindustry.mod.Mods
 
 class EntropyModMeta {
     var name: String = ""
@@ -30,84 +30,65 @@ class EntropyModMeta {
 
     companion object {
         private val reader = JsonReader()
-        private val json = Json()
 
-        fun read(file: Fi): EntropyModMeta? {
-            if (!file.exists()) {
-                Log.warn("[Entropy] Mod meta file not found: ${file.path()}")
-                return null
-            }
-
-            return try {
-                val content = file.readString("UTF-8")
-                parseContent(content, file.extension())
-            } catch (e: Exception) {
-                Log.err("[Entropy] Failed to read mod meta: ${file.path()}")
-                e.printStackTrace()
-                null
-            }
-        }
-
-        private fun parseContent(content: String, extension: String): EntropyModMeta? {
-            val root: JsonValue? = when (extension) {
-                "json", "hjson" -> {
-                    val cleaned = content.lines()
-                        .filter { !it.trimStart().startsWith("//") && !it.trimStart().startsWith("#") }
-                        .joinToString("\n")
-                    reader.parse(cleaned)
-                }
-                else -> {
-                    Log.warn("[Entropy] Unsupported file extension: $extension")
-                    return null
-                }
-            }
-
-            return root?.let { fromJsonValue(it) }
-        }
-
-        private fun fromJsonValue(json: JsonValue): EntropyModMeta {
+        fun readFromLoadedMod(loadedMod: Mods.LoadedMod): EntropyModMeta {
+            val meta = loadedMod.meta
             return EntropyModMeta().apply {
-                name = json.getString("name", "")
-                displayName = json.getString("displayName", "")
-                author = json.getString("author", "")
-                description = json.getString("description", "")
-                version = json.getString("version", "0.0.0")
-                minGameVersion = json.getString("minGameVersion", "")
-                subtitle = json.getString("subtitle", "")
-                main = json.getString("main", "")
-                java = json.getBoolean("java", false)
-                hidden = json.getBoolean("hidden", false)
-                pregenerated = json.getBoolean("pregenerated", false)
-                legacyCompatible = json.getBoolean("legacyCompatible", false)
-                iosCompatible = json.getBoolean("iosCompatible", false)
-                texturescale = json.getFloat("texturescale", 1f)
-                repo = json.getString("repo", "")
+                name = meta.name ?: ""
+                displayName = meta.displayName ?: ""
+                author = meta.author ?: ""
+                description = meta.description ?: ""
+                version = meta.version ?: "0.0.0"
+                minGameVersion = meta.minGameVersion ?: ""
+                subtitle = meta.subtitle ?: ""
+                main = meta.main ?: ""
+                java = meta.java
+                hidden = meta.hidden
+                pregenerated = meta.pregenerated
+                legacyCompatible = meta.legacyCompatible
+                iosCompatible = meta.iosCompatible
+                texturescale = meta.texturescale
+                repo = meta.repo ?: ""
                 
-                dependencies = Seq<String>().apply {
-                    val deps = json.get("dependencies")
-                    deps?.let {
-                        for (child in it) {
-                            add(child.asString())
-                        }
+                // 尝试从 mod.hjson 中读取自定义的 contents 字段
+                try {
+                    val hjsonFile = loadedMod.root.child("mod.hjson")
+                    if (hjsonFile.exists()) {
+                        val content = hjsonFile.readString("UTF-8")
+                        Log.info("[Entropy] Reading mod.hjson for custom fields: ${hjsonFile.absolutePath()}")
+                        
+                        // 简单解析查找 contents 字段
+                        parseCustomContents(content, this)
                     }
+                } catch (e: Exception) {
+                    Log.warn("[Entropy] Failed to read custom contents field: ${e.message}")
                 }
-                
-                softDependencies = Seq<String>().apply {
-                    val softDeps = json.get("softDependencies")
-                    softDeps?.let {
-                        for (child in it) {
-                            add(child.asString())
-                        }
+            }
+        }
+        
+        private fun parseCustomContents(content: String, result: EntropyModMeta) {
+            try {
+                // 对于 HJSON，先做基本清理
+                val cleaned = content.lines()
+                    .filter { line ->
+                        val trimmed = line.trimStart()
+                        !(trimmed.startsWith("//") || trimmed.startsWith("#"))
                     }
+                    .joinToString("\n")
+                
+                val root = reader.parse(cleaned)
+                
+                // 读取 contents 字段
+                root.get("contents")?.let { contentsNode ->
+                    val list = mutableListOf<String>()
+                    for (child in contentsNode) {
+                        list.add(child.asString())
+                    }
+                    result.contents = list.toTypedArray()
+                    Log.info("[Entropy] Found custom contents: ${list.joinToString()}")
                 }
-                
-                contentOrder = json.get("contentOrder")?.let { arr ->
-                    arr.map { it.asString() }.toTypedArray()
-                } ?: emptyArray()
-                
-                contents = json.get("contents")?.let { arr ->
-                    arr.map { it.asString() }.toTypedArray()
-                } ?: emptyArray()
+            } catch (e: Exception) {
+                Log.warn("[Entropy] Failed to parse custom contents: ${e.message}")
             }
         }
     }

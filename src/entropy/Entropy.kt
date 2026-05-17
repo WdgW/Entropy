@@ -39,8 +39,8 @@ class Entropy : Mod() {
         mod?.let { loadedMod ->
             contentRoot = loadedMod.root.child("content")
             
-            modMeta = EntropyModMeta.read(loadedMod.root.child("mod.json")) 
-                ?: EntropyModMeta.read(loadedMod.root.child("mod.hjson"))
+            // 使用新方法，从已加载的 mod 中读取，再额外解析自定义字段
+            modMeta = EntropyModMeta.readFromLoadedMod(loadedMod)
             
             modMeta.log()
             
