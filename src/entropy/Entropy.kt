@@ -14,7 +14,8 @@ import mindustry.ai.types.BuilderAI
 import mindustry.content.UnitTypes
 import entropy.EntropyContentType as ECT
 import entropy.BuilderAIn
-
+import arc.util.Strings
+import java.util.Locale
 
 class Entropy : Mod() {
     val mod: Mods.LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
@@ -127,4 +128,105 @@ class Entropy : Mod() {
                     "\ncontent=${file.readString("UTF-8")})"
         }
     }
+    class ModMeta {
+    /** Name as defined in mod.json. Stripped of colors, but may contain spaces. */
+    var name: String = ""
+
+    /** Name without spaces in all lower case. */
+    var internalName: String = ""
+
+    /** Minimum game version that this mod requires, e.g. "140.1" */
+    var minGameVersion: String = "0"
+
+    var displayName: String = ""
+    var author: String = ""
+    var description: String = ""
+    var subtitle: String = ""
+    var version: String = ""
+    var main: String = ""
+    var repo: String = ""
+
+    var dependencies: Seq<String> = Seq.with()
+    var softDependencies: Seq<String> = Seq.with()
+
+    /** Hidden mods are only server-side or client-side, and do not support adding new content. */
+    var hidden: Boolean = false
+
+    /** If true, this mod should be loaded as a Java class mod. */
+    var java: Boolean = false
+
+    /** If true, this script mod is compatible with iOS. */
+    var iosCompatible: Boolean = false
+
+    /** To rescale textures with a different size. */
+    var texturescale: Float = 1.0f
+
+    /** If true, bleeding is skipped and no content icons are generated. */
+    var pregenerated: Boolean = false
+
+    /** If set, load the mod content in this order by content names. */
+    var contentOrder: Array<String> = emptyArray()
+
+    /** Mod from an older major version that is compatible with the latest one as well. */
+    var legacyCompatible: Boolean = false
+
+    companion object {
+        private val blacklistedMods: ObjectSet<String> = ObjectSet.with(
+            "ui-lib", "braindustry", "schema",
+            "scheme-size:1.0.5", "scheme-size:1.0.4", "scheme-size:1.0.3",
+            "scheme-size:1.0.1", "scheme-size:1.0.0", "scheme-size:1.1.0",
+            "scheme-size:1.0.4.1"
+        )
+        const val maxModSubtitleLength: Int = 40
+    }
+    
+    fun isBlacklisted(): Boolean {
+        return blacklistedMods.contains(name) || blacklistedMods.contains("$name:$version")
+    }
+
+    fun shortDescription(): String {
+        val desc = if (subtitle.isNotEmpty()) subtitle
+                   else if (description.isNotEmpty() && description.length <= maxModSubtitleLength) description
+                   else ""
+        return Strings.truncate(desc, maxModSubtitleLength, "...")
+    }
+
+    fun cleanup() {
+        name = Strings.stripColors(name)
+        displayName = Strings.stripColors(displayName)
+        if (displayName.isEmpty()) displayName = name
+        if (version.isEmpty()) version = "0"
+        author = Strings.stripColors(author)
+        description = Strings.stripColors(description)
+        subtitle = Strings.stripColors(subtitle).replace("\n", "")
+        internalName = name.lowercase(Locale.ROOT).replace(" ", "-")
+    }
+
+    fun getMinMajor(): Int {
+        val ver = minGameVersion.ifEmpty { "0" }
+        val dot = ver.indexOf(".")
+        return if (dot != -1) Strings.parseInt(ver.substring(0, dot), 0)
+               else Strings.parseInt(ver, 0)
+    }
+
+    override fun toString(): String {
+        return "ModMeta{" +
+                "name='$name'" +
+                ", minGameVersion='$minGameVersion'" +
+                ", displayName='$displayName'" +
+                ", author='$author'" +
+                ", description='$description'" +
+                ", subtitle='$subtitle'" +
+                ", version='$version'" +
+                ", main='$main'" +
+                ", repo='$repo'" +
+                ", dependencies=$dependencies" +
+                ", softDependencies=$softDependencies" +
+                ", hidden=$hidden" +
+                ", java=$java" +
+                ", texturescale=$texturescale" +
+                ", pregenerated=$pregenerated" +
+                '}'
+    }
+}
 }
