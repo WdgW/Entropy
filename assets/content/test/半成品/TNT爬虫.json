@@ -1,0 +1,72 @@
+{
+"type":"mech",
+"name":"TNT爬虫",
+"description":"见过背着TNT的爬虫见过没",
+"controller":"suicideAI",//ai
+"research":"爆破爬虫",
+"speed":2,//速度
+"mechSideSway":0.11,//偏移
+"hitSize":24,//尺寸
+"health":1024,//生命
+"armor":120,//护甲
+"itemCapacity":40,//背包容量
+"range":80,//范围
+"ammoType":"TNT",
+"weapons":[{
+"name":"TNT爬虫",//名称
+"x":0,"y":0,
+"reload":45,//装弹时间
+"shootCone":360,//射锥
+"shootOnDeath":true,//自杀
+"ejectEffect":"none",
+"shootSound":"explosion",
+"mirror":false,//镜像
+"shoot":{"firstShotDelay":160}
+"bullet":{
+"type":"explosionBulletType",//基础子弹
+"speed":0,
+"rangeOverride":160,//范围覆盖
+"splashDamage":50,//飞溅损坏。
+"splashDamageRadius":55,//飞溅伤害半径。
+"instantDisappear":true,//瞬间消失
+"collides":false,
+"killShooter":true,
+"collidesAir":true,
+"hittable":false,
+"collidesTiles":false,
+"fragBullets":120,//破片弹数量
+"fragRandomSpread":180,//随机分裂角度
+"fragSpread":0,//指定分裂角度
+"fragBullet":{
+"type":"missileBulletType",//弹片子弹型
+"pierce":false,//穿透
+"fromColor":"#ff6f55",//子弹颜色
+"status":"blasted",//击中给予状态
+"splashDamageRadius": 64,//爆炸伤害半径
+"splashDamage": 60, //爆炸损伤
+"length": 64.00,//半径
+"damage": 60.00, //损伤
+"fragBullets":2,//破片弹数量
+"fragRandomSpread":180,//随机分裂角度
+"fragSpread":0,//指定分裂角度
+"fragBullet":{
+"type":"continuousFlameBulletType",//基础子弹
+"damage": 50//伤害
+//"pierce":true,//穿透
+"status":"blasted",//击中给予状态
+"splashDamageRadius": 64,//爆炸伤害半径
+"splashDamage": 60, //爆炸损伤
+"hitSize":2
+"flareLength":60
+"fragBullets":2,//破片弹数量
+"fragRandomSpread":180,//随机分裂角度
+"fragSpread":0,//指定分裂角度
+"fragBullet":{
+"type":"continuousFlameBulletType",//基础子弹
+"damage": 60//伤害
+//"pierce":true,//穿透
+"status":"shocked",//击中给予状态
+"hitSize":2
+"flareLength":60
+}}}}}]
+}

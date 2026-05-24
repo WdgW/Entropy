@@ -1,0 +1,9 @@
+{
+"name": "机械动力-物品源",
+"group":"transportation"
+"size":1
+"type":"itemSource"
+"itemsPerSecond":9000
+"category": "distribution",
+"buildVisibility":"sandboxOnly",
+}

@@ -1,0 +1,39 @@
+{
+	"type": "Conduit",
+	"name": "合金导管",
+	"description": "用很多材料h做的导管",
+    "health": 300,
+	"hasLiquids": true,
+	"liquidCapacity": 50,
+	"outputsLiquid": true,
+	"update": true,
+	"rotate": true,
+	"solid": false,
+	"group": "liquids",
+	"floating": true,
+	"requirements": [
+		{
+			"item": "phase-fabric",
+			"amount": 1
+		},
+		{
+			"item": "thorium",
+			"amount": 1
+		},
+		{
+			"item": "surge-alloy",
+			"amount": 1
+		},
+		{
+			"item": "plastanium",
+			"amount": 1
+		},
+		{
+			"item": "metaglass",
+			"amount": 1
+		},
+	],
+	"category": "liquid",
+	"research": "铜铅钻头"
+	
+}

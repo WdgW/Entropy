@@ -1,0 +1,18 @@
+{
+     "name":"冲压机",//名称
+     "description":"可以把物品压成板",//简介
+    // "details":"",
+     "size":3,//尺寸
+     //"drawer":"DrawMixer"
+     "drawer":{
+	"type":"DrawMulti"
+	"drawers":[
+    "DrawDefault",
+    "DrawFlame"
+    ]}
+     "itemCapacity":50,//物品容量
+     "liquidCapacity":100,//流体容量
+     "requirements":["铁/210","copper/530","silicon/220","碳钢板/150"],//建造花费
+     "research":"碳钢板压制机",//前置科技
+     "category":"crafting",//建造菜单中的位置
+}

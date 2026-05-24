@@ -1,0 +1,30 @@
+{
+    "name":"区块加速器",
+    "type":"OverdriveProjector",
+    "description":"可以给整个区块加速"
+    "speedBoost":1.5,
+    //加速百分比
+    "useTime":300
+    "conductivePower": true,
+    "hasPower":true,
+    "consumes": {
+        "power":33.3334,//耗电1=60
+        "items":{
+        "items":[
+            "surge-alloy/1"
+        ]}}
+    "solid":true
+	//是不是实体，陆地单位能不能走过去
+    "range":20000,
+    //范围
+    "health":1000,
+    //血量
+    "size":5,
+    //大小
+    "canOverdrive":false,
+    //能否超频
+    "requirements":[
+        "超级锭/10","copper/1000","lead/900","plastanium/600","silicon/500","thorium/400"],
+    "category":"effect",
+    "research":"overdrive-dome",
+}

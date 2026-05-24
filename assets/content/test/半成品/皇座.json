@@ -1,0 +1,76 @@
+{"type":"mechUnit"
+"legCount":4,//腿数
+"legLength":16,//最大腿长
+"legBaseOffset":0,//腿根部偏移
+"legExtension":5,//腿部各段长短
+"legSplashDamage":50,//踩踏范围伤害
+"legSplashRange":50,//踩踏范围伤害的范围
+"rippleScale":50,//踩踏特效范围
+"legLengthScl": 3,//腿部最大伸缩
+"targetFlag": "factory", //优先攻击目标标志
+"mass": 100, //单位的质量/重量
+"name": "皇座",
+"speed":2,
+"controller":"groundAI"
+"drag":0.001,
+//"accel":1,
+"rotateSpeed":3,
+"maxVolcity": 10,//最大容量
+  "range":400
+"flying": false,
+"hitSize": 64,
+"health": 80000,
+"targetAir":true,
+"targetGround":true,
+"canBoost": false,
+"circleTarget": true, //圈出目标
+"armor":400,
+"isCounted":true,//被计算在内
+"research":"reign"
+		"engineOffset": 78,	
+	"engineSize": 10,
+"abilities": [
+        {
+              "type": "ForceFieldAbility",
+"radius":80,"regen":500,"max":20000,"cooldown":300
+        }
+]
+"ammoType":"blast-compound",
+"weapons":[
+{
+"name":"皇座-",//名称
+"x":0,"y":0,
+"reload":120,//装弹时间
+"ejectEffect":"none",
+"bullet":{
+"type":"RailBulletType",//基础子弹
+"damage":100,//伤害
+"collidesAir":true,"hitTiles":true,"pierce":true,"pierceArmor":true,
+}}
+{
+"name":"皇座-",//名称
+"x":0,"y":0,
+"reload":120,//装弹时间
+"ejectEffect":"none",l
+//"shootSound":"explosion",
+"bullet":{
+"type":"ArtilleryBulletType",//基础子弹
+"damage":100,//伤害
+"collidesAir":true,"hitTiles":true,"pierce":true,"pierceArmor":true,
+}}
+{
+"name":"    ",//名称
+"x":-2,"y":0,
+"reload":5,//装弹时间
+"ejectEffect":"none",
+//"shootSound":"explosion",
+"bullet":{
+"type":"shrapnelBulletType",//基础子弹
+"damage":100,//伤害
+"collidesAir":true,"hitTiles":true,"pierce":true,"pierceArmor":true,
+}}
+]
+
+
+
+}

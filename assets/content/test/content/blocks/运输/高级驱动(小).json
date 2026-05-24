@@ -1,0 +1,55 @@
+{
+//copper 铜 lead 铅 coal 煤 spore-pod 孢子荚
+//graphite 石墨 silicon 硅 titanium 钛 thorium 钍
+//plastanium 塑钢 surge-alloy 巨浪合金 phase-fabric 相织布
+//pyratite 硫 blast-compound 爆炸混合物 metaglass 钢化玻璃
+    "type": "massDriver",
+    "name":"高级驱动(小)",
+    //名称
+    "description":"远程传送,发射的速度很快小心电没了",
+    "speed":5
+    //描述
+    "size":1,
+    "buildCostMultiplier": 0.1
+	//建造方块的速度倍速
+    "health":600,
+    //血量
+    "itemCapacity": 900,
+    //物品容量
+    "range": 450,
+    //范围
+    "liquidCapacity":8
+    //液体容量
+    "minDistribute":1,
+    //最小发射容量
+    "reload":600,
+    //重载时间
+    "bulletSpeed":100,
+    //子弹飞行速度
+    "rotateSpeed":100,
+    //转动速度
+    "shootEffect":"shieldWave",
+    //射击特效
+    "smokeEffect":"pointHit",
+    //射击时炮口特效
+    "receiveEffect":"pointHit",
+    //接收方的特效
+    "consumes": {
+        "power":10
+    },
+   
+    "requirements": [
+      "lead/400"
+      "copper/400"
+      "graphite/400"
+      "silicon/400"
+      "titanium/400"
+      "metaglass/400"
+      "phase-fabric/50"
+      "plastanium/50"
+      "碳钢板/200"
+    ]
+    "category": "distribution",
+    "research": "合金传送带"
+    //科技排在谁的后面
+}

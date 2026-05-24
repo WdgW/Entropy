@@ -1,0 +1,29 @@
+{
+   "name":"熔炉",
+   "type": "genericCrafter",
+   "description":"烧制矿渣"
+   //描述
+   "size":1,
+   "health":50,
+   "itemCapacity":5,
+   "liquidCapacity":30
+	//容量
+   "craftTime":15,
+   "outputLiquid":"slag/0.4",
+   //输出
+   "consumes": {
+        "power":1
+         "items": {
+            "items": [
+               "铁/1",
+            ]
+         }
+   }
+   "requirements": [
+      "silicon/20"
+      "graphite/20"
+      "铁/10"
+   ]
+   "category": "crafting"
+   "research": "铜铅钻头"
+}

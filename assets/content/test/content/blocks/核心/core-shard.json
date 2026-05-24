@@ -1,0 +1,8 @@
+{
+//初代核心
+  "requirements": [
+		{ "item": "copper", "amount": 1300 },
+		{ "item": "lead", "amount": 850 },
+  ],
+  
+}

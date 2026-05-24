@@ -1,0 +1,14 @@
+{
+	"type":"Unloader",
+	"name":"铜卸载器",
+	"health": 50,
+	"description":"一个卸载器",
+	"speed":14.634146342,
+	"requirements":[
+		{"item":"lead","amount":30},
+		{"item":"copper","amount":30},
+	],
+	"category":"effect",
+	"research": "铜铅钻头",
+	"alwaysUnlocked":true
+}

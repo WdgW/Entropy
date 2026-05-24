@@ -1,0 +1,42 @@
+{
+	"type":"genericCrafter",
+	"description":"通过太阳能发电，让沙子变成硅"
+    //描述
+	"craftEffect":"pulverizeSmall",
+	"name":"太阳能硅厂",
+	"outputItem":"silicon/1",
+	"itemCapacity":4,
+	"health":150,
+	"craftTime":39.6,
+	//生产时间
+	"drawer":{
+	"type":"DrawMulti"
+	"drawers":[
+    "DrawDefault",
+    "DrawFlame"
+    ]}
+	"size":2,
+	"consumes":{
+		"items":{
+			"items":[
+				"sand/2",
+				//"coal/2"
+			]
+		}
+		}
+	"requirements":[
+		"copper/60",
+		"lead/60",
+		"silicon/20"
+	]
+	"research":"silicon-smelter",
+	//科技树中位于合金工厂的后面
+	//加工特效，目前为石墨的特效
+	"category":"crafting"
+	//在建筑菜单中位于工厂子页面
+	//turret 炮塔子页面 production 钻头子页面 
+	//defense 墙子页面 power 电力子页面
+	//logic 逻辑子页面 units 单位子页面
+	//liquid 液体子页面 distribution 传送带子页面
+	//effect 修复仪子页面
+}

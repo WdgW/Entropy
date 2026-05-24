@@ -1,0 +1,23 @@
+{
+	"name": "小型墙壁粉碎机",
+	"description": "",
+	"type": "WallCrafter",
+	"size":1,
+	"health":100,
+	"range":6,
+	"fogRadius":2,//雾半径
+	"hasPower":true,
+	"attribute":"sand",
+	"output":"sand",
+	"drillTime":110
+	"consumes":{
+	     "power":0.08888889,
+	},
+	"requirements": [
+		{"item": "beryllium", "amount":25 }
+		{"item": "graphite", "amount":10 }
+
+	],
+	"category": "production",
+    "research": "小型等离子钻机"
+}

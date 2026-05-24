@@ -1,0 +1,17 @@
+{
+   "type": "stackConveyor",
+   "name": "压缩合金带",
+   "description": ""
+   //描述
+   "health":550,
+   "idleSound":"none"
+   "requirements": [
+      "surge-alloy/1"
+      "thorium/1","plastanium/1","phase-fabric/1"
+   ]
+   "category": "distribution",
+   "itemCapacity": 20,
+	"speed": 0.6,
+	//"displayedSpeed":720,
+   "research": "合金传送带桥",
+}

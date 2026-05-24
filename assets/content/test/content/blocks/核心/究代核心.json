@@ -1,0 +1,32 @@
+{
+	"name": "究代核心",
+	"type":"coreBlock",
+	"description": "基地的核心，比终代核心还要NB",
+	"itemCapacity":20000,
+	"hasItems": true,
+	"health": 10000,
+	"size": 6,
+	"unitCapModifier":35,
+	"unitType":"卡尔玛",
+	"requirements": [
+		{ "item": "copper", "amount": 10000 },
+		{ "item": "lead", "amount": 9000 },
+		{ "item": "铁", "amount": 5000 },
+		{ "item": "thorium", "amount": 6000 },
+		{ "item": "titanium", "amount": 8000 },
+		{ "item": "silicon", "amount": 7000 },
+	],
+	"alwaysUnlocked":true,
+	"category": "effect",
+	"research":{
+	"parent":"铜铅钻头",
+    "requirements": [
+		{ "item": "copper", "amount": 10000 },
+		{ "item": "lead", "amount": 9000 },
+		{ "item": "铁", "amount": 5000 },
+		{ "item": "thorium", "amount": 6000 },
+		{ "item": "titanium", "amount": 8000 },
+		{ "item": "silicon", "amount": 8000 },
+	    ],
+		}
+}

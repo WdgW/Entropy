@@ -1,0 +1,220 @@
+{"type":"itemTurret","hasPower":true,"name": "轨道",
+"description":"",//描述
+"targetAir":true,//是否攻击空军
+"targetGround":true,//是否攻击地面目标
+"unitSort":"strongest",
+"health":2500,"size":5,"shoot":{"firstShotDelay":120,},
+"requirements": ["surge-alloy/200","phase-fabric/300","plastanium/400","silicon/500","titanium/1500","graphite/2000","thorium/600"],
+"consumes": {"power": 35,/*"items":{"items":[
+"blast-compound/20","火药/5",]}*/
+"coolant": {"amount": 0.3,"optional": true}}
+"category": "turret","research": "雷"
+"accurateDelay": false,/*关闭预判！！*/
+"chargeSound":"none",//音效
+"shootSound":"none",
+"smokeSound":"none",
+"despawnSound":"none",
+"hitSound":"none",
+"hasItems": true,
+"itemCapacity": 100,
+     "ammoPerShot":10,//单发消耗
+     "maxAmmo":100,//弹容量
+     "range":8000,//射程，8/格
+     "cooldownTime":300,//攻击间隔
+     "recoil":10,//后坐力
+     "speed":3,//炮台转速
+     "shootCone":2,//最大瞄准偏角
+     "shootShake":0,//射击抖动
+     "coolantMultiplier":1,
+
+"drawer":{"type":"DrawTurret",
+"parts":[
+//中间
+{"type":"RegionPart",
+"mirror":false,//是否镜像显示
+"x":0,"y":0,//起始位置
+"suffix":"-zj","layer":60,"layerOffset":-60,"moveX":0,"moveY":0,
+"moveRot":0,//移动圈数
+}
+//下
+{"type":"RegionPart",
+"mirror":false,//是否镜像显示
+"x":0,"y":0,//起始位置
+"suffix":"-x","layer":60,"layerOffset":0,"moveX":0,"moveY":0,
+"moveRot":0,//移动圈数
+}
+{"type":"RegionPart",
+"mirror":false,//是否镜像显示
+"x":0,"y":0,//起始位置
+"suffix":"-rx","layer":60,"layerOffset":1,"moveX":0,"moveY":0,
+"moveRot":0,//移动圈数
+}
+//左
+{"type":"RegionPart",
+"mirror":false,//是否镜像显示
+"x":0,"y":0,//起始位置
+"suffix":"-z","layer":60,"layerOffset":0,"moveX":-1,"moveY":1,
+"moveRot":0,//移动圈数
+}
+{"type":"RegionPart",
+"mirror":false,//是否镜像显示
+"x":0.625,"y":-0.25,//起始位置
+"suffix":"-rz","layer":60,"layerOffset":40,"moveX":-1,"moveY":1,
+"moveRot":0,//移动圈数
+}
+//右
+{"type":"RegionPart",
+"mirror":false,//是否镜像显示
+"x":0,"y":0,//起始位置
+"suffix":"-y","layer":60,"layerOffset":0,"moveX":1,"moveY":1,
+"moveRot":0,//移动圈数
+}
+{"type":"RegionPart",
+"mirror":false,//是否镜像显示
+"x":-0.625,"y":-0.25,//起始位置
+"suffix":"-ry","layer":60,"layerOffset":40,"moveX":1,"moveY":1,
+"moveRot":0,//移动圈数
+}
+]}
+
+
+
+
+
+     //下为子弹
+     "ammoTypes": {
+     "surge-alloy":{
+     "type":"PointBulletType",//基础子弹
+//"despawnEffect":"none",
+//"hitEffect":"none",
+"despawnEffect":"instBomb"
+"trailEffect":{
+"type":"multiEffect",
+"effects":[
+{
+"type":"ParticleEffect",
+"lifetime": 60,
+"colorFrom":"#ffd555",//开始时颜色
+"colorTo":"#ffe600",//结束时颜色
+"particles":5,//粒子数量
+"randLength":true,//兰德长度？
+"cone":-80,//粒子扩散角度
+"length":40,//粒子移动长度
+"baseLength":4,//粒子在一定长度内出现
+"useRotation":true,//使用旋转
+"line":false,//形状为方形
+"sizeFrom":2,//圆形从开始大小//粒子大小？？
+"sizeTo":0,//圆形至结尾大小}
+}
+]},
+"shootEffect":"instShoot",
+"smokeEffect":"smokeCloud",
+"hitEffect":"instHit"
+"chargeEffect":{
+"type":"multiEffect",
+"effects":[
+{
+"type":"ParticleEffect",
+"lifetime": 180,
+"colorFrom":"f8ff55",//开始时颜色
+"colorTo":"f5ff1c",//结束时颜色
+"particles":30,//粒子数量
+"randLength":true,//兰德长度？
+"cone":360,//粒子扩散角度
+"length":-110,//粒子移动长度
+"baseLength":80,//粒子在一定长度内出现
+"useRotation":true,//使用旋转
+"line":false,//形状为方形
+"sizeFrom":2,//圆形从开始大小//粒子大小？？
+"sizeTo":0,//圆形至结尾大小}
+}
+{
+"type":"ParticleEffect",
+"lifetime": 160,
+"colorFrom":"#ffe600",//开始时颜色
+"colorTo":"#ffd555",//结束时颜色
+"particles":1,//粒子数量
+"randLength":true,//兰德长度？
+"cone":0,//粒子扩散角度
+"length":0,//粒子移动长度
+"baseLength":0,//粒子在一定长度内出现
+"useRotation":true,//使用旋转
+"line":false,//形状为方形
+"sizeFrom":0,//圆形从开始大小//粒子大小？？
+"sizeTo":2,//圆形至结尾大小}
+}
+]},
+"lifetime":60,
+"trailSpacing":8,
+"speed":100000000
+             "damage":3000,//伤害
+             "knockback":10,//击中减速
+             "hitTiles":false,//攻击方块
+             "buildingDamageMultiplier":0.2,
+            // "backColor":"#ffe600",
+            // "frontColor":"#f5ff1c",//背景色//正面颜色
+     }
+     "plastanium":{
+     "type":"RailBulletType",//基础子弹
+//"despawnEffect":"none",
+//"hitEffect":"none",
+"despawnEffect":"instBomb"
+"trailEffect":"instTrail",
+"shootEffect":"instShoot",
+"smokeEffect":"smokeCloud",
+//"chargeEffect":"none",
+"lifetime":60,
+"speed":100000000
+             "damage":2000,//伤害
+             "pierceDamageFactor":0.05,
+             "furthest":8000,"length":8000,
+             "pointEffectSpace":8000
+             "knockback":10,//击中减速
+             "hitTiles":false,//攻击方块
+             "backColor":"#ffe600",
+             "buildingDamageMultiplier":0.2,
+             "frontColor":"#f5ff1c",//背景色//正面颜色
+     }
+
+}
+}
+/*foreshadow = new ItemTurret("foreshadow"){{
+            float brange = range = 500f;
+
+            requirements(Category.turret, with(Items.copper, 1000, Items.metaglass, 600, Items.surgeAlloy, 300, Items.plastanium, 200, Items.silicon, 600));
+            ammo(
+                Items.surgeAlloy, new PointBulletType(){{点项目符号类型。
+                    shootEffect = Fx.instShoot;
+                    hitEffect = Fx.instHit;
+                    smokeEffect = Fx.smokeCloud;
+                    trailEffect = Fx.instTrail;
+                    despawnEffect = Fx.instBomb;
+                    trailSpacing = 20f;
+                    damage = 1350;
+                    buildingDamageMultiplier = 0.2f;
+                    speed = brange;
+                    hitShake = 6f;
+                    ammoMultiplier = 1f;
+                }}
+            );
+
+            maxAmmo = 40;
+            ammoPerShot = 5;
+            rotateSpeed = 2f;
+            reload = 200f;
+            ammoUseEffect = Fx.casing3Double;
+            recoil = 5f;
+            cooldownTime = reload;
+            shake = 4f;
+            size = 4;
+            shootCone = 2f;
+            shootSound = Sounds.railgun;
+            unitSort = UnitSorts.strongest;
+            envEnabled |= Env.space;
+
+            coolantMultiplier = 0.4f;
+            scaledHealth = 150;
+
+            coolant = consumeCoolant(1f);
+            consumePower(10f);
+        }};

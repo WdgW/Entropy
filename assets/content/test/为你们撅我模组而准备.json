@@ -1,0 +1,262 @@
+//有的为机翻。  待完善   
+通用  方块  物品  液体  状态
+
+搜索关键词: 
+|通用 
+|矿
+|炮塔
+—
+
+
+
+--------------------------------------------------------
+
+
+通用
+"type":"xx"//类型
+"name":"xx"//名字
+"description":"xxx"//描述
+"details":"xx"//小字注解
+"size":1//大小/n*n/不能超过16
+
+
+--------------------------------------------------------
+
+方块
+"block"
+1.矿 environment
+代码:
+"itemDrop"://对应的物品/挖出的物品
+"playerUnmineable"://玩家能否挖掘
+"variants"://贴图数量
+"oreDefault"://矿石违约
+"useColor"://使用颜色
+"oreScale"://自动生成的规模
+"oreThreshold"://自动生成的密集度
+"oreDefault"://是否自动生成
+
+
+
+
+//多前置/自定义研究消耗
+	"research": {
+		"parent": "前置",
+		"objectives": [
+			{
+				"type": "Produce",
+				"preset": "物品名字"
+			}
+		],
+		"requirements": [//自定义研究消耗
+			"plastanium/52500",
+			"导能回路/30000",
+			"生物钢/18000",
+			"肃正协议/4"
+		]
+	},
+	
+	
+
+/*钻头速度公式
+drillTime + hardnessDrillMultiplier * item.hardness;*/
+-------------------------------------------------------
+//"affinities":["冲击"],//反应//消耗
+//"reactive":"true",//反应性//被消耗
+-------------------------------------------------------
+"isEnemy":true,//是敌人
+"isCounted"true,//是否计入波次单位数
+
+
+
+
+//贴图命名xx-preview（仅在菜单难看见，一般动画块用得上）
+------
+炮塔
+"accurateDelay": false,/*关闭预判*/
+"unitSort":"strongest"//优先高级血量最高的
+"shoot":{
+    	"type":"ShootAlternate",//交替射击
+    	"barrels":4,//炮口数量
+		"spread":3,//炮口间距设定
+		"shots":4,//炮口数
+		"firstShotDelay":100,//每次射击前摇
+    }
+
+
+"smokeSound":"none",//
+"shootSound":"none",//攻击声音
+"hitSound":"none",//击中声音
+"despawnSound":"none",//消失声音
+"chargeSound":"none",/*好像在子弹射出之前*/
+"smokeEffect":"none",//烟雾特效
+"shootEffect":"none",//攻击特效
+"hitEffect":"none",//击中特效
+"despawnEffect":"none",//消失特效
+"chargeEffect":"none",/*好像在子弹射出之前产生*/
+/*可以放在炮塔里则子弹里可以不用写
+也可以写在子弹里，仅代表这个子弹的特效
+若都写子弹里的为主
+*/
+
+"ammoType""shootType":{
+
+"weaveMag":3//
+"weaveScale":4//
+
+
+"scaleLife":true,//攻击指定地点
+"fragOnHit":false,//一击即中
+"collidesAir":false,//攻击空军
+"collides":false,//碰撞
+"collidesTiles":false,//碰撞门
+
+"type":"EmpBulletType",
+"hitPowerEffect":"hitEmpSpark",//击中效果
+"trailRotation":true,
+"timeIncrease":3,//加速效果
+"timeDuration":1200,//加速时间
+
+"pierceArmor":true,/*穿甲*/
+"pierceCap":10,//穿透个数
+"pierce":true,//穿透
+"pierceBuilding":true,/*穿透建筑*/
+
+"rangeChange":120,//范围变化。
+
+"trailLength":20,//拖尾长度
+"trailWidth":6,//拖尾宽度
+"trailInterval":3,//试验间隔
+"trailSpacing":16,//轨迹间距。
+
+
+"bulletInterval": 0.5,//间隔多少生成一次
+"intervalBullets": 1,//每个间隔生成的子弹数。
+"intervalRandomSpread": 60,//随机分布角度
+"intervalSpread": 8,//两个子弹之间的角度
+ "intervalAngle": 0,//间隔角度偏移
+"intervalBullet": {}
+
+"healPercent":20,//治疗百分比
+"trailColor":"84F491",//拖尾颜色
+"trailRotation":true,//子弹旋转
+"trailLength":20,//拖尾长度
+"trailWidth":6,//拖尾宽度
+
+//分裂
+"fragBullets":7,//破片弹数量
+"fragVelocityMin":1,//破片最小速度
+"fragVelocityMax":2,//破片最大速度
+"fragRandomSpread":45,//随机分裂范围(度)
+"fragSpread":1,//每个弹片之间的角度
+"fragAngle":0,//随机偏移角度
+"fragOnHit":true,//击中分裂
+"fragLifeMin":0,//最少存在时间
+"fragLifeMax":0,//最多存在时间
+"fragBullet":{}
+
+"type":"RailBulletType",//基础子弹
+"pointEffect":{
+"type":"ParticleEffect",
+"colorFrom":"596ab8",//开始时颜色
+"colorTo":"596ab8",//结束时颜色
+"particles":1,//粒子数量
+"lifetime":10,//存在时间
+"cone":0,//粒子扩散角度
+"length":1,//粒子移动长度
+"baseLength":0,//粒子在一定长度内出现
+"line":true,//形状为方形
+"strokeFrom":1.5,//开始时宽度
+"strokeTo":0.5,//结束时宽度
+"lenFrom":8,//开始时长度
+"lenTo":8,/*结束时长度*/}
+
+
+"heatColor":"ab3400",//过热特效
+"makeFire":true,//点燃
+"velocityRnd":-0.01,//子弹随机减速
+"splashDamage":200,//伤害
+"splashDamageRadius":80,//伤害范围
+"pierce":true,//穿透
+"pierceArmor":true,/*穿甲*/
+"pierceBuilding":true,//穿透建筑
+"absorbable":false,//受力墙影响
+"hittable":false,//被分解
+"reflectable":false,//被反弹
+"knockback":0.5,//击退力
+"lightColor":"84F491",//颜色
+"lightRadius":60,//光半径
+"lightOpacity":0.7,//光不透明度
+"keepVelocity":"false",//保持速度
+"shrinkY":0,//子弹收缩
+
+"status":"none",//赋予状态
+
+
+
+	
+    
+    
+"hitEffect":{//子弹击中特效
+	"type": "multiEffect",//多种特效
+		"effects":[
+{
+"type":"WaveEffect",
+"lifetime": 4
+"colorFrom":"ff0000",//颜色从
+"colorTo":"ff7539",//颜色至
+"lightColor":"ffa255",//浅色
+"sizeFrom":5,//开始时圆环直径
+"sizeTo":0,//结束时圆环直径
+"lightScl":3.0,//轻量级
+"lightOpacity":0.8,//光不透明
+"sides":-1,//双方//效果不明
+"rotation":-1,//回转//效果不明
+"strokeFrom":2,//开始时圆形宽度
+"strokeTo":1,//结束时圆环宽度
+//"interp":linear,//插值
+//"lightInterp":reverse,//插值
+"offsetX":0.0,//偏转x
+"offsetY":0.0//偏转y
+"startDelay":4//开始延迟
+}
+		]
+	},
+"shootEffect":{
+	"type": "multiEffect",//多种特效
+		"effects":[
+{
+"type":"WaveEffect",
+"lifetime": 1200
+"colorFrom":"#e3e3ff",//颜色从
+"colorTo":"#e3e3ff",//颜色至
+"lightColor":"ffffff",//浅色
+"sizeFrom":1,//开始时圆环直径
+"sizeTo":500,//结束时圆环直径
+"lightScl":3.0,//轻量级
+"lightOpacity":0.8,//光不透明
+"sides":-1,//双方//效果不明
+"rotation":-1,//回转//效果不明
+"strokeFrom":1,//开始时圆形宽度
+"strokeTo":10,//结束时圆环宽度
+//"interp":linear,//插值
+//"lightInterp":reverse,//插值
+"offsetX":0.0,//偏转x
+"offsetY":0.0//偏转y
+}
+]}
+}
+"line":true,//线
+
+//来源界限
+"drawer":{
+"type":"DrawTurret",
+"parts":[
+{"type":"ShapePart",//前/外圆/圈
+"color":"#51A3CC",
+"circle":true,"hollow":true,"stroke":0,
+"strokeTo":1.6,"radius":11,"layer":110,"y":20,}
+]}
+
+
+
+"canBoost":false,//是否助推

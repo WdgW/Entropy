@@ -1,0 +1,62 @@
+{
+	"type": "itemTurret",
+	"name": "螺旋",
+	"description": "",
+	"targetAir":true,//是否攻击空军
+	"targetGround":true,//是否攻击地面目标
+	"health":500,//生命值
+	"size":2,//尺寸
+	"inaccuracy":0,//子弹偏移度
+	"reload":6,//射速
+	"hasPower":true,//是否用电
+	"shootSound":"mud",//音效
+	"ammoPerShot":4,//单发消耗
+    "maxAmmo":40,//弹容量
+	"consumes":{
+		"power":5
+	}
+	"rotateSpeed":10,//炮台转动速度
+	"range":240,//射程
+	"shoot":{
+	 "type":"ShootMulti"
+	 "source":{
+	 "type":"ShootPattern"
+    },
+    "dest":[
+    {	"type":"ShootHelix",
+    	"offset":7,
+		"mag":6
+		"scl":6
+    }
+    {	"type":"ShootHelix",
+    	"offset":-7,
+		"mag":-6
+		"scl":-6
+    }]}
+     "ammoTypes": {
+         "graphite": {
+         //钛
+             "type":"BasicBulletType",//基础子弹
+             "lifetime":140,//存在时间，帧
+             "speed":2,//初速度
+             "damage":25,//伤害
+             "hitSize":8,//碰撞箱大小
+             "drawSize":8,//渲染大小
+             "drag":0,//每帧减速度
+             "pierce":false,//穿透
+             "knockback":3,//击中减速
+             "hitTiles":true,//攻击方块
+             "backColor":"ffb039","frontColor":"ffec39",//背景色//正面颜色
+             "width": 8,"height": 8,
+             }
+             }
+	"requirements": [
+		{ "item": "titanium", "amount": 200 },
+		{ "item": "lead", "amount": 200 },
+		{ "item": "silicon", "amount": 83 },
+		{ "item": "graphite", "amount": 76 },
+		{ "item": "碳钢板", "amount": 200 },
+	],
+	"category": "turret",
+	"research": "高射炮"
+	}

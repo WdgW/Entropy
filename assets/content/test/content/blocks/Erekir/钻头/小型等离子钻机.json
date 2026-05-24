@@ -1,0 +1,27 @@
+{
+	"name": "小型等离子钻机",
+	"description": "",
+	"type": "BeamDrill",
+	"size":1,
+	"health":100,
+	"tier": 3,
+	"range":5,
+	"fogRadius":3,
+	"haspower":true,
+	"drillTime":60,
+	//"hasShadow":true//有影子
+	"consumes":{
+	     "power":0.075
+		 "liquid": {
+			"liquid": "water", "amount": 0.25,
+			"booster":true,
+			"optional": true
+		}
+	},
+	"requirements": [
+		{"item": "beryllium", "amount":10 }
+
+	],
+	"category": "production",
+    "research": "plasma-bore"
+}

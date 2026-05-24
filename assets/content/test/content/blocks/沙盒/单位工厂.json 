@@ -1,0 +1,21 @@
+{
+	"type": "unitFactory",
+	"name": "单位工厂",
+	"description": "一座兵工厂",
+    "health":1,
+    "size":2
+    "buildCostMultiplier":0.75
+	"consumes":{
+	"power":0.01
+	},
+	"plans":[
+		{ "unit": "t6", "time": 1, "requirements": [
+		{ "item": "copper", "amount": 1 }
+		]}
+		]
+	"requirements": [
+		"copper/1"
+	],
+	"category":"units",
+    "buildVisibility":"sandboxOnly",
+}

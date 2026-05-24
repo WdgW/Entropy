@@ -1,0 +1,50 @@
+{
+	"type":"genericCrafter",
+	"craftEffect":"pulverizeSmall",
+	"description":"将水、细石墨粉、塑钢粉混合成冷却液"
+    //描述
+	"name":"增强版冷冻液混合机",
+	"outputLiquid":"cryofluid/1",
+	"itemCapacity":10,
+	"liquidCapacity":320,
+	"health":100,
+	"craftTime":120,
+	//生产时间
+"drawer":{
+	"type":"DrawMulti"
+	"drawers":[
+    "DrawDefault",
+    "DrawFlame"
+    ]}
+	"size":2,
+	"consumes":{
+		"power":6
+		//耗电公式为：1=60
+		"liquid": {
+		"liquid":"water"
+		"amount":0.8,
+        "optional": false
+		}
+		"items":{
+			"items":[
+				"graphite/4",
+				"plastanium/1"
+			]
+		}
+	}
+	"requirements":[
+		"copper/100",
+		"lead/60",
+		"graphite/40",
+		"silicon/50",
+		"titanium/70",
+		"thorium/30",
+		"plastanium/10"
+		"铁/30"
+	]
+	"research":"blast-mixer",
+	//科技树中位于合金工厂的后面
+	//加工特效，目前为石墨的特效
+	"category":"crafting"
+	//在建筑菜单中位于工厂子页面
+}

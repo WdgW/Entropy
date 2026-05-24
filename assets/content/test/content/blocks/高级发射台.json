@@ -1,0 +1,23 @@
+{
+    "type":"LaunchPad", 
+    "name":"高级发射台", 
+    "description":"将货物发射至指定区块。", 
+    "health":1000,
+    "size":5, 
+    "buildCostMultiplier":0.1,
+    //建筑速度倍率
+    "itemCapacity":1000, 
+    "launchTime":120,
+    "hasPower":true, 
+    "consumes": {
+        "power": 10
+    },
+	"requirements": [
+		{ "item": "copper", "amount": 1000 },
+		{ "item": "silicon", "amount": 1000 },
+		{ "item": "graphite", "amount": 1000 },
+		{ "item": "lead", "amount": 1000 },
+		],
+	"category": "effect",
+	"research":"高级卸载器"
+}

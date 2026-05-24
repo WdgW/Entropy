@@ -1,0 +1,38 @@
+/*{
+   "type":"GenericCrafter",
+   "description":"在矿渣中获取化学物质",
+   //描述
+   "name": "化学解离机",
+   "health":200,
+   "size":2,
+   "liquidCapacity":50,
+	//容量
+   "craftTime":20,
+   //生产时间÷60
+   "outputLiquids": [
+     "氢氧根/0.0166666666666667", 
+     "钬/0.0166666666666667"
+   ],
+   "hasPower": false,//是否需要电
+   "hasLiquids": true,//是否需要液体
+   "hasItems": false,//是否需要物品
+   "consumes": {
+        "liquid": {
+         "liquid": "slag",
+        //强化液:
+         "amount":0.033333333334,
+        //每秒所需的强化液(数值×60)
+         "booster": false,
+        //加速
+         "optional": false
+        //可选(false为必需)
+        }
+   },
+   "requirements": [
+      "碳钢板/20",
+      "silicon/40",
+      "copper/50"
+   ],
+   "research": "铜铅钻头",
+   "category":"crafting"
+}

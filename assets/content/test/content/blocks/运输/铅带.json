@@ -1,0 +1,20 @@
+{
+   "type": "conveyor",
+   "name": "铅带",
+   "description": "前期工具"
+   //描述
+   "health":55,
+   "itemCapacity":3,
+	//容量
+   "requirements": [
+      "copper/1"
+      "lead/1"
+   ]
+   "category": "distribution",
+   "speed": 0.077,
+   "displayedSpeed":8,
+   "research": "铜铅钻头",
+	"insulated":false,
+    "placeableLiquid":false,
+    "absorbLasers":false
+}

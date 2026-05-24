@@ -1,0 +1,26 @@
+{
+"type":"reconstructor",
+"description":"生产单位。",
+"name":"地空机械厂",
+"size":3,
+"health":500,
+"constructTime":900,
+"consumes":{"power":10
+"items": {
+"items": ["TNT/2000"
+"titanium/4000"
+"coal/1500"
+"graphite/2500"
+"pyratite/2000"
+"blast-compound/1000"
+]}}
+"upgrades":[
+	    ["爆破爬虫","蜘蛛侠"]],
+"requirements": ["copper/5000"
+     "titanium/3000"
+     "silicon/4000"
+     "metaglass/6000"
+     "铁/2000"],
+"category":"units",
+"research":"机械工厂",
+}

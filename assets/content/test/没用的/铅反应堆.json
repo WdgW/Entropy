@@ -1,0 +1,39 @@
+{
+   "type": "NuclearReactor",
+   "description":"利用铅的致密，进行压缩，放出大量的热量，转换为电量。"
+   //描述
+   "name":"铅反应堆",
+   "health":300,
+   "size":3,
+   "hasPower":true,
+   "hasItems":true,
+   "fuelitem": ["lead"]
+   "outputsPower":true
+	//输出电量
+   "powerProduction":7.66666666667,
+	//发电量(1:60)
+   "itemDuration":600,//项目持续时间。
+   "heating":0.01
+   "itemCapacity":15,
+   "consumes": {
+       "items": {
+         "items": [
+               "lead/1"
+         ]
+         }
+         "liquid": {
+         "liquid": "water",
+         "amount": 0.0166666667,
+         "optional": true,
+        //可选(false为必需)
+         }
+   }
+   "requirements": [
+        "silicon/100",
+	    "graphite/50",
+		"copper/300",
+		"lead/100"
+   ]
+   "category": "power",
+   "research": "combustion-generator"
+}

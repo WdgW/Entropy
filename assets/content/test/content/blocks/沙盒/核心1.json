@@ -1,0 +1,18 @@
+{
+	"name": "核心1",
+	"itemCapacity":10000,
+	"hasItems": true,
+	"health": 4000,
+	"size": 1
+	"targetable":false,
+	"isFirstTier":true
+	"update":false,//更新
+	"solid":false,//坚实的
+	"rebuildable":true,//可重建。
+	"breakable": true,//易碎
+	"destructible":true,//可破坏的。
+	"unloadable": true,//可卸载。
+	"unitType":"卡尔玛",
+	"category": "effect",
+	"buildVisibility":"sandboxOnly",
+}

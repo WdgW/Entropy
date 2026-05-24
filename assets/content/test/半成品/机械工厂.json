@@ -1,0 +1,19 @@
+{
+"type":"unitFactory",
+"description":"生产单位。",
+"name":"机械工厂",
+"size":3,
+"health":500,
+"consumes":{"power":10}
+"plans":[
+{ "unit": "爆破爬虫", "time": 600, "requirements": [
+		"silicon/900","coal/2000","graphite/1800" ]
+		}]
+"requirements": ["copper/2000"
+     "titanium/5000"
+     "silicon/3000"
+     "metaglass/2000"
+     "铁/2000"],
+"category":"units",
+"research":"铜铅钻头",
+}

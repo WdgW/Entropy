@@ -1,0 +1,21 @@
+{
+	"name": "建造塔",
+	"description": "浓缩就是精华",
+	"type": "BuildTurret",
+	"health": 1000,
+	"size": 1,
+	"range":440,
+	"buildSpeed": 3,
+	"canOverdrive": true,
+	"consumes": {
+		"power": 5},
+	"requirements": [
+	{ "item":"thorium","amount":320},
+	{ "item":"lead","amount":300},
+	{ "item":"silicon","amount":220},
+	{ "item":"titanium","amount":200},
+	{ "item":"碳钢板","amount":100},
+	],
+	"category": "effect",
+	"research":"铜铅钻头"
+}

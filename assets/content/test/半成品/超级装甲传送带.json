@@ -1,0 +1,18 @@
+{
+   "type": "armoredConveyor",
+   "name": "红晶装甲传送带",
+   "description": "用红晶做的装甲传送带，你不要嫌慢，要怪就怪你游戏帧率太低"
+   //描述
+   "health":2500,
+   "insulated":true,
+   "absorbLasers":true,
+   "requirements": [
+      "超级锭/1"
+   ]
+   "category": "distribution",
+   "research": "超级压缩传送带"
+   "speed": 5,
+   "displayedSpeed": 500,
+   "displayFlow":true,
+   "placeableLiquid": true
+}

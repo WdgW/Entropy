@@ -1,0 +1,20 @@
+{
+    "category": "distribution",
+    "type": "ItemBridge",
+    "requirements": [
+        "titanium/5",
+        "silicon/5",
+        "graphite/5",
+    ],
+    "range": 5,
+    "canOverdrive":true,
+    "hasPower": false,
+    "health":450,
+    "transportTime":4,
+    //运输时间（越小越快）
+    "itemCapacity":20,
+    "name": "钛传送带桥",
+    "description": "可在液体上构建，无需耗电……",
+    "research":"titanium-conveyor",
+    "placeableLiquid":true,
+}

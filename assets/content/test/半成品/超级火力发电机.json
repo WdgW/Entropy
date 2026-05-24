@@ -1,0 +1,21 @@
+{
+	"name":"红晶火力发电机",
+	"description":"来自火力发电机的愤怒",
+	"size":1,
+	"health":1000,
+	"hasPower":true,
+	"hasItems":true,
+	"itemCapacity":20,
+	"outputsPower":true
+	//输出电量
+	"powerProduction":100,
+	//发电量(1:60)
+	"itemDuration":300,
+	//发电时间(每个物品)
+	"requirements":[
+	    {"item":"超级锭","amount":1},
+		{"item":"copper","amount":50},
+		{"item":"lead","amount":50}],
+	"category": "power",
+	"research": "超级锭"
+}

@@ -1,0 +1,26 @@
+{
+    "name": "TNT厂",
+    "type": "genericCrafter",
+    "description": "制作TNT",
+    "size": 2,
+    "health": 450,
+    "itemCapacity": 6000,
+    "craftTime": 30,
+    "outputItem": "TNT/1",
+    "consumes": {
+        "power": 1,
+        "items": {
+            "items": [
+                "火药/2000",
+                "硫磺/3000"
+            ]
+        }
+    },
+    "requirements": [
+        "silicon/20",
+        "graphite/30",
+        "铁/10"
+    ],
+    "category": "crafting",
+    "research": "粉碎机"
+}

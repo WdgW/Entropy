@@ -1,0 +1,36 @@
+{
+   "type": "TractorBeamTurret",
+   "name": "牵引"
+   "description":"仅对地"
+   //描述
+   "health":370,
+   "size":2,
+"retargetTime":1,//重定目标时间。
+    
+"shootCone":2,//射击锥
+//"shootLength":240,//拍摄长度。
+"laserWidth":0.5//激光宽度
+"force":16,//力量。
+"scaledForce":16,//缩放力，成比例的力。
+"damage":0.1,//损害
+"scaledHealth":160,//缩放的运行状况。
+   "hasPower": true,
+   "range":240,
+   "targetGround":true,
+    "targetAir":false,
+   //"scaledHealth":160,//缩放的运行状况。
+   "rotateSpeed":10,
+   "requirements": [
+      "silicon/180"
+      "graphite/50"
+      "titanium/70"
+   ]
+   "consumes": {
+        "power":3,
+        //耗电1=60
+   }
+   "research": "高射炮"
+   //科技排在谁的后面
+   "category":"turret"
+	//在建筑菜单中位于工厂子页面
+}

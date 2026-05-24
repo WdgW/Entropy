@@ -1,0 +1,91 @@
+/*{
+    "type":"PowerTurret"
+    "name": "歼星炮"
+    "description":"你TND高射炮呢！给老子拉上来。"
+   //描述
+    "buildCostMultiplier": 0.1,
+	//建造方块的速度倍速
+    "targetAir":true,
+	//是否攻击空军
+	"targetGround":true,
+	//是否攻击地面目标
+	"health":3800,
+	//生命值
+	"shots":1,
+	"alternate":true,
+	//是否多炮口射击
+	"size":5,
+	//尺寸
+	"requirements": [
+      "copper/10"
+      "lead/20"
+      "surge-alloy/290"
+      "plastanium/300"
+      "phase-fabric/500"
+      "silicon/20"
+    ]
+    "hasliquid":true
+    "shootSound": "artillery"
+	"category":"turret",//菜单栏
+     "ammoPerShot":1,//单发消耗
+     "maxAmmo":40,//弹容量
+     "range":280,//射程，8/格
+     "reload":7,//重新加载时间
+     "inaccuracy": 0.4,
+     "recoil":0,//后坐力
+     "speed":10,//炮台转速
+     "shootCone":8,//最大瞄准偏角
+     "shootShake":0,//射击抖动
+     "xRand":0,//射击偏转
+     "coolantMultiplier":1,
+     //下为子弹
+     "ammoTypes": {
+         "titanium,surge-alloy,blast-compound": {
+         //钛
+             "type":"BasicBulletType",//基础子弹
+             "lifetime":65,//存在时间，帧
+             "speed":9,//初速度
+             "damage":30,//伤害
+             "hitSize":4,//碰撞箱大小
+             "drawSize":40,//渲染大小
+             "drag":0,//每帧减速度
+             "pierce":false,//穿透
+             "ammoMultiplier":3,//每个物品能够作为几发子弹
+             "reloadMultiplier":2,//装弹速度倍率
+             "killShooter":false,//自爆
+             "knockback":2,//击中减速
+             "hitTiles":true,//攻击方块
+             "status":"none",//击中给予状态
+             "statusDuration":600,//状态持续时间，帧
+             "frontColor":"#1cdeff",//子弹颜色
+             "width": 16,"height": 16,
+             "fragBullets":6
+             }
+     }
+     "itemCapacity":10,
+      //液体容量
+      "liquidBoostIntensity":1.5,
+   //液体提供的加速效果,(数值的平方)
+     "consumes": {
+        "liquid": {
+        "liquid": "water",
+        //强化液:水
+        "amount":0.5,
+        //每秒所需的强化液(数值×60)
+        "booster": true,
+        //加速
+        "optional": true
+        //可选(false为必需)
+        }
+        }
+//copper 铜 lead 铅 coal 煤 spore-pod 孢子荚
+//graphite 石墨 silicon 硅 titanium 钛 thorium 钍
+//plastanium 塑钢 surge-alloy 巨浪合金 phase-fabric 相织布
+//pyratite 硫 blast-compound 爆炸混合物 metaglass 钢化玻璃
+     
+     
+     "researchCostMultiplier": 5
+	//研究方块的资源倍速
+    "category": "turret",
+    "research": "duo"
+}

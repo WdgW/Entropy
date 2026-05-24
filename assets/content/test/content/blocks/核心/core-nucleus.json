@@ -1,0 +1,11 @@
+{
+//block.core-nucleus.name = 终代核心
+    "requirements": [
+		{ "item": "copper", "amount": 8200 },
+		{ "item": "lead", "amount": 8000 },
+		{ "item": "plastanium", "amount": 300 },
+		{ "item": "thorium", "amount": 4000 },
+		{ "item": "titanium", "amount": 300 },
+		{ "item": "silicon", "amount": 5200 },
+	],
+}

@@ -1,0 +1,14 @@
+/*{
+     "name":"纳米气凝胶墙",//名称
+     "type":"Wall",
+     "description":"拥有丰富的弹性能够有效阻挡子弹",//简介
+     "size":2,//尺寸
+     "health":450,//生命值
+     "absorbLasers":true//反弹
+     "flashHit":true
+     "requirements":[
+     "气凝胶/12"
+	],//建造花费
+     "research":"铜铅钻头",//前置科技
+     "category":"defense"//建造菜单中的位置
+}

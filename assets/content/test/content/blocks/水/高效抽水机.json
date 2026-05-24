@@ -1,0 +1,26 @@
+{
+	"type":"solidPump",
+	"name":"高效抽水机",
+	"description": "可以以更高的效率抽取地下水……"
+	"size":1,
+	"health":50,
+	"pumpAmount":0.4,//每帧泵量
+	"result":"water",//所泵液体
+	"rotateSpeed":10,//贴图转速
+	"attribute":"water",//地形加成
+	"liquidCapacity":200,
+	"consumes": {
+		"power":0.5,
+	},
+	"requirements": [
+	    "titanium/100"
+		"lead/200"
+		"graphite/100"
+		"metaglass/100"
+		"碳钢板/100"
+		],
+	"buildCostMultiplier": 0.1
+	//建造方块的速度倍速
+	"category": "production",
+	"research": "water-extractor"
+}

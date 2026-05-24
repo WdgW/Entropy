@@ -1,0 +1,68 @@
+{
+   "type":"genericCrafter",
+   "description":"(把原版的东西融合在一起，竟然得到了红晶，从此人们做了这个工厂批量生产红晶锭)"//描述
+   "name": "超级工厂"
+   "health":5000,
+   "craftEffect":"pulverizeSmall",
+   "size":5,
+   "itemCapacity":1000,//容量
+   "craftTime":1200,//生产时间÷60
+   "outputItem":"超级锭/1",//输出
+   "drawer":{
+	"type":"DrawMulti"
+	"drawers":[
+    "DrawDefault",
+    "DrawFlame"
+    ]}
+   "consumes": {
+        "power":20,//耗电1=60
+         "items": {
+            "items": [
+               //铜450,铅450,钛130,钍100,玻璃110,硅100,石墨90,巨浪合金10,相织布20,塑钢20,沙250,煤200,硫30,混爆15,孢子30,废料50
+               "copper/450" //铜
+               "lead/450" //铅
+               "metaglass/110" //钢化玻璃
+               "graphite/90"//石墨
+               "sand/250" //沙
+               "coal/200"  //煤
+               "titanium/130"  //钛
+               "thorium/100" //钍
+               "scrap/50" //废料
+               "silicon/100"//硅
+               "plastanium/20"//塑钢
+               "phase-fabric/20"//相位物
+               "surge-alloy/10"//巨浪合金
+               "spore-pod/30"//孢子
+               "blast-compound/15"//爆炸混合物
+	           "pyratite/30"//硫化物
+	           "铁/200"
+                
+            ]
+         }
+   }
+   
+   "requirements": [
+      //铜150,铅150,钛130,钍90,玻璃110,硅130,石墨100,巨浪合金20,相织布20,塑钢20,沙60,煤60,硫30,混爆10,孢子30,废料20
+      "copper/150"//铜
+      "lead/150"//铅
+      "metaglass/110"//钢化玻璃
+      "graphite/100"//石墨
+      "sand/60"//沙
+      "coal/60"//煤
+      "titanium/130"//钛
+      "thorium/90"//钍
+      "scrap/20"//废料
+      "silicon/130"//硅
+      "plastanium/20"//塑钢
+      "phase-fabric/20"//相位物
+      "surge-alloy/20"//巨浪合金
+      "spore-pod/30"//孢子
+      "blast-compound/10"//爆炸混合物
+	  "pyratite/30"//硫化物
+	  "碳钢板/3000"
+   ]
+   "buildCostMultiplier":0.01,
+    //建筑速度倍率
+   "research": "铜铅钻头"
+   "category":"crafting"
+}

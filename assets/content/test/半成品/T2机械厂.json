@@ -1,0 +1,26 @@
+{
+"type":"reconstructor",
+"description":"生产单位。",
+"name":"T2机械厂",
+"size":4,
+"health":500,
+"constructTime":900,
+"consumes":{"power":10
+"items": {
+"items": ["TNT/2000"
+"titanium/5000"
+"coal/2000"
+"graphite/3000"
+"pyratite/4000"
+"blast-compound/2000"
+]}}
+"upgrades":[
+	    ["爆破爬虫","TNT爬虫"]],
+"requirements": ["copper/5000"
+     "titanium/3000"
+     "silicon/4000"
+     "metaglass/6000"
+     "铁/2000"],
+"category":"units",
+"research":"机械工厂",
+}

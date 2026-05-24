@@ -1,0 +1,39 @@
+{
+    "name":"元帅"
+    //"description":"高效率的自我修复……"
+	"damageMultiplier":2
+	//攻击力倍率（数值越大，攻击力越高）
+	"healthMultiplier":2
+	//血量倍率（数值越大，血量最大上限越高）
+	"speedMultiplier":2
+	//速度倍率（数值越大，移动越快）
+	"reloadMultiplier":2
+	//射速倍率（数值越大，射速越快）
+	"damage":-1
+	//每1/60秒扣血速度（负数为回血）
+	"permanent":false
+	//如果为ture
+	//这个状态永远存在于此单位身上，除非单位死亡
+	//如果为false 则没有永远存在的效果
+	"reactive":false
+	//如果为true，则此效果将仅与其他效果反应无法应用
+	"disarm":false,
+	//是否解除武装
+	"show":true,
+	//是否显示
+	"color":"98ffa9"
+	//状态颜色
+	"effect": {
+	    "type":"ParticleEffect"
+	    "particles":1
+	    "length":0
+	    "lifetime":38
+	    "sizeFrom":3
+	    "sizeTo":0
+	    "colorFrom":"98ffa950"
+	    "colorTo":"98ffa9"
+	}
+	//效果
+	"effectChance":1
+	//效果数量（数值越大,效果越多越密集）
+}

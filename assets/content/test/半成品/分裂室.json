@@ -1,0 +1,22 @@
+{
+     "name":"分裂室",//名称
+     "description":"一变二"
+     "size":1,//尺寸
+     "itemCapacity":60,//物品容量
+     "requirements":[
+         "surge-alloy/5"
+	],//建造花费
+     "research":"超级工厂",//前置科技
+     "category":"crafting",//建造菜单中的位置
+     "type":"multicraft.MultiCrafter",
+     "recipes":[
+{"input":{"items":["copper/1"],"liquids":[],"power":10},
+"output":{"items":["copper/2"],"liquids":[],"power":0},
+"craftTime":3600,},
+{"input":{"items":["lead/1"],"liquids":[],"power":11},
+"output":{"items":["lead/2"],"liquids":[],"power":0},
+"craftTime":3650,},
+{input:{items:[],fluids:[],power:0.0001},
+output:{items:[],fluids:[],power:0.0001},
+craftTime:300}]
+}

@@ -1,0 +1,54 @@
+{
+   "type": "drill"
+   //类型
+   "name": "TNT钻头"
+   //名称
+   "description": "用TNT炸矿"
+   //介绍
+   "health":5000,
+   //血量
+   "itemCapacity":1500,
+	//容量
+   "tier":6
+   //挖掘等级
+   "size":5
+   //可以理解为边长。
+   "drillTime":180
+   //采矿耗时(秒)
+   "updateEffect":"explosion"
+   "rotateSpeed": 4.5,
+   //贴图转速
+   "drawRim":true,
+   //如果开机的话，贴图亮
+   //如果没开的话，贴图没有反应
+   
+   "drawMineItem": "false",
+   "requirements": [
+      "黑曜石/100"
+      "碳钢板/100"
+      "铁/100"
+      "plastanium/50"//塑钢
+      "surge-alloy/50"//巨浪合金
+   ]
+   "itemCapacity":1000,
+   //液体容量
+   "liquidBoostIntensity":2.646,
+   //液体提供的加速效果,(数值的平方)
+   "consumes": {
+        "power":7,
+        //耗电量
+        "items":{
+        "items":["TNT/1"]}
+        
+        "liquid": {
+        "liquid": "cryofluid",//强化液
+        "amount":0.3,//每秒所需的强化液(数值×60)
+        "booster": true,//加速
+        "optional": false//可选(false为必需)
+        }}
+   "heatColor": "#FF0000FF",
+   "research": "合金钻头",
+   //科技排在爆破钻头的后面
+   "category": "production"
+   //分类钻头
+}

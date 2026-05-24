@@ -1,0 +1,53 @@
+{
+   "type": "drill"
+   //类型
+   "name": "合金钻头"
+   //名称
+   "description": "后期工具，十分的快，很快......"
+   //介绍
+   "health":2250,
+   //血量
+   "itemCapacity":1000,
+	//容量
+   "tier":5
+   //挖掘等级
+   "size":4
+   //可以理解为边长。
+   "drillTime":250
+   //采矿耗时(秒)
+   "rotateSpeed": 15,
+   //贴图转速
+   "drawRim":true,
+   //如果开机的话，贴图亮
+   //如果没开的话，贴图没有反应
+   "drawMineItem": "false",
+   "requirements": [
+      "thorium/100"//钍
+      "silicon/200"//硅
+      "plastanium/20"//塑钢
+      "surge-alloy/10"//巨浪合金
+   ]
+   "itemCapacity":1000,
+   //液体容量
+   "liquidBoostIntensity":2.238,
+   //液体提供的加速效果,(数值的平方)
+   "consumes": {
+        "power":5,
+        //耗电量
+        "liquid": {
+        "liquid": "water",
+        //强化液:水
+        "amount":0.1666666667,
+        //每秒所需的强化液(数值×60)
+        "booster": true,
+        //加速
+        "optional": true
+        //可选(false为必需)
+        }
+   }
+   "heatColor": "#ffe600",
+   "research": "铜铅钻头",
+   //科技排在爆破钻头的后面
+   "category": "production"
+   //分类钻头
+}

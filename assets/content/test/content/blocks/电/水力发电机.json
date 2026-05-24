@@ -1,0 +1,32 @@
+{
+	"type": "impactReactor",
+	"name": "水力发电机",
+	"description": "利用水流的推动水力发电机发电",
+	"health": 150,
+	"size": 2,
+	"buildCostMultiplier":1,
+	"hasPower": true,
+	"hasLiquids": true,
+	"consumes": {
+		"power":0.05,
+		"liquid": {
+			"liquid": "water",
+			"amount": 0.2
+		}
+	},
+    "requirements": ["lead/50",
+    "metaglass/40",
+    "silicon/20",
+    "graphite/30"
+	],
+	"category": "power",
+	"research": "steam-generator",
+	"placeableLiquid":true,
+	"itemCapacity":0, //物品容量
+	"liquidCapacity":30, //液体容量
+	"itemDuration": 60,//生产时间
+	"warmupSpeed": 0.0001, //启动时间。
+	"explosionRadius":16, //爆炸半径
+	"explosionDamage":10, //爆炸伤害
+	"powerProduction": 1, //输出电量
+}

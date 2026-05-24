@@ -1,0 +1,11 @@
+{
+   "itemDrop": "铁"
+   "type": "oreBlock"
+   "playerUnmineable":true,
+   "variants": 6//贴图数量
+   "useColor":true
+   "oreDefault":true
+   "oreThreshold":0.8,
+   "oreScale":20
+   "oreDefault":true,//是否自动生成
+}

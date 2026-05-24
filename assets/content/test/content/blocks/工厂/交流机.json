@@ -1,0 +1,29 @@
+{
+   "type":"genericCrafter",
+   "description":""
+   "name": "交流机"
+   "health":350,
+   "size":2
+   "liquidCapacity":6,//液体容量
+   
+   "craftTime":60,//生产时间÷60
+   "outputItem":"黑曜石/6",//输出
+	"hasPower": true,//是否需要电
+	"hasLiquids": true,//是否需要液体
+   "consumes": {
+        "power":1,
+        //耗电1=60
+        "liquids": [
+        {"liquid": "water","amount": 0.05},
+        {"liquid": "slag","amount":0.05}]
+        
+   }
+   "requirements": [
+     "graphite/25",
+	 "silicon/20",
+     "titanium/30",
+     "铁/15"
+   ]
+   "research": "silicon-smelter"
+   "category":"crafting"
+}

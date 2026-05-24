@@ -1,0 +1,22 @@
+{
+	"type": "LiquidBridge",
+	"name": "合金导管桥",
+	"description": "长，快",
+	"health":750,
+	"range":40,
+	"liquidCapacity":50,
+	"hasPower":false,
+	"requirements": [
+		"metaglass/35",
+		"surge-alloy/10",
+		"titanium/10",
+		"silicon/20",
+		"phase-fabric/10"
+	],
+	"category": "liquid",	
+	"research": "合金传送带桥",
+	"transportTime":0.05,
+    //运输时间（越小越快）
+	"placeableLiquid":true,
+	//能否放置在液体上
+}

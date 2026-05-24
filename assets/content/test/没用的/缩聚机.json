@@ -1,0 +1,27 @@
+/*{
+   "type":"GenericCrafter",
+   "description":"利用化学物质制作气凝胶"
+   "name": "缩聚机"
+   "health":170,
+   "size":2
+   "liquidCapacity":50,//物品容量
+   "craftTime":60,//生产时间÷60
+   "outputItem":"气凝胶/1",//输出
+	"hasPower": true,//是否需要电
+	"hasLiquids": true,//是否需要液体
+   "consumes": {
+        "power":1.5,
+        //耗电1=60
+        "liquid": {
+        "liquid": "氢氧根","amount": 0.13,
+        "liquid": "钬","amount": 0.13
+        }
+   }
+   "requirements": [
+      "silicon/70"
+      "lead/40"
+      "graphite/50"
+   ]
+   "research": "铜铅钻头"
+   "category":"crafting"
+}

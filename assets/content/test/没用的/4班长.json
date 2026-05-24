@@ -1,0 +1,33 @@
+{
+    "name":"班长"
+    //"type":"statusEffect"
+   // "description":"为敌对生命体准备的“超级大礼”。"
+	"damageMultiplier":1.3,
+	//攻击力倍率（数值越大，攻击力越高）
+	"healthMultiplier":1.3,
+	//血量倍率（数值越大，血量最大上限越高）
+	"speedMultiplier":1.3,
+	//速度倍率（数值越大，移动越快）
+	"reloadMultiplier":1.3,
+	//射速倍率（数值越大，射速越快）
+	"damage":-0.3,
+	//每1/60秒扣血速度（负数为回血）
+	"permanent":false,
+	//如果为ture
+	//这个状态永远存在于此单位身上，除非单位死亡
+	//如果为false 则没有永远存在的效果
+	"reactive":false,
+	//如果为true，则此效果将仅与其他效果反应无法应用
+	"color":"888888",
+	//状态颜色
+	"effect": {
+	    "type":"waveEffect"
+	    "lifetime":15
+	    "sizeFrom":0
+	    "sizeTo":3
+	    "colorFrom":"888888"
+	    "colorTo":"666666"
+	},
+	"effectChance":1,
+	//效果数量（数值越大,效果越多越密集）
+}
