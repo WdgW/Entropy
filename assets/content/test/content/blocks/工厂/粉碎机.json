@@ -1,0 +1,35 @@
+{
+//copper 铜 lead 铅 coal 煤 spore-pod 孢子荚
+//graphite 石墨 silicon 硅 titanium 钛 thorium 钍
+//plastanium 塑钢 surge-alloy 巨浪合金 phase-fabric 相织布
+//pyratite 硫 blast-compound 爆炸混合物 metaglass 钢化玻璃
+   "name":"粉碎机",
+   "craftEffect":"pulverizeSmall",
+   "type":"genericCrafter",
+   "description":"粉碎煤炭"
+   //描述
+   "itemCapacity":2
+	//容量
+   "health":250,
+   "size":1
+   "craftTime":60,
+   //生产时间÷60
+   "outputItem":"火药/1",
+   //输出
+   "consumes": {
+        "power":0.2
+         "items": {
+            "items": [
+               "coal/1",
+                
+            ]
+         }
+   }
+   "requirements": [
+      "copper/30"
+      "lead/30"
+      "铁/10"
+   ]
+   "category":"crafting"
+   "research": "铜铅钻头"
+}

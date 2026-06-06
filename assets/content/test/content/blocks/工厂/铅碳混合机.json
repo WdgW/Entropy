@@ -1,0 +1,34 @@
+{
+   "type": "genericCrafter",//类型
+   "name": "铅碳混合机",//名字
+   "description":"把铅和碳放一起"
+   //描述
+   "health":200,//血量
+   "size":2,//大小
+   "itemCapacity":4
+	//容量
+   "craftTime":60,
+   //生产时间÷60
+   "outputItem":"铅碳混合物/1",
+   //输出
+   "requirements": [
+      "silicon/15"
+      "copper/30"
+      "lead/70"
+   ]
+   "consumes": {
+        "power":1,
+         "items": {
+            "items": [
+               "lead/2",
+                //铅
+               "coal/1"
+                //煤
+            ]
+         }
+   }
+   "research": "铜铅钻头"
+   //科技排在谁的后面
+   "category":"crafting"
+	//在建筑菜单中位于工厂子页面
+}

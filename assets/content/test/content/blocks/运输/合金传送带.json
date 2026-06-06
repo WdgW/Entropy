@@ -1,0 +1,23 @@
+{
+   "type": "conveyor",
+   "name": "合金传送带",
+   "description": "后期工具？应该吧"
+   //描述
+   "health":200,
+   "itemCapacity":3,
+	//容量
+   "requirements": [
+      "surge-alloy/1"
+      "titanium/2"
+      "silicon/2"
+      "phase-fabric/1"
+   ]
+   "category": "distribution",
+   "speed": 0.6,
+   "displayedSpeed":60,
+   "research": "硅带",
+	"insulated":false,
+    "placeableLiquid":false,
+    "displayFlow":true,
+    "absorbLasers":false
+}

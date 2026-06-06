@@ -1,0 +1,149 @@
+{
+	"type": "itemTurret",
+	"name": "空军拦截器",
+	"description": "发射一颗追踪导弹,以非常快的速度追击它，并对他造成巨额伤害",
+	"targetAir":true,
+	//是否攻击空军
+	"targetGround":false,
+	//是否攻击地面目标
+	"health":2000,
+	//生命值
+	"size":3,//尺寸
+	"accurateDelay": false,/*关闭预判！！*/
+	"unitSort":"strongest",
+	"ammoPerShot":1500,//单发消耗
+     "maxAmmo":8000,//弹容量
+	"reload":2700,
+	//射速
+	"hasPower":true,
+	//是否用电
+	"shootSound":"missileLaunch",
+	//音效
+	"consumes":{
+		"power":10
+	}
+	"rotateSpeed":5,
+	//炮台转动速度
+	"range":1700,
+	//射程
+	"shoot":{
+    	"type":"ShootPattern",
+    	"firstShotDelay":160
+    }
+	"ammoTypes": {
+         "graphite": {
+         //钛
+         "makeFire":true,//点燃
+             "spawnUnit": "导弹-子弹"
+             "type":"MissileBulletType",//基础子弹
+             "lifetime":300,//存在时间，帧
+             "speed":5,//初速度
+             "homingRange":200,
+			"homingPower":0.13,
+			//追踪力度
+			"hitSound": "shootSmite",
+             //"damage":5760,//伤害
+             "hitSize":8,//碰撞箱大小
+             "drawSize":8,//渲染大小
+             "drag":-0.5,//每帧减速度
+             "pierce":false,//穿透
+             "knockback":5,//击中减速
+             "hitTiles":false,//攻击方块
+/*"hitEffect":{
+"type":"multiEffect"
+"effect":[
+{
+"type":"WaveEffect",
+"lifetime": 8
+"colorFrom":"ff0000",//颜色从
+"colorTo":"ff0000",//颜色至
+"lightColor":"ff6f55",//浅色
+"sizeFrom":2,//开始时圆环直径
+"sizeTo":2,//结束时圆环直径
+"lightScl":3.0,//轻量级
+"lightOpacity":0.8,//光不透明
+"sides":-1,//双方//效果不明
+"rotation":-1,//回转//效果不明
+"strokeFrom":2,//开始时圆形宽度
+"strokeTo":2,//结束时圆环宽度
+//"interp":linear,//插值
+//"lightInterp":reverse,//插值
+"offsetX":0.0,//偏转x
+"offsetY":0.0//偏转y
+}
+{
+"type":"WaveEffect",
+"lifetime": 8
+"colorFrom":"ff0000",//颜色从
+"colorTo":"ff0000",//颜色至
+"lightColor":"ff6f55",//浅色
+"sizeFrom":2,//开始时圆环直径
+"sizeTo":2,//结束时圆环直径
+"lightScl":3.0,//轻量级
+"lightOpacity":0.8,//光不透明
+"sides":-1,//双方//效果不明
+"rotation":-1,//回转//效果不明
+"strokeFrom":2,//开始时圆形宽度
+"strokeTo":2,//结束时圆环宽度
+//"interp":linear,//插值
+//"lightInterp":reverse,//插值
+"offsetX":0.0,//偏转x
+"offsetY":0.0//偏转y
+"startDelay":4
+}
+{
+"type":"WaveEffect",
+"lifetime": 8
+"colorFrom":"ff0000",//颜色从
+"colorTo":"ff0000",//颜色至
+"lightColor":"ff6f55",//浅色
+"sizeFrom":2,//开始时圆环直径
+"sizeTo":2,//结束时圆环直径
+"lightScl":3.0,//轻量级
+"lightOpacity":0.8,//光不透明
+"sides":-1,//双方//效果不明
+"rotation":-1,//回转//效果不明
+"strokeFrom":2,//开始时圆形宽度
+"strokeTo":2,//结束时圆环宽度
+//"interp":linear,//插值
+//"lightInterp":reverse,//插值
+"offsetX":0.0,//偏转x
+"offsetY":0.0//偏转y
+"startDelay":4
+}
+]}*/
+}}
+	/*"shootType":{
+	"type":"MissileBulletType",
+	"damage":35,
+	//伤害
+	"status":"electrified",
+	"splashDamageRadius":8,//飞溅伤害半径。
+	"splashDamage":20,//飞溅损坏。
+	"width":8,//宽度
+	"height":16,//高度
+	"pierce":false,
+	"speed":9,
+	"lifetime":50,
+	"homingRange":200,
+	"homingPower":0.13,
+	//追踪力度
+	"hitEffect":"flakExplosion",
+	//子弹击中特效
+	"trailColor":"#ff6f55",
+	//尾迹颜色
+	"backColor":"#ff0000",//背景色。
+	"frontColor":"#ffe600",//正面颜色
+	"recoil":0
+	},*/
+	"requirements": [
+		{ "item": "titanium", "amount": 300 },
+		{ "item": "lead", "amount": 300 },
+		{ "item": "silicon", "amount": 400 },
+		{ "item": "graphite", "amount": 500 },
+		{ "item": "phase-fabric", "amount": 400 },
+		{ "item": "碳钢板", "amount": 2000 },
+	],
+	"category": "turret",
+	"research": "高射炮"
+	}

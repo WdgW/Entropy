@@ -1,0 +1,28 @@
+{
+   "type": "drill"//类型
+   "name": "红晶钻头",//名称
+   "description":"你不要嫌慢，要怪就怪你游戏帧率太低",
+   "health":6000,//血量
+   "itemCapacity":5000,//容量
+   "tier":5,//挖掘等级
+   "size":6,//可以理解为边长。
+   "drillTime":-100,//采矿耗时
+   "rotateSpeed": 5,//贴图转速
+   "drawMineItem": "false",
+   "requirements": [
+      "超级锭/500"
+   ]
+   "buildCostMultiplier":1000,
+    //建筑速度倍率
+   "itemCapacity":5000,//液体容量
+   "liquidBoostIntensity":49,//液体提供的加速效果,(数值的平方)
+   "consumes": {
+        "power":30, //耗电量
+   }
+   "heatColor": "#ff0000",
+   "drawRim":true,
+   //如果开机的话，贴图亮
+   //如果没开的话，贴图没有反应
+   "research": "合金钻头"//科技排在
+   "category": "production"//分类钻头
+}

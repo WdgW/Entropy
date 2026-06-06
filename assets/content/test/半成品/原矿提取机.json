@@ -1,0 +1,32 @@
+{
+   "type":"GenericCrafter",
+   "description":"可以提取出原矿"//描述
+   "name": "原矿提取机"
+   "health":260,
+   "craftEffect":"pulverizeSmall",
+   "size":1,
+   "itemCapacity":1000,//容量
+   "craftTime":3600,//生产时间÷60
+   "outputItem":"合金原矿/1",//输出
+   /*"drawer":{
+	"type":"DrawMulti"
+	"drawers":[
+    "DrawDefault",
+    "DrawFlame"
+    ]}*/
+   "consumes": {
+        "power":10,//耗电1=60
+         "items": {
+            "items": [
+               "surge-alloy/1000"//巨浪合金
+            ]}}
+   
+   "requirements": [
+      "metaglass/110"//钢化玻璃
+      "plastanium/20"//塑钢
+      "phase-fabric/20"//相位物
+      "surge-alloy/20"//巨浪合金
+   ]
+   "research": "铜铅钻头"
+   "category":"crafting"
+}

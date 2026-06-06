@@ -1,0 +1,34 @@
+{
+   "type":"drill",
+   "name":"硅钻头",
+   "description":"",
+   "health":500,
+   "cost":5
+   "size":2,
+   //大小
+   "tier":4,
+   "drillTime":240,
+   //挖矿耗时
+   "requirements": [
+      "lead/6"
+      "copper/6"
+      "silicon/10"
+      "graphite/5"
+   ]
+   "itemCapacity":25,
+   "warmupSpeed":1000,
+   "liquidBoostIntensity":1.5,
+   //液体提供的加速
+   "drawMineItem":true,
+   "warmupSpeed":0.1,
+   "consumes": {
+        "liquid": {
+        "liquid": "water",
+        "amount":0.06,
+        "booster": true,
+        "optional": true
+        }
+   }
+   "research": "pneumatic-drill"
+   "category": "production"
+}

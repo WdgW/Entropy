@@ -1,0 +1,83 @@
+{
+    "type":"itemTurret"
+    "name": "雷..."
+    "description":""
+   //描述
+    "targetAir":true,//是否攻击空军
+	"targetGround":true,//是否攻击地面目标
+	"health":1354,//生命值
+	"shootSound":"shotgun"
+	"heatColor":"ff6f55"
+	"size":4,//尺寸
+	"shoot":{
+    	"type":"ShootSpread",
+		"shots":5
+		"spread":8
+    }
+	"requirements": [
+      "silicon/400"
+      "thorium/400"
+      "titanium/400"
+      "碳钢板/500"
+    ]
+	"category":"turret",//菜单栏
+     "ammoPerShot":2,//单发消耗
+     "maxAmmo":40,//弹容量
+     "range":160,//射程，8/格
+     "reload":20,//攻击间隔
+     "inaccuracy": 0,
+     "scaledHealth":300
+     "recoil":1,//后坐力
+     "speed":5,//炮台转速
+     "liquidBoostIntensity":1.7,
+     "coolantMultiplier":1,
+     //下为子弹
+     "ammoTypes": {
+         "titanium": {
+         //钛
+         "makeFire":true,//点燃
+"type":"ShrapnelBulletType","length":170,//长度
+"damage":70,"pierce":true,"reloadMultiplier":2,
+//伤害/穿透/装弹速度倍率
+"knockback":1,"hitTiles":true,//击中减速/攻击方块
+"frontColor":"00b4ff","toColor":"8effef"//子弹颜色(蓝)
+}
+"thorium": {//钍
+"type":"ShrapnelBulletType","length":170,//长度
+"damage":200,"pierce":true,"pierceArmor":true,
+//伤害/穿透/穿甲
+"reloadMultiplier":2,"knockback":1,"hitTiles":true,
+//装弹速度倍率/击中减速/攻击方块。
+"frontColor":"cc00ff","toColor":"eeaaff"//子弹颜色(粉)
+}
+"surge-alloy": {
+"type":"ShrapnelBulletType","length":170,//长度
+"damage":300,"pierce":true,"pierceArmor":true,
+//伤害/穿透/穿甲
+"reloadMultiplier":2,"knockback":2,"hitTiles":true,
+//装弹速度倍率/击中减速/攻击方块。
+"frontColor":"ffb039","toColor":"fff171"//子弹颜色(黄)
+}
+     }
+     "itemCapacity":50,
+      //液体容量
+     "consumes": {
+        "coolant": {
+        "amount":0.4,
+        //每秒所需的强化液(数值×60)
+        "booster": true,//加速
+        "optional": true //可选(false为必需)
+        }
+        }
+//copper 铜 lead 铅 coal 煤 spore-pod 孢子荚
+//graphite 石墨 silicon 硅 titanium 钛 thorium 钍
+//plastanium 塑钢 surge-alloy 巨浪合金 phase-fabric 相织布
+//pyratite 硫 blast-compound 爆炸混合物 metaglass 钢化玻璃
+     
+     
+     "researchCostMultiplier": 40//研究方块的资源倍速
+    "category": "turret",
+    "research": "铜铅钻头"
+}
+/*代码*/
+/*"speed":-4,//"drag":-0.01,//速度/反*/

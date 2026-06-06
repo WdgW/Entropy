@@ -2,8 +2,9 @@ displayName: "[#FF6600[]]Entropy"
 subtitle: "Mass Mess"
 name: "entropy"
 author: "[purple[]]dg"
-description: "[red[]]别问，问就是乱了。"
+description: "[#B22222[]]这里没有秩序！！！\n[#A52A2A[]]这里没有秩序！！！\n[#8B0000[]]这里没有秩序！！！"
 version: 0.0.0
 minGameVersion: 156
-java:true
+java: true
 main: entropy.Entropy
+contents: ["reaction"]

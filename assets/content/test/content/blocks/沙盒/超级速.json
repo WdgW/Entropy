@@ -1,0 +1,12 @@
+{
+    "name":"超级速",
+    "type":"overdriveProjector",
+    "speedBoost":999, //加速百分比
+    "conductivePower": true,
+    "solid":true//是不是实体，陆地单位能不能走过去
+    "range":40,//范围
+    "health":1000,//血量
+    "size":1,//大小
+    "canOverdrive":true,//能否超频
+    "buildVisibility":"sandboxOnly",
+}

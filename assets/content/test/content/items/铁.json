@@ -1,0 +1,10 @@
+{
+   "name": "铁"
+   "type":"material",
+   "description":"铁除了熔炼还能干什么？答:做钢。"
+   "hardness":2/*挖掘等级，如果不是矿物的话填0即可，原版最高4级*/
+   //描述
+   "color":"D9D9D9FF"
+   "research": "铜铅钻头"
+   //科技排在谁的后面
+}

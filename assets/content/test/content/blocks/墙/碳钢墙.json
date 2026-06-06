@@ -1,0 +1,17 @@
+{
+   "name":"碳钢墙"
+   "size":1
+   "description":"碳已经变成钢了，不用担心燃烧了，哦耶！"
+   //描述
+   "type":"wall",
+   "absorbLasers":false
+	//这个方块会不会吸收激光
+	"health":900
+	//方块血量
+	"requirements": [
+         "碳钢板/4"
+    ]
+    "category": "defense",
+   "research": "碳钢板"
+   //科技排在谁的后面
+}

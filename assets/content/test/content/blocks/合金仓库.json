@@ -1,0 +1,17 @@
+{
+	"name": "合金仓库",
+	"description": "",
+	"type": "StorageBlock",
+	"itemCapacity": 5250,
+	"hasItems": true,
+	"health": 5000,
+	"size": 3,
+	"buildCostMultiplier":0.75
+	"requirements": [
+		{ "item": "surge-alloy", "amount": 100 },
+		{ "item": "silicon", "amount": 200 },
+		{ "item": "graphite", "amount": 150 },
+	],
+	"category": "effect",
+	"research": "铜容器"
+}

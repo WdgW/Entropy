@@ -1,0 +1,1 @@
+const lib = require("base/矩阵能源lib");

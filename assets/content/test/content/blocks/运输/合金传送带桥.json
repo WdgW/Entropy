@@ -1,0 +1,22 @@
+{
+    "category": "distribution",
+    "type": "ItemBridge",
+    "requirements": [
+        "titanium/20",
+        "silicon/20",
+        "graphite/20",
+        "phase-fabric/10",
+        "surge-alloy/10",
+    ],
+    "range": 40,
+    "canOverdrive":true,
+    "hasPower": false,
+    "health":750,
+    "transportTime":0.1,
+    //运输时间（越小越快）
+    "itemCapacity":50,
+    "name": "合金传送带桥",
+    "description": "长，快",
+    "research":"合金传送带",
+    "placeableLiquid":true,
+}

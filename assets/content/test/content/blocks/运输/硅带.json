@@ -1,0 +1,22 @@
+{
+   "type": "conveyor",
+   "name": "硅带",
+   "description": "中期工具"
+   //描述
+   "health":70,
+   "idleSound":"none",//"空闲时的声音"
+   "itemCapacity":3,
+	//容量
+   "requirements": [
+      "silicon/1"
+      "graphite/1"
+      "titanium/1"
+   ]
+   "category": "distribution",
+   "speed": 0.2,
+   "displayedSpeed":20,
+   "research": "铅带",
+	"insulated":false,
+    "placeableLiquid":false,
+    "absorbLasers":false
+}

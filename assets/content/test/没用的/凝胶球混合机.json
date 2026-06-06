@@ -1,0 +1,28 @@
+/*{
+   "type": "GenericCrafter",
+   "name": "凝胶球混合机"
+   "description":"用玻璃和石油制作出凝胶球"
+   "health":120,
+   "size":2
+   "itemCapacity":15,//物品容量
+   "craftTime":60,//生产时间60:1
+   "outputItem":"气凝胶/1",//输出物品
+   "requirements": [
+      "silicon/15"
+      "copper/30"
+      "lead/70"
+   ]
+   "hasPower": true,//是否需要电
+   "hasLiquids": true,//是否需要液体
+   "hasItems": true,//是否需要物品
+   "consumes": {
+        "power":0.6,
+        //耗电1:60
+        "items": {
+            "items": ["metaglass/1"]
+         }
+        "liquid": {"liquid": "oil","amount": 0.16}
+   }
+   "research": "铜铅钻头"//科技树上一个
+   "category":"crafting"
+}

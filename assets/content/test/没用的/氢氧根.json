@@ -1,0 +1,13 @@
+/*{
+     "name":"氢氧根",//名称
+     "type":"liquids",//类
+     "alwaysUnlocked":false,//始终于科技树中解锁
+     "color":"#ffffff",//代表色
+     "effect":"electrified",//影响
+     "flammability":0,//可燃性
+     "temperature":0.5,//温度
+     "heatCapacity":0,//热容
+     "viscosity":0,//粘性
+     "explosiveness":0,//爆炸性
+     "research":"铜铅钻头"//科技树
+}

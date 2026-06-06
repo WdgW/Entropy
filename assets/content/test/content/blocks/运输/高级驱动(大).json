@@ -1,0 +1,52 @@
+{
+    "type": "massDriver",
+    "name":"高级驱动(大)",
+    //名称
+    "description":"远程传送,发射的速度很快小心电没了",
+    //描述
+    "speed":20
+    "size":3,
+    "health":5400,
+    //血量
+    "buildCostMultiplier": 0.01
+	//建造方块的速度倍速
+    "itemCapacity": 8100,
+    //物品容量
+    "liquidCapacity":40
+    //液体容量
+    "range": 1200,
+    //范围
+    "minDistribute":1,
+    //最小发射容量
+    "reload":60,
+    //重载时间
+    "bulletSpeed":100,
+    //子弹飞行速度
+    "rotateSpeed":100,
+    //转动速度
+    "shootEffect":"shieldWave",
+    //射击特效
+    "smokeEffect":"pointHit",
+    //射击时炮口特效
+    "receiveEffect":"pointHit",
+    //接收方的特效
+    "consumes": {
+        "power":90
+    },
+   
+    "requirements": [
+      "lead/3600"
+      "copper/3600"
+      "graphite/3600"
+      "silicon/3600"
+      "titanium/3600"
+      "metaglass/3600"
+      "phase-fabric/450"
+      "plastanium/450"
+      "碳钢板/1800"
+    ]
+    
+    "category": "distribution",
+    "research": "合金传送带"
+    //科技排在谁的后面
+}

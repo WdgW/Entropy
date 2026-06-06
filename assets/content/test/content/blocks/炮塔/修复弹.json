@@ -1,0 +1,70 @@
+{
+"type":"powerTurret",
+"name":"修复弹",
+"description":"",
+"health":160,
+"size":2,
+"canOverdrive":false,
+"category": "turret",
+"research":"高射炮",
+"targetHealing":true,
+"range":90,
+"reload":9,//重新装弹
+"shootSound":"plasmadrop",
+"targetAir":false,
+"targetGround":false,
+
+/*
+"drawer":{
+"type":"DrawTurret",//牵引炮塔
+"parts":[
+{"type":"HaloPart",//前/三角形
+"color":"00ff66","tri":true,"shapes":3,"triLength":0,
+"triLengthTo":5,"radius":4,"radiusTo":12,"haloRadius":11,
+"haloRotateSpeed":0.75,"shapeRotation":180,
+"haloRotation":180,"layer":110,"hollow":true}//颜色/三/边数/三倍长度/三倍长度至/半径/半径到/光晕半径/光环旋转速度/形状旋转/光环旋转/层/是否为空/
+{"type":"ShapePart",//三角
+"rotateSpeed":0.75,"color":"00ff66",
+"circle":true,"hollow":true,"stroke":0,
+"strokeTo":2,"radius":4,"layer":110}//转速/颜色/是否为圆圈/是否为空/中风/中风..../半径/层
+{"type":"ShapePart",//三角
+"rotateSpeed":0.75,"color":"#00ff66",
+"circle":true,"hollow":true,"stroke":0,
+"strokeTo":1,"radius":12,"layer":110}//转速/颜色/是否为圆圈/是否为空/中风/中风..../半径/层
+{"type":"HaloPart",//前/三角形
+"color":"00ff66","tri":true,"shapes":3,"triLength":0,
+"triLengthTo":5,"radius":4,"radiusTo":12,"haloRadius":11,
+"haloRotateSpeed":-0.75,"shapeRotation":180,
+"haloRotation":0,"layer":110,"hollow":true}//颜色/三/边数/三倍长度/三倍长度至/半径/半径到/光晕半径/光环旋转速度/形状旋转/光环旋转/是否为空/
+]}
+*/
+"consumes":{"power":5,
+/*"liquid": {
+"liquid": "cryofluid",//强化液
+"amount":0.017,//每秒所需的强化液(数值×60)
+"booster": true,//加速
+"optional": false}*/},
+"coolantMultiplier":2,
+"hasPower":true,
+"requirements":[
+{"item":"copper","amount":100},
+{"item":"lead","amount":100},
+{"item":"graphite","amount":20},    
+{ "item": "铁", "amount": 30 },],
+"shootType":{
+"type":"LaserBoltBulletType",
+"collidesTeam":true,
+"ammoMultiplier":1,
+"frontColor":"98ffa9",
+"backColor":"98ffa9",
+"width":4,
+"height":5,
+"shrinkY":0,
+"collidesAir":false,
+"lifetime":30,
+"speed":4,
+"damage":0
+"healPercent":0.3,
+"healAmount":5,
+}
+}

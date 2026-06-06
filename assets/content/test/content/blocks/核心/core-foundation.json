@@ -1,0 +1,9 @@
+{
+//block.core-foundation.name = 次代核心
+    "requirements": [
+		{ "item": "copper", "amount": 3200 },
+		{ "item": "lead", "amount": 3050 },
+		{ "item": "graphite", "amount": 350 },
+		{ "item": "silicon", "amount": 2000 },
+	],
+}

@@ -1,0 +1,46 @@
+{ 
+    "name":"红晶墙",
+    "type":"mendProjector",
+    "description":"利用红晶制作的大型墙"
+    "group":"walls"
+    //方块组别：墙
+    "reload":120,
+    //修复速度
+    "phaseBoost":0.25,
+    //加速百分比
+    "range":40,
+    //修复范围
+    "healPercent":20,
+    //修复百分比
+    "conductivePower": true,
+    //"absorbLasers":false//反弹
+    "hasPower":true,
+    "consumes": {
+        "power":1,//耗电1=60
+        }
+    //"solid":true
+	//是不是实体，陆地单位能不能走过去
+	//"alwaysReplace":true
+	//是否可以在所有情况下替换此方块
+	//和防御墙替换墙一样效果
+    "absorbLasers":true
+	//这个方块会不会吸收激光
+    "phaseRangeBoost":24,
+    //加速范围百分比
+/*    "lightningChance":0.3,
+	//产生闪电概率
+	"lightningDamage":50,
+	//闪电伤害
+	"lightningLength":5,
+	//闪电长度*/
+    "health":10000,
+    //血量
+    "size":1
+    //大小
+    "canOverdrive":false,
+    //能否超频
+    "requirements":[
+        "超级锭/15"],
+    "category":"defense",
+    "research":"超级锭",
+}

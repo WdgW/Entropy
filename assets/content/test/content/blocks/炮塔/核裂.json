@@ -1,0 +1,53 @@
+{
+	"type": "itemTurret",
+	"name": "核裂",
+	"description": "核打击",
+	"targetAir":true,
+	//是否攻击空军
+	"targetGround":true,
+	//是否攻击地面目标
+	"health":4000,
+	//生命值
+	"hitSound":"shotgun"
+	"size":9,
+	//尺寸
+	"rotateSpeed":1,//炮台转速
+	"inaccuracy":1,//子弹偏移度
+	"reload":300,"hasPower":true,
+	"shootSound":"titanExplosion",//音效
+	"consumes":{
+		"power":3000
+	}
+	"range":800,//射程
+	"ammoTypes": {
+         "核弹": {
+	"type":"MissileBulletType","status":"blasted",
+	"damage":1000
+	"sprite":"机械动力-核弹.子弹"//子弹贴图
+	"despawnEffect":"flakExplosion"//子弹消失特效
+    "status":"blasted"
+    "splashDamageRadius": 400.00,//爆炸伤害半径
+    "splashDamage": 5000.00,//爆炸损伤
+	"width":80,//宽度
+	"height":160,//高度
+	"pierce":false,"speed":4,"lifetime":3600,
+	"homingRange":800,
+	"homingPower":1,//追踪力度
+	"hitEffect":"flakExplosion",//子弹击中特效
+	"trailColor":"FF4900FF",//尾迹颜色
+	"trailWidth":25,"trailLength":50,
+	"recoil":20
+	},}
+	"requirements": [
+		"titanium/2000"
+		"lead/3000"
+		"silicon/1000"
+		"graphite/1500"
+		"phase-fabric/850"
+		"surge-alloy/750"
+		"碳钢板/2000"
+		"铀/300"
+	],
+	"category": "turret",
+	"research": "导弹"
+	}

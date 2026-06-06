@@ -1,0 +1,37 @@
+{
+	"name": "末影箱",
+	"group":"transportation"
+	"description": "。。。这就是个核心",
+	"itemCapacity":100,
+	"hasItems": true,
+	"health": 100,
+	"size": 1,
+	"targetable":false,
+	"update":false,//更新
+	"solid":false,//坚实的
+	"rebuildable":true,//可重建。
+	"breakable": true,//易碎
+	"destructible":true,//可破坏的。
+	"unloadable": true,//可卸载。
+	"unitCapModifier":0,
+	"unitType":"beta",
+	"requirements": [
+		{ "item": "copper", "amount": 1000 },
+		{ "item": "lead", "amount": 1000 },
+		{ "item": "铁", "amount": 100 },
+		{ "item": "黑曜石", "amount": 100 },
+		{ "item": "silicon", "amount": 500 },
+	],
+	"alwaysUnlocked":true,
+	"category": "effect",
+	"research":{
+	"parent":"究代核心",
+    "requirements": [
+		{ "item": "copper", "amount": 1000 },
+		{ "item": "lead", "amount": 1000 },
+		{ "item": "铁", "amount": 100 },
+		{ "item": "黑曜石", "amount": 100 },
+		{ "item": "silicon", "amount": 500 },
+	    ],
+		}
+}

@@ -1,0 +1,19 @@
+{//电弧
+   "shootType": {
+   "type":"LightningBulletType"
+   "lightningLength":40,
+   "damage":45
+   "ammoMultiplier":2
+   "buildingDamageMultiplier":0.5
+   }
+   "range":180,
+   "targetGround":true,
+   "targetAir" :true,
+   "shootCone":4,
+   //"shots":8,
+   "requirements": [
+      "lead/75"
+      "copper/100"
+      "碳钢板/5"
+   ]
+}

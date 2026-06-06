@@ -1,0 +1,109 @@
+{
+    "type":"ContinuousTurret"
+    "name": "剧毒"
+    "description":""
+   //描述
+    "buildCostMultiplier": 0.1,
+	//建造方块的速度倍速
+    "targetAir":false,
+	//是否攻击空军
+	"targetGround":true,//是否攻击地面目标
+	"health":888,//生命值
+	"size":2,//尺寸
+	/*"shoot":{
+    	"type":"ShootAlternate",
+    }*/
+	"requirements": [
+      "copper/200"
+      "lead/100"
+      "titanium/60"
+      "碳钢板/50"
+    ]
+    "hasliquid":false
+    "shootSound": "artillery"
+	"category":"turret",//菜单栏
+     "ammoPerShot":1,//单发消耗
+     "maxAmmo":80,//弹容量
+     "range":80,//射程，8/格
+     "inaccuracy": 0.4,
+     "recoil":0,//后坐力
+     "speed":5,//炮台转速
+     "shootCone":60,//最大瞄准偏角
+     "shootShake":5,//射击抖动
+     "coolantMultiplier":1,
+     //下为子弹
+     "ammoTypes": {
+         "毒气弹": {
+         
+             "type":"ContinuousFlameBulletType",//基础子弹
+             "length":80
+             "damage":0,//伤害
+             "hitSize":4,//碰撞箱大小
+             "drawSize":40,//渲染大小
+             "pierceArmor":true
+             "pierce":true,//穿透
+             "rangeChange":80
+             "ammoMultiplier":2,//每个物品能够作为几发子弹
+             "optimalLifeFract":1.5
+             "reloadMultiplier":2,//装弹速度倍率
+             "killShooter":false,//自爆
+             "knockback":2,//击中减速
+             "hitTiles":true,//攻击方块
+             "status":"中毒",//击中给予状态
+             "statusDuration":650,//状态持续时间，帧
+             "hitColor":"#8000ff","lightColor":"#c455ff"//颜色
+             "width": 12,"height": 15,
+             "hitEffect":"hitFlameSmall"
+             "divisions":25
+             "oscScl":2
+             "oscMag":1
+             //"flareWidth":12, 
+            // "flareInnerScl":1, 
+             //"flareLength":80, 
+             //"flareInnerLenScl":1, 
+             "makeFire":false,//是否生产火焰
+ // "colors":["8000ff","6c1cff","6139ff","5e55ff","7181ff"]
+             "lengthWidthPans":[
+             80,32,1,1//长宽椭圆平移偏移。
+             2,3,1,2
+             4,5,1,3
+             6,7,1,4
+             8,9,0,0
+             /*0.5,0.5,0.5,0.5
+             0.4,0.4,0.4,0.4
+             0.3,0.3,0.3,0.3
+             0.2,0.2,0.2,0.2
+             0.1,0.1,0,0*/
+             
+             ]
+"shootEffect":"shootPyraFlame"
+//"shootEffect":{
+
+
+}
+             }
+     }
+    /* "itemCapacity":15,
+      //液体容量
+      "liquidBoostIntensity":1.3,
+   //液体提供的加速效果,(数值的平方)
+    "consumes": {
+        "liquid": {
+        "liquid": "water",
+        //强化液:水
+        "amount":0.5,
+        //每秒所需的强化液(数值×60)
+        "booster": true,
+        //加速
+        "optional": true
+        //可选(false为必需)
+        } }*/
+     
+     
+     "researchCostMultiplier": 100
+	//研究方块的资源倍速
+    "category": "turret",
+    "research": "高射炮"
+}
+/*代码*/
+/*"speed":-4,//"drag":-0.01,//速度/反*/

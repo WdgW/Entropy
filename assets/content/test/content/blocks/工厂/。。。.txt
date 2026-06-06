@@ -1,0 +1,11 @@
+{
+//copper 铜 lead 铅 coal 煤 spore-pod 孢子荚
+//graphite 石墨 silicon 硅 titanium 钛 thorium 钍
+//plastanium 塑钢 surge-alloy 巨浪合金 phase-fabric 相织布
+//pyratite 硫 blast-compound 爆炸混合物 metaglass 钢化玻璃
+	//turret 炮塔子页面 production 钻头子页面 
+	//defense 墙子页面 power 电力子页面
+	//logic 逻辑子页面 units 单位子页面
+	//liquid 液体子页面 distribution 传送带子页面
+	//effect 修复仪子页面
+}

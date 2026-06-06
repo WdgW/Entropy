@@ -1,0 +1,19 @@
+{
+   "type": "itemBridge",
+   "name": "红晶传送带桥",
+   "description": "用红晶做的传送带桥，你不要嫌慢，要怪就怪你游戏帧率太低,"
+   //描述
+   "health":1250,
+   "requirements": [
+      "超级锭/1"
+   ]
+   "category": "distribution",
+   "range": 160,
+   "transportTime":0.001,
+    //运输时间（越小越快）
+   "speed": 2500000000000,
+   "canOverdrive": false,
+   "hasPower": false,
+   "itemCapacity":500,
+   "research": "超级传送带",
+}

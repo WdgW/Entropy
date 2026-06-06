@@ -1,0 +1,45 @@
+{
+   "type": "drill"
+   //类型
+   "name": "碳钢钻头"
+   //名称
+   "description": "中期工具"
+   //介绍
+   "health":1200,
+   //血量
+   "itemCapacity":60,
+	//容量
+   "tier":4
+   //挖掘等级
+   "size":2
+   //可以理解为边长。
+   "drillTime":160
+   //采矿耗时(秒)
+   "drawMineItem": "false",
+   "requirements": [
+      "silicon/15"//硅
+      "碳钢板/5"
+      "graphite/15"
+   ]
+   "itemCapacity": 10,
+   //液体容量
+   "warmupSpeed":0.5,
+   "liquidBoostIntensity": 1.8,
+   //液体提供的加速效果,(数值的平方)
+   "consumes": {
+        "liquid": {
+        "liquid": "water",
+        //强化液:水
+        "amount":0.07,
+        //每秒所需的强化液(数值×60)
+        "booster": true,
+        //加速
+        "optional": true
+        //可选(false为必需)
+        }
+   }
+   "research": "硅钻头"
+   //科技排在爆破钻头的后面
+   "category": "production"
+   //分类钻头
+}

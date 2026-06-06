@@ -1,0 +1,85 @@
+{
+"type":"legs",
+"name":"蜘蛛侠",
+"description":"墙上的爬虫见过没，还背着TNT哦！",
+"controller":"suicideAI",//ai
+"research":"爆破爬虫",
+"speed":2,//速度
+"mechSideSway":0.11,//偏移
+"hitSize":20,//尺寸
+"health":950,//生命
+"armor":100,//护甲
+"targetAir":true,//是否攻击空军
+"targetGround":true,//是否攻击地面目标
+"itemCapacity":40,//背包容量
+"range":80,//范围
+"legCount":2,//腿数
+"legLength":2,//最大腿长
+"legBaseOffset":0,//腿根部偏移
+"legExtension":-1,//腿部各段长短
+"legSplashDamage":3,//踩踏范围伤害
+"legSplashRange":2,//踩踏范围伤害的范围
+"rippleScale":0.1,//踩踏特效范围
+"legLengthScl": 1.2,//腿部最大伸缩
+"ammoType":"TNT",
+"weapons":[{
+"shoot":{"firstShotDelay":160}
+"name":"TNT爬虫",//名称
+"x":0,"y":0,
+"reload":45,//装弹时间
+"shootCone":180,//射锥
+"shootOnDeath":true,//自杀
+"ejectEffect":"none",
+"shootSound":"explosion",
+"mirror":false,//镜像
+"bullet":{
+"type":"basicBulletType",//基础子弹
+"ammoMultiplier":1,//每个物品能够
+"damage":50,//伤害
+"speed":1,
+"lifetime":1,//子弹存在时间
+"rangeOverride":160,//范围覆盖
+"splashDamage":20,//飞溅损坏。
+"splashDamageRadius":20,//飞溅伤害半径。
+"instantDisappear":true,//瞬间消失
+"collides":false,
+"killShooter":true,
+"collidesAir":true,
+"hittable":false,
+"collidesTiles":false,
+"fragBullets":360,//破片弹数量
+"fragRandomSpread":360,//随机分裂角度
+"fragSpread":0,//指定分裂角度
+"fragBullet":{
+"type":"missileBulletType",//弹片子弹型
+"pierce":false,//穿透
+"fromColor":"#ff6f55",//子弹颜色
+"status":"blasted",//击中给予状态
+"splashDamageRadius": 20,//爆炸伤害半径
+"splashDamage": 20, //爆炸损伤
+"length": 20.00,//半径
+"damage": 20.00, //损伤
+"fragBullets":1,//破片弹数量
+"fragRandomSpread":360,//随机分裂角度
+"fragSpread":0,//指定分裂角度
+"fragBullet":{
+"type":"continuousFlameBulletType",//基础子弹
+"damage": 20//伤害
+//"pierce":true,//穿透
+"status":"blasted",//击中给予状态
+"splashDamageRadius": 20,//爆炸伤害半径
+"splashDamage": 60, //爆炸损伤
+"hitSize":2
+"flareLength":60
+/*"fragBullets":2,//破片弹数量
+"fragRandomSpread":180,//随机分裂角度
+"fragSpread":0,//指定分裂角度
+"fragBullet":{
+"type":"ContinuousFlameBulletType",//基础子弹
+"damage": 20//伤害
+//"pierce":true,//穿透
+"status":"shocked",//击中给予状态
+"hitSize":2
+"flareLength":60
+}*/}}}}]
+}

@@ -1,0 +1,31 @@
+{
+   "type":"genericCrafter",
+   "name": "碳钢板压制机",
+   "health":1000,
+   "size":2,
+   "itemCapacity":4,
+	//容量
+   "craftTime":60,
+   //生产时间÷60
+   "outputItem":"碳钢板/1",
+   //输出
+   "consumes": {
+        "power":2,
+        //耗电1=60
+         "items": {
+            "items": [
+               "铅碳混合物/2",
+               "铁/1"
+                
+            ]
+         }
+   }
+   
+   "requirements": [
+      "silicon/15",
+      "铁/5",
+      "lead/15"
+   ]
+   "research": "铅碳混合机",
+   "category":"crafting"
+}

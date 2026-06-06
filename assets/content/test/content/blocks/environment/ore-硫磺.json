@@ -1,0 +1,13 @@
+{
+   "itemDrop": "硫磺"
+   "type": "oreBlock"
+   "playerUnmineable":true,
+   "variants": 3//贴图数量
+   "useColor":true
+   "oreDefault":true,
+   "oreScale":10
+	//自动生成的规模
+	"oreThreshold":0.8
+	//自动生成的密集度
+   "oreDefault":true,//是否自动生成
+}

@@ -1,0 +1,11 @@
+{
+   "itemDrop": "铀"
+   "type": "oreBlock"
+   "playerUnmineable":true,
+   "variants": 2//贴图数量
+   "useColor":true
+   "oreDefault":true,
+   "oreThreshold":0.8,
+   "oreScale":10
+   "oreDefault":true,//是否自动生成
+}

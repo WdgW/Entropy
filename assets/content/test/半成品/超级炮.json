@@ -1,0 +1,71 @@
+{
+    "type":"laserTurret"//类型
+    "name":"红晶炮"
+	"description": "伤害高emmmmmmmm",//介绍
+	"details":"敌人:莫得体验！TMD!"
+	"targetGround": true,//是否攻击陆军
+	"health": 10000,	//血量
+	"reload":600,//发射间隔60为1秒
+	"targetAir":true,//攻击天空
+	"lengthFalloff":100,//光的速度
+	"rotatespeed": 100,
+	"drag":3,
+	"cooldown": 20,
+	"powercapacity":1000,
+	"craftTime":480
+	"booster": true,
+	"optional": true
+	"recoil": 5,
+	"restitution": 0.6,//返还倍数
+	"heatColor":"ec7458ff",//过热颜色
+	"inaccuracy": 0,//误差度数90为90度
+	"burstSpacing":3,
+	"reload": 60,
+	"alternate":true
+	"range":320,//射程8为1格
+	"consumes": {
+	"power":10
+	}
+	"size": 3,
+	"chargeTime": 6,
+    "chargeMaxDelay": 10,
+    "chargeEffects": 10,
+    "heatColor":"ec7458ff",
+    "buildCostMultiplier":1,
+    "coolantMultiplier":4,
+	"hasPower": true,
+	"shootSound" : "laserbig",
+    "smokeEffect": "bigShockwave",
+    "chargeEffect": "none",//充能特效
+    "chargeBeginEffect": "shieldBreak",
+    "loopSound":"beam"
+    "loopSoundVolume":2
+	"rotateSpeed": 15,
+		"shootType":{
+	        "type":"ContinuousLaserBulletType"
+    		"despawnEffect":"none"
+         "shots": 1,//一次发射多少炮弹
+         "status":"sapped"
+         "statusDuration":600
+    		"length":320
+    		"width":10//宽
+    		"shootDuration":500//子弹显示时间
+    		"drawSize":125
+			"damage":50000
+			"collidesAir":true
+			"incendChance":0.4
+            "incendSpread":5
+            "incendAmount":1
+            "hitEffect":"hitMeltdown"
+            "hitColor":"meltdownHit"
+ }
+	"requirements": [
+		{"item":"surge-alloy","amount":275},
+		{"item":"copper","amount":1000}
+		{"item":"silicon","amount":650}
+		{"item":"lead","amount":750}
+		{"item":"超级锭","amount":500}
+	]
+	"category": "turret",//菜单种类
+	"research":"超级锭",//在什么科技树后面(万能duo(双管炮))
+}

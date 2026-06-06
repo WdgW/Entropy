@@ -1,0 +1,21 @@
+{
+   "type": "conveyor",
+   "name": "碳钢带",
+   "description": "中期工具"
+   //描述
+   "health":100,
+   "itemCapacity":3,
+	//容量
+   "requirements": [
+      "silicon/1"
+      "graphite/1"
+      "碳钢板/1"
+   ]
+   "category": "distribution",
+   "speed": 0.35,
+   "displayedSpeed":35,
+   "research": "硅带",
+	"insulated":false,
+    "placeableLiquid":false,
+    "absorbLasers":true
+}

@@ -1,0 +1,105 @@
+{
+	"type": "powerTurret",
+	"name": "导弹",
+	"description": "",
+	"targetAir":true,
+	//是否攻击空军
+	"targetGround":true,
+	//是否攻击地面目标
+	"health":1200,
+	//生命值
+	"size":3,
+	//尺寸
+	"inaccuracy":5,
+	//子弹偏移度
+	"reload":5,
+	//射速
+	"hasPower":true,
+	//是否用电
+	"shootSound":"missile",
+	//音效
+	"consumes":{
+		"power":10
+	}
+	"rotateSpeed":25,
+	//炮台转动速度
+	"range":300,
+	//射程
+	"shoot":{
+    	"type":"ShootAlternate",
+    	"barrels":4,
+		//炮口数量
+		"spread":3,
+		//炮口间距设定
+		"shots":4
+    }
+	"shootType":{
+	"sprite":"机械动力-导弹.子弹"
+	"type":"MissileBulletType",
+	"damage":35,
+	//伤害
+	"status":"electrified",
+	"splashDamageRadius":8,//飞溅伤害半径。
+	"splashDamage":20,//飞溅损坏。
+	"width":8,//宽度
+	"height":16,//高度
+	"pierce":false,
+	"speed":9,
+	"lifetime":50,
+	"homingRange":200,
+	"homingPower":0.13,
+	//追踪力度
+	"hitEffect":"flakExplosion",
+	//子弹击中特效
+	"trailColor":"#ff6f55",
+	//尾迹颜色
+	"backColor":"#ff0000",//背景色。
+	"frontColor":"#ffe600",//正面颜色
+	"recoil":0,
+	"fragBullets":7,//破片弹数量
+"fragVelocityMin":1,//破片最小速度
+"fragVelocityMax":2,//破片最大速度
+"fragRandomSpread":45,//随机分裂范围(度)
+"fragSpread":1,//每个弹片之间的角度
+"fragAngle":0,//随机偏移角度
+//"fragOnHit":true,//击中分裂
+"fragLifeMin":600,//最少存在时间
+"fragLifeMax":600,//最多存在时间
+"fragBullet":{
+"sprite":"机械动力-导弹.子弹"
+	"type":"MissileBulletType",
+	"damage":35,
+	//伤害
+	"status":"electrified",
+	"splashDamageRadius":8,//飞溅伤害半径。
+	"splashDamage":20,//飞溅损坏。
+	"width":8,//宽度
+	"height":16,//高度
+	"pierce":false,
+	"speed":9,
+	"lifetime":50,
+	"homingRange":200,
+	"homingPower":0.13,
+	//追踪力度
+	"hitEffect":"flakExplosion",
+	//子弹击中特效
+	"trailColor":"#ff6f55",
+	//尾迹颜色
+	"backColor":"#ff0000",//背景色。
+	"frontColor":"#ffe600",//正面颜色
+	"recoil":0,
+	"spawnUnit":"导弹-子弹"
+}
+	
+	},
+	"requirements": [
+		{ "item": "titanium", "amount": 200 },
+		{ "item": "lead", "amount": 200 },
+		{ "item": "silicon", "amount": 100 },
+		{ "item": "graphite", "amount": 100 },
+		{ "item": "phase-fabric", "amount": 20 },
+		{ "item": "碳钢板", "amount": 2000 },
+	],
+	"category": "turret",
+	"research": "高射炮"
+}

@@ -1,0 +1,15 @@
+{
+	"name": "铜容器",
+	"type": "StorageBlock",
+	"itemCapacity": 100,
+	"hasItems": true,
+	"health": 120,
+	"size": 2,
+	"buildCostMultiplier":0.75
+	"requirements": [
+		{ "item": "copper", "amount": 300 },
+		{ "item": "lead", "amount": 120 },
+	],
+	"category": "effect",
+	"research": "铜卸载器"
+}

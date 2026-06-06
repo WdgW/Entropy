@@ -1,0 +1,44 @@
+{
+//copper 铜 lead 铅 coal 煤 spore-pod 孢子荚
+//graphite 石墨 silicon 硅 titanium 钛 thorium 钍
+//plastanium 塑钢 surge-alloy 巨浪合金 phase-fabric 相织布
+//pyratite 硫 blast-compound 爆炸混合物 metaglass 钢化玻璃
+   "type":"genericCrafter",
+   "description":""
+   //描述
+   "name": "大型尘埃收集器"
+   "health":250,
+   "size":4
+   "itemCapacity":50,
+	//容量
+   "craftTime":8,
+   //生产时间÷60
+   "outputItem":"sand/1",
+   //输出
+	"hasPower": true,/*是否需要电*/
+	"hasLiquids": false,/*是否需要液体*/
+	"hasItems": false,/*是否需要物品*/
+	"liquidBoostIntensity":2,
+   //液体提供的加速效果,(数值的平方)
+   "consumes": {
+        "power":4,
+        //耗电1=60
+        "liquid": {
+        "liquid": "water",
+        //强化液:水
+        "amount":0.2,
+        //每秒所需的强化液(数值×60)
+        "booster": true,
+        //加速
+        "optional": true
+        //可选(false为必需)
+        }
+   }
+   "requirements": [
+      "copper/80"
+      "lead/100"
+      "graphite/30"
+   ]
+   "research": "铜铅钻头"
+   "category":"crafting"
+}

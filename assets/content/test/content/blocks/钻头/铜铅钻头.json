@@ -1,0 +1,52 @@
+{
+   "type":"drill",
+   "name":"铜铅钻头",
+   "description":"过渡工具，没煤用的",
+   "health":160,
+   "cost":5
+   "size":2,
+   //大小
+   "tier":3,
+   "drillTime":420,
+   //挖矿耗时
+   "requirements": [
+      "lead/15"
+      "copper/10"
+   ]
+   "itemCapacity":10,
+   "liquidBoostIntensity":1.73,
+   //液体提供的加速
+   "drawMineItem":true,
+   "warmupSpeed":0.1,
+       /*"consumes":{
+        "liquid": {
+        "liquid": "water",
+        "amount":0.01,
+        "optional":false
+            "booster":false
+        }
+        "coolant":{
+            "amount":0.01,
+            "optional":true,
+            "booster":true
+        }
+    },*/
+   "consumes": {
+        "liquid": {
+        "liquid": "water",
+        "amount":0.05,
+        "booster": true,
+        "optional": true
+        }
+   }
+   
+   	"research": {
+		"root": true
+		"name":"机械动力"
+		"turbine-condenser":[
+{   "type": "OnPlanet"
+	"planet": "机械飞升" // 指定需要着陆的星球
+}
+	]}
+   "category": "production"
+}

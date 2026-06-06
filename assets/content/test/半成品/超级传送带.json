@@ -1,0 +1,19 @@
+{
+   "type": "conveyor",
+   "name": "红晶传送带",
+   "description": "用红晶做的传送带，你不要嫌慢，要怪就怪你游戏帧率太低"
+   //描述
+   "health":1250,
+   "idleSound":"none",//"空闲时的声音"
+   "requirements": [
+      "超级锭/1"
+   ]
+   "category": "distribution",
+   "speed": 5,
+   "displayedSpeed":500,
+   "research": "超级锭",
+	"insulated":false,
+    "placeableLiquid":false,
+    "displayFlow":true,
+    "absorbLasers":false
+}

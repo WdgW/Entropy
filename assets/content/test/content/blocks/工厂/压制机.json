@@ -1,0 +1,34 @@
+{
+   "type": "genericCrafter",
+   "name": "压制机"
+   "description":"把铀压成铀棒"
+   //描述
+   "health":200,
+   "size":2,
+   "itemCapacity":20,
+	//容量
+   "craftTime":60,
+   //生产时间÷60
+   "outputItem":"铀棒/1",
+   //输出
+   "requirements": [
+      "silicon/30",
+      "copper/30",
+      "lead/70",
+      "铁/50",
+      "碳钢板/50"
+   ]
+   "consumes": {
+        "power":0.5,
+        //耗电1=60
+         "items": {
+            "items": [
+               "铀/10"
+            ]
+         }
+   }
+   "research": "铀"
+   //科技排在谁的后面
+   "category":"crafting"
+	//在建筑菜单中位于工厂子页面
+}
