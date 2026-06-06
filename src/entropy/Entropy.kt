@@ -1,24 +1,45 @@
 package entropy
 
 import arc.files.Fi
-import arc.func.Boolf
 import arc.struct.Seq
 import arc.util.Log
 import arc.util.serialization.Json
+import arc.util.serialization.Jval
 import mindustry.Vars
 import mindustry.ai.UnitCommand
 import mindustry.input.Binding
 import mindustry.mod.Mod
-import mindustry.mod.Mods
 import mindustry.mod.Mods.LoadedMod
 import entropy.EntropyContentType as ECT
 
-
 class Entropy : Mod() {
-    val mod: Mods.LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
-    val contentRoot: Fi by lazy {mod.root.child("content") }
-    val modJsonFi: Fi by lazy {if (mod.root.child("mod.json").exists()) mod.root.child("mod.json")else mod.root.child("mod.hjson") }
-    val json : Json = Json()
+    companion object{
+        val mod: LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
+        val contentRoot: Fi by lazy {mod.root.child("content") }
+        val modJsonFi: Fi by lazy {if (mod.root.child("mod.json").exists()) mod.root.child("mod.json")else mod.root.child("mod.hjson") }
+        var entropyModMeta: EntropyModMeta? = null
+        val json : Json = Json()
+
+        fun parseCustomContents(jsonString: String): EntropyModMeta {
+            try {
+
+                val root = json.fromJson(EntropyModMeta::class.java, Jval.read(jsonString).toString(Jval.Jformat.plain))
+
+                // 读取 contents 字段
+                root.content?.let { contents ->
+                    "Found custom contents: $contents".log()
+                }
+                return root
+            } catch (e: Exception) {
+                Log.warn("[Entropy] Failed to parse custom contents: ${e.message}")
+            }
+            return EntropyModMeta()
+        }
+        fun <T>  T.log(){
+            Log.infoTag("Entropy", this.toString())
+        }
+    }
+
    // val configs
     //var isLoadExamples: Boolean = contentRoot.exists(false) {
      //   // TODO
@@ -56,6 +77,8 @@ class Entropy : Mod() {
     }
 
     override fun loadContent() {
+        entropyModMeta = parseCustomContents(modJsonFi.readString("UTF-8"))
+
         "Loading some entropy content.".log()
         loadCustomJsonContent()
         
@@ -111,9 +134,7 @@ class Entropy : Mod() {
         }
     }
 
-    fun <T>  T.log(){
-        Log.infoTag("Entropy", this.toString())
-    }
+
 
     data class LoadRun(val type: ECT, val file: Fi, val mod: LoadedMod) : Comparable<LoadRun> {
         override fun compareTo(other: LoadRun): Int {
@@ -129,4 +150,6 @@ class Entropy : Mod() {
                     "\ncontent=${file.readString("UTF-8")})"
         }
     }
+
 }
+
