@@ -7,9 +7,12 @@ import arc.util.serialization.Json
 import arc.util.serialization.Jval
 import mindustry.Vars
 import mindustry.ai.UnitCommand
+import mindustry.content.Items
 import mindustry.input.Binding
 import mindustry.mod.Mod
 import mindustry.mod.Mods.LoadedMod
+import mindustry.type.Category
+import mindustry.type.ItemStack
 import entropy.EntropyContentType as ECT
 
 class Entropy : Mod() {
@@ -38,6 +41,8 @@ class Entropy : Mod() {
         fun <T>  T.log(){
             Log.infoTag("Entropy", this.toString())
         }
+        inline infix fun <T> Boolean.ifTrue(condition:()->T): T? = if (this) condition() else null
+        infix fun <T> Boolean.ifTrue(condition:T): T? = if (this) condition else null
     }
 
    // val configs
@@ -84,6 +89,21 @@ class Entropy : Mod() {
         
         UnitCommand.assistCommand = UnitCommand("assist", "players", Binding.unitCommandAssist){BuilderAIn(true)}
         modJsonFi.readString().log()
+        PowerProjector("power-force-projector").apply {
+                requirements(Category.defense,ItemStack.with(Items.copper, 10000))
+                consumePower(10f)
+                itemConsumer = consumeItem(Items.phaseFabric,2).boost()
+                size = 5
+                phaseRadiusBoost = 80f
+                radius = 240f
+
+        }
+        PowerProjectorNode("power-force-projector-node").apply {
+            requirements(Category.defense,ItemStack.with(Items.copper, 1000))
+            radiusScl = 1f
+//            consumePower(10f)
+        }
+
 //        val modjson = json.readField()
         
     }
