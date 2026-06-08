@@ -10,11 +10,7 @@ import arc.scene.ui.Image
 import arc.scene.ui.layout.Stack
 import arc.scene.ui.layout.Table
 import arc.struct.Seq
-import arc.util.Eachable
-import arc.util.Scaling
-import arc.util.Strings
-import arc.util.Structs
-import arc.util.Time
+import arc.util.*
 import arc.util.io.Reads
 import arc.util.io.Writes
 import mindustry.Vars
@@ -46,7 +42,7 @@ import mindustry.world.meta.BlockStatus
 import mindustry.world.meta.Stat
 import mindustry.world.meta.StatUnit
 import mindustry.world.meta.StatValues
-import java.util.Objects
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -825,7 +821,6 @@ class MultiFactory(name: String) : GenericCrafter(name) {
                 warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed)
             }
 
-            //TODO may look bad, revert to edelta() if so
             totalProgress += warmup * Time.delta
 
 

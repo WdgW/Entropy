@@ -3,7 +3,6 @@ package entropy.mod
 import arc.files.Fi
 import entropy.mod.Parser.Companion.parseLog
 import entropy.mod.Parser.Companion.toHashMap
-import entropy.mod.Parser.Companion.toJsonValue
 
 /**
  * 类型别名

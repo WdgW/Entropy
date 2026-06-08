@@ -17,7 +17,6 @@ import arc.util.Time
 import arc.util.io.Reads
 import arc.util.io.Writes
 import entropy.Entropy.Companion.ifTrue
-import entropy.Entropy.Companion.log
 import entropy.EntropyBlock
 import entropy.EntropyBuilding
 import mindustry.Vars
@@ -46,7 +45,6 @@ import mindustry.world.meta.BlockFlag
 import mindustry.world.meta.BlockGroup
 import mindustry.world.meta.Env
 import mindustry.world.meta.Stat
-
 
 
 /**

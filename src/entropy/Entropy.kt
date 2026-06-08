@@ -4,23 +4,15 @@ import arc.files.Fi
 import arc.struct.Seq
 import arc.util.Log
 import arc.util.serialization.Json
-import arc.util.serialization.Jval
 import entropy.mod.ClassMap
 import entropy.mod.EntropyModMeta
-import entropy.mod.Parser
 import entropy.mod.Parser.Companion.parseLog
-import entropy.mod.Parser.Companion.toHashMap
 import entropy.mod.Parser.Companion.toJsonValue
 import entropy.mod.ParserMap
 import entropy.mod.TypeAlias
 import mindustry.Vars
-import mindustry.ai.UnitCommand
-import mindustry.content.Items
-import mindustry.input.Binding
 import mindustry.mod.Mod
 import mindustry.mod.Mods.LoadedMod
-import mindustry.type.Category
-import mindustry.type.ItemStack
 import entropy.EntropyContentType as ECT
 
 class Entropy : Mod() {
@@ -88,6 +80,7 @@ class Entropy : Mod() {
             typeAlias.log()
 
             val jsons = testContentFi.findAll { f: Fi -> f.extension() == "json" || f.extension() == "hjson" && f.name() != "typealias.json" }
+            jsons.log()
             for (json in jsons){
                 json.name().log()
 //                json.readString().log()
