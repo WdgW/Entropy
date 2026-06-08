@@ -1,5 +1,7 @@
-package entropy
+package entropy.world
 
+import entropy.EntropyBlock
+import entropy.EntropyBuilding
 import mindustry.world.blocks.power.PowerNode
 
 class PowerProjectorNode(name: String) : PowerNode(name), EntropyBlock {

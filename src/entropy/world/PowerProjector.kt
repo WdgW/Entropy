@@ -1,4 +1,4 @@
-package entropy
+package entropy.world
 
 import arc.Core
 import arc.Events
@@ -11,15 +11,19 @@ import arc.graphics.g2d.Lines
 import arc.graphics.g2d.TextureRegion
 import arc.math.Mathf
 import arc.math.geom.Intersector
+import arc.struct.EnumSet
 import arc.struct.Seq
 import arc.util.Time
 import arc.util.io.Reads
 import arc.util.io.Writes
 import entropy.Entropy.Companion.ifTrue
-import entropy.PowerProjectorNode.PowerProjectorNodeBuild
+import entropy.Entropy.Companion.log
+import entropy.EntropyBlock
+import entropy.EntropyBuilding
 import mindustry.Vars
 import mindustry.Vars.renderer
 import mindustry.content.Fx
+import mindustry.entities.Effect
 import mindustry.game.EventType
 import mindustry.game.Team
 import mindustry.gen.Building
@@ -33,12 +37,15 @@ import mindustry.logic.Ranged
 import mindustry.ui.Bar
 import mindustry.world.Block
 import mindustry.world.blocks.ExplosionShield
+import mindustry.world.blocks.defense.ForceProjector
+import mindustry.world.blocks.power.PowerGraph
 import mindustry.world.blocks.power.PowerNode.PowerNodeBuild
 import mindustry.world.consumers.Consume
 import mindustry.world.consumers.ConsumeCoolant
 import mindustry.world.consumers.ConsumeItems
 import mindustry.world.meta.BlockFlag
 import mindustry.world.meta.BlockGroup
+import mindustry.world.meta.Env
 import mindustry.world.meta.Stat
 
 /**
@@ -89,11 +96,11 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
     /**
      * 护盾被伤害时的特效
      */
-    var absorbEffect: mindustry.entities.Effect = Fx.absorb
+    var absorbEffect: Effect = Fx.absorb
     /**
      * 护盾被伤害时的特效音效
      */
-    var shieldBreakEffect: mindustry.entities.Effect = Fx.shieldBreak
+    var shieldBreakEffect: Effect = Fx.shieldBreak
 
     /**
      * 护盾被摧毁是否销毁电池
@@ -127,8 +134,15 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         var paramBlock: PowerProjector? = null
         var paramEntity: PowerProjectorBuild? = null
 
+        // 使用三个并行数组替代 Triple，减少对象创建
+        var nodeCount: Int = 0
+        var nodePosArr: IntArray? = null
+        var nodeRadiusArr: FloatArray? = null
+        var nodeBoundsArr: FloatArray? = null // [minX, maxX, minY, maxY] * nodeCount
+
         /**
-         * 统一的子弹检测回调，同时检测本体和所有节点护盾
+         * 优化的子弹检测回调
+         * 先用矩形边界粗检测过滤，再用多边形精确检测
          */
         protected val shieldConsumer = shieldConsumer@{ bullet: Bullet ->
             if (paramBlock == null || paramEntity == null) {
@@ -143,27 +157,50 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
 
                 val bx = bullet.x
                 val by = bullet.y
+                val realRadius = paramEntity.realRadius()
 
                 // 检测本体护盾
-                val realRadius = paramEntity.realRadius()
-                if (realRadius > 0 &&
-                    Intersector.isInRegularPolygon(
-                        paramBlock.sides, paramEntity.x, paramEntity.y,
-                        realRadius, paramBlock.shieldRotation, bx, by)) {
-                    handleBulletAbsorb(bullet, paramEntity.power.graph)
-                    return@shieldConsumer
-                }
+                if (realRadius > 0) {
+                    val selfMinX = paramEntity.x - realRadius
+                    val selfMaxX = paramEntity.x + realRadius
+                    val selfMinY = paramEntity.y - realRadius
+                    val selfMaxY = paramEntity.y + realRadius
 
-                // 检测所有节点护盾
+                    // 先做矩形粗检测
+                    if (bx in selfMinX..selfMaxX && by in selfMinY..selfMaxY) {
+                        if (Intersector.isInRegularPolygon(
+                                paramBlock.sides, paramEntity.x, paramEntity.y,
+                                realRadius, paramBlock.shieldRotation, bx, by)) {
+                            handleBulletAbsorb(bullet, paramEntity.power.graph)
+                            return@shieldConsumer
+                        }
+                    }
 
-                paramEntity.powerProjectorNodes.forEach { node ->
-                    val nodeRadius = realRadius* node.radiusScl
-                    if (nodeRadius > 0 &&
-                        Intersector.isInRegularPolygon(
-                            paramBlock.sides, node.x, node.y,
-                            nodeRadius, paramBlock.shieldRotation, bx, by)) {
-                        handleBulletAbsorb(bullet, node.power.graph)
-                        return@shieldConsumer
+                    // 检测所有节点护盾
+                    val count = nodeCount
+                    if (count <= 0) return@shieldConsumer
+                    val posArr = nodePosArr!!
+                    val radiusArr = nodeRadiusArr!!
+                    val boundsArr = nodeBoundsArr!!
+
+                    for (i in 0 until count) {
+                        val node = Vars.world.build(posArr[i]) as? PowerProjectorNode.PowerProjectorNodeBuild ?: continue
+                        val nodeRadius = radiusArr[i]
+
+                        if (nodeRadius <= 0f) continue
+
+                        val boundsIdx = i * 4
+                        // 先做矩形粗检测，快速过滤掉不在范围内的子弹
+                        if (bx !in boundsArr[boundsIdx]..boundsArr[boundsIdx + 1] ||
+                            by !in boundsArr[boundsIdx + 2]..boundsArr[boundsIdx + 3]) continue
+
+                        // 矩形内才执行昂贵的多边形检测
+                        if (Intersector.isInRegularPolygon(
+                                paramBlock.sides, node.x, node.y,
+                                nodeRadius, paramBlock.shieldRotation, bx, by)) {
+                            handleBulletAbsorb(bullet, node.power.graph)
+                            return@shieldConsumer
+                        }
                     }
                 }
             }
@@ -172,7 +209,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         /**
          * 处理子弹吸收的公共逻辑
          */
-        private fun handleBulletAbsorb(bullet: Bullet, graph: mindustry.world.blocks.power.PowerGraph) {
+        private fun handleBulletAbsorb(bullet: Bullet, graph: PowerGraph) {
             if (paramEntity == null || paramBlock == null) {
                 return
             }
@@ -205,10 +242,10 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         hasPower = true
         hasLiquids = true
         hasItems = true
-        envEnabled = envEnabled or mindustry.world.meta.Env.space
+        envEnabled = envEnabled or Env.space
         ambientSound = Sounds.loopShield
         ambientSoundVolume = 0.1f
-        flags = arc.struct.EnumSet.of(BlockFlag.shield)
+        flags = EnumSet.of(BlockFlag.shield)
         breakSound = Sounds.shieldBreak
 
         if (consumeCoolant) {
@@ -330,18 +367,12 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         var hit: Float = 0f
 
         // ✅ 添加上次更新时的电力图，用于检测电网变化
-        var lastGraph: mindustry.world.blocks.power.PowerGraph? = null
+        var lastGraph: PowerGraph? = null
         var lastGraphSize: Int =0
         var lastGraphID: Int = 0
         // ✅ 只在必要时更新节点列表
-        val powerProjectorNodes = Seq<PowerProjectorNodeBuild>(false, 16, PowerProjectorNodeBuild::class.java)
+        val powerProjectorNodes = Seq<PowerProjectorNode.PowerProjectorNodeBuild>(false, 16, PowerProjectorNode.PowerProjectorNodeBuild::class.java)
         var needsUpdate: Boolean = false
-
-        var left:Float = x
-        var right:Float = x
-        var top:Float = y
-        var bottom:Float = y
-        var maxNodeRadius:Float = realRadius()
 
 
         var shouldDisable: Boolean = false
@@ -368,12 +399,12 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         override fun inFogTo(viewer: Team?): Boolean = false
 
         val buildEndEventListener = { it: EventType.BlockBuildEndEvent ->
-            if (it.team == team && it.tile.build is PowerProjectorNodeBuild && it.tile.build?.power?.graph === power.graph) {
+            if (it.team == team && it.tile.build is PowerProjectorNode.PowerProjectorNodeBuild && it.tile.build?.power?.graph === power.graph) {
                 needsUpdate = true
             }
         }
         val destroyEventListener = { it: EventType.BlockDestroyEvent ->
-            if (it.tile.team() == team && it.tile.build is PowerProjectorNodeBuild && it.tile.build?.power?.graph === power.graph) {
+            if (it.tile.team() == team && it.tile.build is PowerProjectorNode.PowerProjectorNodeBuild && it.tile.build?.power?.graph === power.graph) {
                 needsUpdate = true
             }
         }
@@ -428,10 +459,6 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         // ✅ 单独的方法，只在电网变化时调用
         private fun updateNodeList() {
             powerProjectorNodes.clear()
-            left = x
-            right = x
-            top = y
-            bottom = y
             shouldDisable = false
 
             power.graph.all.forEach {
@@ -439,17 +466,9 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                     is PowerProjectorBuild if it != this && it.enabled && it.realRadius() > 0f -> {
                         shouldDisable = true
                     }
-                    is PowerProjectorNodeBuild if !it.dead -> {
+                    is PowerProjectorNode.PowerProjectorNodeBuild if !it.dead -> {
                         powerProjectorNodes.add(it)
-                        if (radius*it.radiusScl > maxNodeRadius){
-                            maxNodeRadius = radius*it.radiusScl
-                        }
-                        when{
-                            it.x < left -> left = it.x
-                            it.x > right -> right = it.x
-                            it.y < top -> top = it.y
-                            it.y > bottom -> bottom = it.y
-                        }
+
                     }
                 }
             }
@@ -463,7 +482,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                 this.power.graph.batteries.remove(it)
             }  }
             this.power.graph.all.forEach { if (it is PowerNodeBuild && !it.dead) {
-                if (it is PowerProjectorNodeBuild){
+                if (it is PowerProjectorNode.PowerProjectorNodeBuild){
                     if (isDestroyProjectorNode) {
                         it.kill()
                         this.power.graph.all.remove(it)
@@ -502,20 +521,65 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         }
 
 
+
         fun deflectBullets(){
-            if (maxNodeRadius > 0) {
-                paramBlock = this@PowerProjector
-                paramEntity = this
-                // 只进行一次四叉树查询
-                Groups.bullet.intersect(
-                    left - maxNodeRadius,
-                    bottom - maxNodeRadius,
-                    (right-left)+ maxNodeRadius * 2f,
-                    (top-bottom)+ maxNodeRadius * 2f,
-                    shieldConsumer
-                )
+            val radius = realRadius()
+            if (radius <= 0) {
+                return
             }
 
+            var minX = x - radius
+            var maxX = x + radius
+            var minY = y - radius
+            var maxY = y + radius
+
+            val nodeSize = powerProjectorNodes.size
+            val posArr = IntArray(nodeSize)
+            val radiusArr = FloatArray(nodeSize)
+            val boundsArr = FloatArray(nodeSize * 4)
+
+            var idx = 0
+            for (node in powerProjectorNodes) {
+                val nodeRadius = radius * node.radiusScl
+                posArr[idx] = node.pos()
+                radiusArr[idx] = nodeRadius
+
+                val boundsIdx = idx * 4
+                boundsArr[boundsIdx] = node.x - nodeRadius
+                boundsArr[boundsIdx + 1] = node.x + nodeRadius
+                boundsArr[boundsIdx + 2] = node.y - nodeRadius
+                boundsArr[boundsIdx + 3] = node.y + nodeRadius
+
+                // 更新全局边界
+                if (nodeRadius > 0f) {
+                    minX = minX.coerceAtMost(boundsArr[boundsIdx])
+                    maxX = maxX.coerceAtLeast(boundsArr[boundsIdx + 1])
+                    minY = minY.coerceAtLeast(boundsArr[boundsIdx + 2])
+                    maxY = maxY.coerceAtMost(boundsArr[boundsIdx + 3])
+                }
+                idx++
+            }
+
+            paramBlock = this@PowerProjector
+            paramEntity = this
+            nodeCount = nodeSize
+            nodePosArr = posArr
+            nodeRadiusArr = radiusArr
+            nodeBoundsArr = boundsArr
+
+            Groups.bullet.intersect(
+                minX,
+                minY,
+                maxX - minX,
+                maxY - minY,
+                shieldConsumer
+            )
+
+            // 清理，防止内存泄漏
+            nodeCount = 0
+            nodePosArr = null
+            nodeRadiusArr = null
+            nodeBoundsArr = null
         }
 
         override fun absorbExplosion(ex: Float, ey: Float, damage: Float): Boolean {
@@ -606,10 +670,11 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
             val size = read.i()
             powerProjectorNodes.clear()
             (0 until size).forEach { _ ->
-                powerProjectorNodes.add(Vars.world.build(read.i())as PowerProjectorNodeBuild)
+                powerProjectorNodes.add(Vars.world.build(read.i())as PowerProjectorNode.PowerProjectorNodeBuild)
             }
             // ✅ 读取后重新验证列表
             lastGraph = null
+            lastGraphID =0
         }
     }
 
