@@ -1,7 +1,4 @@
-package entropy
-
-import entropy.event.EntropyEvent
-
+package entropy.event
 
 class EventChannel {
     private val events = mutableMapOf<Any, EntropyEvent<*>>()

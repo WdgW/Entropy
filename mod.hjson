@@ -8,3 +8,4 @@ minGameVersion: 156
 java: true
 main: entropy.Entropy
 contents: ["reaction"]
+test: true

@@ -5,6 +5,14 @@ import arc.struct.Seq
 import arc.util.Log
 import arc.util.serialization.Json
 import arc.util.serialization.Jval
+import entropy.mod.ClassMap
+import entropy.mod.EntropyModMeta
+import entropy.mod.Parser
+import entropy.mod.Parser.Companion.parseLog
+import entropy.mod.Parser.Companion.toHashMap
+import entropy.mod.Parser.Companion.toJsonValue
+import entropy.mod.ParserMap
+import entropy.mod.TypeAlias
 import mindustry.Vars
 import mindustry.ai.UnitCommand
 import mindustry.content.Items
@@ -23,26 +31,30 @@ class Entropy : Mod() {
         var entropyModMeta: EntropyModMeta? = null
         val json : Json = Json()
 
-        fun parseCustomContents(jsonString: String): EntropyModMeta {
+        fun loadModMeta(jsonString: String) {
             try {
 
-                val root = json.fromJson(EntropyModMeta::class.java, Jval.read(jsonString).toString(Jval.Jformat.plain))
+                val root = json.readValue(EntropyModMeta::class.java, null,modJsonFi.readString().toJsonValue())
 
                 // 读取 contents 字段
                 root.content?.let { contents ->
                     "Found custom contents: $contents".log()
                 }
-                return root
+                entropyModMeta = root
+                return
             } catch (e: Exception) {
                 Log.warn("[Entropy] Failed to parse custom contents: ${e.message}")
             }
-            return EntropyModMeta()
+            entropyModMeta = null;
         }
         fun <T>  T.log(){
             Log.infoTag("Entropy", this.toString())
         }
+
         inline infix fun <T> Boolean.ifTrue(condition:()->T): T? = if (this) condition() else null
         infix fun <T> Boolean.ifTrue(condition:T): T? = if (this) condition else null
+        inline infix fun <T> Boolean.ifFalse(condition:()->T): T? = if (!this) condition() else null
+        infix fun <T> Boolean.ifFalse(condition:T): T? = if (!this) condition else null
     }
 
    // val configs
@@ -57,55 +69,60 @@ class Entropy : Mod() {
 
     init {
         "-----------------------------------".log()
-
-//        Vars.mods.addParseListener { type, values, any ->
-//            Log.info("11111111111111111111111")
-//            type.log()
-//            values.log()
-//            if (type == Reaction::class.java) {
-//                Log.info("Found reaction: $any")//
-//            }
-//        }
-
-        //listen for game load event
-//        Events.on<ClientLoadEvent?>(ClientLoadEvent::class.java, Cons { e: ClientLoadEvent? ->
-//            //show dialog upon startup
-//            Time.runTask(10f, Runnable {
-//                val dialog = BaseDialog("frog")
-//                dialog.cont.add("behold").row()
-//                //mod sprites are prefixed with the mod name (this mod is called 'entropy-java-mod' in its config)
-//                dialog.cont.image(Core.atlas.find("entropy-java-mod-frog")).pad(20f).row()
-//                dialog.cont.button("I see", Runnable { dialog.hide() }).size(100f, 50f)
-//                dialog.show()
-//            })
-//        })
     }
 
     override fun loadContent() {
-        entropyModMeta = parseCustomContents(modJsonFi.readString("UTF-8"))
+        loadModMeta(modJsonFi.readString("UTF-8"))
 
-        "Loading some entropy content.".log()
-        loadCustomJsonContent()
-        
-        UnitCommand.assistCommand = UnitCommand("assist", "players", Binding.unitCommandAssist){BuilderAIn(true)}
-        modJsonFi.readString().log()
-        PowerProjector("power-force-projector").apply {
-                requirements(Category.defense,ItemStack.with(Items.copper, 10000))
-                consumePower(10f)
-                itemConsumer = consumeItem(Items.phaseFabric,2).boost()
-                size = 5
-                phaseRadiusBoost = 80f
-                radius = 240f
+        Test.loadTestContent()
+
+        if (entropyModMeta == null) return
+        val modMeta = entropyModMeta!!
+        modMeta.test ifTrue {
+            val testContentFi = contentRoot.child("test").child("content")
+            if (!testContentFi.exists()) return@ifTrue
+
+            val file = testContentFi.child("typealias.json")
+            if (!file.exists()) return@ifTrue
+            val typeAlias = TypeAlias(file)
+            typeAlias.log()
+
+            val jsons = testContentFi.findAll { f: Fi -> f.extension() == "json" || f.extension() == "hjson" && f.name() != "typealias.json" }
+            for (json in jsons){
+                json.name().log()
+//                json.readString().log()
+                val jsonValue = json.readString().toJsonValue()
+                if (jsonValue == null) {
+                    "[${json.path()}] 中json解析失败".parseLog()
+                    continue
+                }
+                val type = jsonValue["type"]
+                if (type == null) {
+                    "[${json.path()}] 中没有找到type字段".parseLog()
+                    continue
+                }
+                if (!type.isString) {
+                    "[${json.path()}] 中type字段不是字符串".parseLog()
+                    continue
+                }
+                val typeName = type.toString()
+                val classType = typeAlias.get(typeName, ClassMap.getClass(typeName))
+                if (classType == null) {
+                    "[${json.path()}] 中type字段$typeName 不存在".parseLog()
+                    continue
+                }
+                val content = ParserMap.get(classType)
+                if (content == null) {
+                    "[${json.path()}] $typeName 不存在解析器".parseLog()
+                    continue
+                }
+
+
+
+            }
+
 
         }
-        PowerProjectorNode("power-force-projector-node").apply {
-            requirements(Category.defense,ItemStack.with(Items.copper, 1000))
-            radiusScl = 1f
-//            consumePower(10f)
-        }
-
-//        val modjson = json.readField()
-        
     }
 
     fun loadCustomJsonContent() {

@@ -1,6 +1,7 @@
-package entropy
+package entropy.mod
 
 import arc.files.Fi
+import entropy.Entropy
 import mindustry.mod.Mods
 
 class EntropyModMeta: Mods.ModMeta() {
@@ -16,14 +17,14 @@ class EntropyModMeta: Mods.ModMeta() {
     /**
      * 是否加载测试内容
      */
-    var isTest = false
+    var test = false
 
     override fun cleanup() {
         super.cleanup()
         content?.let { content ->
             contentDir = Array<Fi>(
                 size = content.size,
-                init = { Entropy.contentRoot.child(content[it]) }
+                init = { Entropy.Companion.contentRoot.child(content[it]) }
             )
         }
     }
@@ -44,7 +45,7 @@ class EntropyModMeta: Mods.ModMeta() {
                 ", java=$java" +
                 ", texturescale=$texturescale" +
                 ", pregenerated=$pregenerated" +
-                ", isTest=$isTest" +
+                ", isTest=$test" +
                 ", content=$content" +
                 ", contentDir=$contentDir" +
                 '}'

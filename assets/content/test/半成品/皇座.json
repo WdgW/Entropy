@@ -1,4 +1,4 @@
-{"type":"mechUnit"
+{"type":"mechUnit",
 "legCount":4,//腿数
 "legLength":16,//最大腿长
 "legBaseOffset":0,//腿根部偏移
@@ -11,7 +11,7 @@
 "mass": 100, //单位的质量/重量
 "name": "皇座",
 "speed":2,
-"controller":"groundAI"
+"controller":"groundAI",
 "drag":0.001,
 //"accel":1,
 "rotateSpeed":3,
@@ -46,18 +46,18 @@
 "type":"RailBulletType",//基础子弹
 "damage":100,//伤害
 "collidesAir":true,"hitTiles":true,"pierce":true,"pierceArmor":true,
-}}
+}},
 {
 "name":"皇座-",//名称
 "x":0,"y":0,
 "reload":120,//装弹时间
-"ejectEffect":"none",l
+"ejectEffect":"none",
 //"shootSound":"explosion",
 "bullet":{
 "type":"ArtilleryBulletType",//基础子弹
 "damage":100,//伤害
-"collidesAir":true,"hitTiles":true,"pierce":true,"pierceArmor":true,
-}}
+"collidesAir":true,"hitTiles":true,"pierce":true,"pierceArmor":true
+}},
 {
 "name":"    ",//名称
 "x":-2,"y":0,
