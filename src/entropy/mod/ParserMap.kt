@@ -1,5 +1,10 @@
 package entropy.mod
 
+import arc.util.serialization.JsonValue
+import entropy.EntropyContent
+import entropy.world.PowerProjectorNode
+import mindustry.mod.ContentParser
+
 object ParserMap {
     /**
      * 一个类型对应一个解析器
@@ -14,6 +19,11 @@ object ParserMap {
         parsers.remove(typeClass)
     }
     init {
-//        Parser<>
+        object: Parser<PowerProjectorNode>(PowerProjectorNode::class.java){
+            override fun parse(jsonValue: JsonValue): PowerProjectorNode {
+                return PowerProjectorNode(jsonValue.toString())
+//                ContentParser
+            }
+        }
     }
 }
