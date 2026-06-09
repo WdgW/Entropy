@@ -19,11 +19,6 @@ object ParserMap {
         parsers.remove(typeClass)
     }
     init {
-        object: Parser<PowerProjectorNode>(PowerProjectorNode::class.java){
-            override fun parse(jsonValue: JsonValue): PowerProjectorNode {
-                return PowerProjectorNode(jsonValue.toString())
-//                ContentParser
-            }
-        }
+
     }
 }
