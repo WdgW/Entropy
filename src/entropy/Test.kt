@@ -1,6 +1,6 @@
 package entropy
 
-import entropy.Entropy.Companion.log
+import entropy.log
 import entropy.Entropy.Companion.modJsonFi
 import entropy.world.PowerProjector
 import entropy.world.PowerProjectorNode

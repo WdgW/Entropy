@@ -1,24 +1,24 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package entropy.mod
 
 import arc.util.serialization.Json
 import arc.util.serialization.JsonReader
 import arc.util.serialization.JsonValue
 import arc.util.serialization.Jval
-import entropy.Entropy.Companion.log
+import entropy.log
 import entropy.mod.ParserMap.register
 import mindustry.Vars
-import mindustry.content.Planets
 import mindustry.ctype.Content
 import mindustry.ctype.ContentType
 import mindustry.ctype.MappableContent
 import mindustry.ctype.UnlockableContent
-import java.lang.reflect.Field
 
-abstract class Parser<T>(val typeClass:Class<T>) {
+abstract class Parser<T>(val typeClass: Class<T>) {
     companion object {
         val json = Json()
         var jsonReader: JsonReader = JsonReader()
-        fun String.toJsonValue(): JsonValue? {
+        inline fun String.toJsonValue(): JsonValue? {
             try {
                 return jsonReader.parse(Jval.read(this).toString(Jval.Jformat.plain))
             } catch (e: Exception) {
@@ -26,11 +26,49 @@ abstract class Parser<T>(val typeClass:Class<T>) {
                 return null
             }
         }
-        fun String.toHashMap(): HashMap<*, *>? {
-            return json.readValue(HashMap::class.java,toJsonValue())
+
+        inline fun String.toHashMap(): HashMap<*, *>? {
+            return json.readValue(HashMap::class.java, toJsonValue())
         }
-        fun String.parseLog() = " [Parser] $this".log()
+
+        inline fun <T> T.pLog() = this.log("[P]")
+
+        /**
+         * 检查jsonValue是否符合typeAlias的定义(含classMap)
+         * @param jsonValue json文件内容
+         * @param jsonPath json文件路径
+         * @param typeAlias 类型别名
+         * @return 是否合规
+         */
+        fun check(
+            jsonValue: JsonValue,
+            jsonPath: String,
+            typeAlias: TypeAlias
+        ): Boolean {
+            val type = jsonValue.get("type")
+            if (type == null) {
+                "[$jsonPath] 中没有找到type字段".pLog()
+                return true
+            }
+            if (!type.isString) {
+                "[$jsonPath] 中type字段不是字符串".pLog()
+                return true
+            }
+            val typeName = type.toString()
+            val classType = typeAlias.get(typeName, ClassMap.getClass(typeName))
+            if (classType == null) {
+                "[$jsonPath] 中type字段$typeName 不存在".pLog()
+                return true
+            }
+            val content = ParserMap.get(classType)
+            if (content == null) {
+                "[$jsonPath] $typeName 不存在解析器".pLog()
+                return true
+            }
+            return false
+        }
     }
+
     init {
         register(typeClass, this)
     }
@@ -46,41 +84,48 @@ abstract class Parser<T>(val typeClass:Class<T>) {
      *
      * 3.一般只对对象类型的属性进行解析
      */
-    abstract fun parse(obj: T, jsonValue: JsonValue,availableNamespace: Array<String>)
+    abstract fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>)
 
-    fun parse(obj: T,str: String,availableNamespace: Array<String>) = parse(obj, str.toJsonValue()!!,availableNamespace)
+    fun parse(obj: T, str: String, availableNamespace: Array<String>) =
+        parse(obj, str.toJsonValue()!!, availableNamespace)
 
-    abstract class ContentParser<T: Content>(typeClass:Class<T>) : Parser<T>(typeClass){
-        override fun parse(obj: T, jsonValue: JsonValue,availableNamespace: Array<String>) {
+    abstract class ContentParser<T : Content>(typeClass: Class<T>) : Parser<T>(typeClass) {
+        override fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>) {
             if (jsonValue.isNull) return
             jsonValue.remove("id")
         }
     }
 
-    abstract class MappableContentParser<T: MappableContent>(typeClass:Class<T>) : ContentParser<T>(typeClass){
-        override fun parse(obj: T, jsonValue: JsonValue,availableNamespace: Array<String>) {
-            super.parse(obj, jsonValue,availableNamespace)
+    abstract class MappableContentParser<T : MappableContent>(typeClass: Class<T>) : ContentParser<T>(typeClass) {
+        override fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>) {
+            super.parse(obj, jsonValue, availableNamespace)
             if (jsonValue.isNull) return
             jsonValue.remove("name")
         }
     }
 
-    abstract class UnlockableContentParser<T: UnlockableContent>(typeClass:Class<T>) : MappableContentParser<T>(typeClass){
+    abstract class UnlockableContentParser<T : UnlockableContent>(typeClass: Class<T>) :
+        MappableContentParser<T>(typeClass) {
 //        val fields = mapOf("shownPlanets" to )
 
-        override fun parse(obj: T, jsonValue: JsonValue,availableNamespace: Array<String>) {
-            super.parse(obj, jsonValue,availableNamespace)
+        override fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>) {
+            super.parse(obj, jsonValue, availableNamespace)
             if (jsonValue.isNull) return
             val shownPlanets = jsonValue.remove("shownPlanets") ?: return
             if (shownPlanets.isNull) return
             when {
                 shownPlanets.isString -> obj.shownPlanets.add(Vars.content.planet(shownPlanets.asString()))
                 shownPlanets.isArray -> {
-                    for (planet in shownPlanets){
+                    for (planet in shownPlanets) {
                         if (planet.isNull) continue
                         when {
                             planet.isString -> obj.shownPlanets.add(Vars.content.planet(planet.asString()))
-                            planet.isLong -> obj.shownPlanets.add(Vars.content.getByID(ContentType.planet,planet.asLong().toInt()))
+                            planet.isLong -> obj.shownPlanets.add(
+                                Vars.content.getByID(
+                                    ContentType.planet,
+                                    planet.asLong().toInt()
+                                )
+                            )
                         }
                     }
                 }

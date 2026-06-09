@@ -1,7 +1,7 @@
 package entropy.mod
 
 import arc.files.Fi
-import entropy.mod.Parser.Companion.parseLog
+import entropy.mod.Parser.Companion.pLog
 import entropy.mod.Parser.Companion.toHashMap
 
 /**
@@ -32,7 +32,7 @@ class TypeAlias(val typeAliasFile: Fi) {
             }
         }
     }
-    fun String.tALog() = " [TypeAlias] ${typeAliasFile.name()} $this".parseLog()
+    fun String.tALog() = " [TypeAlias] ${typeAliasFile.name()} $this".pLog()
     override fun toString(): String {
         return typeAliasMap.toString()
     }

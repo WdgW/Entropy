@@ -4,11 +4,10 @@ import arc.files.Fi
 import arc.struct.Seq
 import arc.util.Log
 import arc.util.serialization.Json
-import entropy.mod.ClassMap
 import entropy.mod.EntropyModMeta
-import entropy.mod.Parser.Companion.parseLog
+import entropy.mod.Parser.Companion.check
+import entropy.mod.Parser.Companion.pLog
 import entropy.mod.Parser.Companion.toJsonValue
-import entropy.mod.ParserMap
 import entropy.mod.TypeAlias
 import mindustry.Vars
 import mindustry.mod.Mod
@@ -16,17 +15,19 @@ import mindustry.mod.Mods.LoadedMod
 import entropy.EntropyContentType as ECT
 
 class Entropy : Mod() {
-    companion object{
-        val mod: LoadedMod by lazy {Vars.mods.getMod(Entropy::class.java)}
-        val contentRoot: Fi by lazy {mod.root.child("content") }
-        val modJsonFi: Fi by lazy {if (mod.root.child("mod.json").exists()) mod.root.child("mod.json")else mod.root.child("mod.hjson") }
+    companion object {
+        val mod: LoadedMod by lazy { Vars.mods.getMod(Entropy::class.java) }
+        val contentRoot: Fi by lazy { mod.root.child("content") }
+        val modJsonFi: Fi by lazy {
+            if (mod.root.child("mod.json").exists()) mod.root.child("mod.json") else mod.root.child("mod.hjson")
+        }
         var entropyModMeta: EntropyModMeta? = null
-        val json : Json = Json()
+        val json: Json = Json()
 
         fun loadModMeta(jsonString: String) {
             try {
 
-                val root = json.readValue(EntropyModMeta::class.java, null,modJsonFi.readString().toJsonValue())
+                val root = json.readValue(EntropyModMeta::class.java, null, modJsonFi.readString().toJsonValue())
 
                 // 读取 contents 字段
                 root.content?.let { contents ->
@@ -39,22 +40,20 @@ class Entropy : Mod() {
             }
             entropyModMeta = null;
         }
-        fun <T>  T.log(){
-            Log.infoTag("Entropy", this.toString())
-        }
 
-        inline infix fun <T> Boolean.ifTrue(condition:()->T): T? = if (this) condition() else null
-        infix fun <T> Boolean.ifTrue(condition:T): T? = if (this) condition else null
-        inline infix fun <T> Boolean.ifFalse(condition:()->T): T? = if (!this) condition() else null
-        infix fun <T> Boolean.ifFalse(condition:T): T? = if (!this) condition else null
+
+        inline infix fun <T> Boolean.ifTrue(condition: () -> T): T? = if (this) condition() else null
+        infix fun <T> Boolean.ifTrue(condition: T): T? = if (this) condition else null
+        inline infix fun <T> Boolean.ifFalse(condition: () -> T): T? = if (!this) condition() else null
+        infix fun <T> Boolean.ifFalse(condition: T): T? = if (!this) condition else null
     }
 
-   // val configs
+    // val configs
     //var isLoadExamples: Boolean = contentRoot.exists(false) {
-     //   // TODO
+    //   // TODO
     //    false
     //}
-    
+
     //fun <T> Fi.existsOrDefault(default: T, func: () -> T): T {
     //return if (exists()) func() else default
 //}
@@ -71,45 +70,31 @@ class Entropy : Mod() {
         if (entropyModMeta == null) return
         val modMeta = entropyModMeta!!
         modMeta.test ifTrue {
-            val testContentFi = contentRoot.child("test").child("content")
+            val testFi = contentRoot.child("test")
+            val testContentFi = testFi.child("content")
             if (!testContentFi.exists()) return@ifTrue
 
             val file = testContentFi.child("typealias.json")
             if (!file.exists()) return@ifTrue
             val typeAlias = TypeAlias(file)
-            typeAlias.log()
 
-            val jsons = testContentFi.findAll { f: Fi -> f.extension() == "json" || f.extension() == "hjson" && f.name() != "typealias.json" }
-            jsons.log()
-            for (json in jsons){
-                json.name().log()
+            val jsons =
+                testContentFi.findAll { f: Fi -> f.extension() == "json" || f.extension() == "hjson" && f.name() != "typealias.json" }
+            loop@ for (json in jsons) {
 //                json.readString().log()
                 val jsonValue = json.readString().toJsonValue()
-                if (jsonValue == null) {
-                    "[${json.path()}] 中json解析失败".parseLog()
-                    continue
-                }
-                val type = jsonValue["type"]
-                if (type == null) {
-                    "[${json.path()}] 中没有找到type字段".parseLog()
-                    continue
-                }
-                if (!type.isString) {
-                    "[${json.path()}] 中type字段不是字符串".parseLog()
-                    continue
-                }
-                val typeName = type.toString()
-                val classType = typeAlias.get(typeName, ClassMap.getClass(typeName))
-                if (classType == null) {
-                    "[${json.path()}] 中type字段$typeName 不存在".parseLog()
-                    continue
-                }
-                val content = ParserMap.get(classType)
-                if (content == null) {
-                    "[${json.path()}] $typeName 不存在解析器".parseLog()
+                if (jsonValue == null || jsonValue.isNull) {
+                    "[${json.path()}] 中json解析失败".pLog()
                     continue
                 }
 
+                if (jsonValue.isObject) {
+                    check(jsonValue, json.path(), typeAlias).ifTrue { continue@loop }
+                } else if (jsonValue.isArray) {
+                    for ((index, item) in jsonValue.withIndex()) {
+                        check(item, "${json.path()}[$index]", typeAlias).ifTrue { continue@loop }
+                    }
+                }
 
 
             }
@@ -139,7 +124,7 @@ class Entropy : Mod() {
             val current = Vars.content.lastAdded
 //            l.log()
             //TODO(还没写完:~:)
-            when (l.type){
+            when (l.type) {
                 ECT.reaction -> {
 
                 }
@@ -165,7 +150,6 @@ class Entropy : Mod() {
     }
 
 
-
     data class LoadRun(val type: ECT, val file: Fi, val mod: LoadedMod) : Comparable<LoadRun> {
         override fun compareTo(other: LoadRun): Int {
             val mod = this.mod.name.compareTo(other.mod.name)
@@ -182,4 +166,6 @@ class Entropy : Mod() {
     }
 
 }
+
+
 
