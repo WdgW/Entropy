@@ -57,7 +57,7 @@ import mindustry.world.meta.StatValues.withTooltip
  * 将电力作为护盾
  */
 @Suppress("DuplicatedCode")
-open class PowerProjector(name: String): Block(name), EntropyBlock {
+open class PowerProjector(name: String) : Block(name), EntropyBlock {
     val timerUse: Int = timers++
     var phaseUseTime: Float = 350f
 
@@ -83,6 +83,14 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
 
     var coolantConsumption: Float = 0.1f
     var consumeCoolant: Boolean = true
+//    var smoke = Effect(17f) { e ->
+//        randLenVectors(e.id.toLong(), 4, e.fin() * 8f) { x, y ->
+//            val size = 1f + e.fout() * 5f
+//            color(Color.lightGray, Color.gray, e.fin())
+//            Fill.circle(e.x + x, e.y + y, size / 2f)
+//        }
+//    }
+
     /**
      * 护盾被伤害时的倍率
      */
@@ -102,6 +110,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
      * 护盾被伤害时的特效
      */
     var absorbEffect: Effect = Fx.absorb
+
     /**
      * 护盾被伤害时的特效音效
      */
@@ -132,6 +141,9 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
      */
     var shake: Float = 0.1f
 
+    /**
+     * 每个节点的消耗比例
+     */
     var perNodeConsumption: Float = 0.5f
 
 
@@ -142,24 +154,27 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         set(value) {
             field = value
             consumeBuilder.removeAll { it is ConsumeItemDynamic || it is ConsumeItems || it is ConsumeItemFilter }
-            consume(ConsumeItemDynamic{ build:PowerProjectorBuild ->
+            consume(ConsumeItemDynamic { build: PowerProjectorBuild ->
                 val items = Seq<ItemStack>()
                 value?.items?.forEach {
-                    items.add(ItemStack(it.item, it.amount *(build.powerProjectorNodes.size*perNodeConsumption + 1).toInt()))
+                    items.add(
+                        ItemStack(
+                            it.item,
+                            it.amount * (build.powerProjectorNodes.size * perNodeConsumption + 1).toInt()
+                        )
+                    )
                 }
                 items.toArray(ItemStack::class.java)
             }
             )
         }
-    val itemCapacitiesBase = Array(content.items().size){0}
+    val itemCapacitiesBase = Array(content.items().size) { 0 }
 
     //TODO json support
     var coolantConsumer: Consume? = null
 
 
-
-
-    init{
+    init {
         update = true
         solid = true
         group = BlockGroup.projectors
@@ -176,7 +191,8 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
             consume<Consume>(ConsumeCoolant(coolantConsumption).also { coolantConsumer = it }).boost().update(false)
         }
     }
-//    @Load("@-top")
+
+    //    @Load("@-top")
     override fun loadIcon() {
         super.loadIcon()
         topRegion = Core.atlas.find("$name-top")
@@ -194,14 +210,16 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
     override fun setBars() {
         super.setBars()
         removeBar("shield")
-        addBar<PowerProjectorBuild>("shield"){ build ->
+        addBar<PowerProjectorBuild>("shield") { build ->
             val batteryStored = build.power.graph.lastPowerStored
             val batteryCapacity = build.power.graph.lastCapacity
-            Bar({ Core.bundle.format("stat.shieldhealth", batteryStored,"/", batteryCapacity) },
+            Bar(
+                { Core.bundle.format("stat.shieldhealth", batteryStored, "/", batteryCapacity) },
                 { Pal.accent }
-            ){ ((!build.enabled || build.shouldDisable) ifTrue 0f) ?: (batteryStored / batteryCapacity) }
+            ) { ((!build.enabled || build.shouldDisable) ifTrue 0f) ?: (batteryStored / batteryCapacity) }
         }
     }
+
     override fun outputsItems(): Boolean {
         return false
     }
@@ -209,21 +227,23 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
     fun stack(region: TextureRegion, amount: Int, content: UnlockableContent, tooltip: Boolean): Stack {
         val stack = Stack();
 
-        stack.add(Table{o ->
+        stack.add(Table { o ->
             o.left();
             o.add(Image(region)).size(32f).scaling(Scaling.fit);
         })
 
-        if(amount != 0){
-            stack.add(Table{t ->
+        if (amount != 0) {
+            stack.add(Table { t ->
                 t.left().bottom();
-                t.add("${
-                    if (amount >= 1000) {
-                        UI.formatAmount(amount.toLong())
-                    } else {
-                        amount.toString()
-                    }
-                }+${arc.util.Strings.autoFixed(amount*perNodeConsumption,3)}N").name("stack amount").style(Styles.outlineLabel);
+                t.add(
+                    "${
+                        if (amount >= 1000) {
+                            UI.formatAmount(amount.toLong())
+                        } else {
+                            amount.toString()
+                        }
+                    }+${arc.util.Strings.autoFixed(amount * perNodeConsumption, 3)}N"
+                ).name("stack amount").style(Styles.outlineLabel);
                 t.pack();
             })
         }
@@ -236,15 +256,31 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
     fun displayItem(item: Item, amount: Int, timePeriod: Float, showName: Boolean): Table {
         val t = Table()
         t.add(stack(item.uiIcon, amount, item, !showName))
-        t.add("${if (showName) item.localizedName + "\n" else ""}[lightgray]${arc.util.Strings.autoFixed(amount / (timePeriod / 60f), 3)}+${arc.util.Strings.autoFixed(amount * perNodeConsumption / (timePeriod / 60f),3)}N${StatUnit.perSecond.localized()}").padLeft(2f).padRight(5f).style(
-            Styles.outlineLabel)
+        t.add(
+            "${if (showName) item.localizedName + "\n" else ""}[lightgray]${
+                arc.util.Strings.autoFixed(
+                    amount / (timePeriod / 60f),
+                    3
+                )
+            }+${
+                arc.util.Strings.autoFixed(
+                    amount * perNodeConsumption / (timePeriod / 60f),
+                    3
+                )
+            }N${StatUnit.perSecond.localized()}"
+        ).padLeft(2f).padRight(5f).style(
+            Styles.outlineLabel
+        )
         return t
     }
+
     fun displayItemPercent(item: Item, percent: Int, showName: Boolean): Table {
         val t = Table()
         t.add(stack(item.uiIcon, 0, item, !showName))
-        t.add((if (showName) item.localizedName + "\n" else "") + "[lightgray]" + percent + "%").padLeft(2f).padRight(5f).style(
-            Styles.outlineLabel)
+        t.add((if (showName) item.localizedName + "\n" else "") + "[lightgray]" + percent + "%").padLeft(2f)
+            .padRight(5f).style(
+                Styles.outlineLabel
+            )
         return t
     }
 
@@ -259,19 +295,20 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                 Stat("n", StatCat.crafting),
                 "电力护盾节点数"
             )
-            stats.add(Stat.input, if (stats.timePeriod < 0){
-                StatValue {table ->
-                    items.forEach { stack ->
-                        table.add(displayItemPercent(stack.item, stack.amount,true)).padRight(5f);
+            stats.add(
+                Stat.input, if (stats.timePeriod < 0) {
+                    StatValue { table ->
+                        items.forEach { stack ->
+                            table.add(displayItemPercent(stack.item, stack.amount, true)).padRight(5f);
+                        }
                     }
-                }
-            }else{
-                StatValue {table ->
-                    items.forEach { stack ->
-                        table.add(displayItem(stack.item, stack.amount,stats.timePeriod,true)).padRight(5f);
+                } else {
+                    StatValue { table ->
+                        items.forEach { stack ->
+                            table.add(displayItem(stack.item, stack.amount, stats.timePeriod, true)).padRight(5f);
+                        }
                     }
-                }
-            })
+                })
 //                ((stats.timePeriod < 0) ifTrue {
 //                    itemConsumer!!.items.forEach { table ->
 //
@@ -360,6 +397,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
 //            }
         }
     }
+
     override fun drawPlace(x: Int, y: Int, rotation: Int, valid: Boolean) {
         super.drawPlace(x, y, rotation, valid)
 
@@ -372,34 +410,34 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         Draw.color()
     }
 
-    inner class PowerProjectorBuild: Building(), Ranged, ExplosionShield, EntropyBuilding {
+    inner class PowerProjectorBuild : Building(), Ranged, ExplosionShield, EntropyBuilding {
         var radscl: Float = 0f
-            set(value)  {
+            set(value) {
                 field = if (value < 0.001f) {
                     0f
-                }else if (value > 0.999f){
+                } else if (value > 0.999f) {
                     1f
-                }else{
+                } else {
                     value
                 }
             }
         var warmup: Float = 0f
-            set(value)  {
+            set(value) {
                 field = if (value < 0.001f) {
                     0f
-                }else if (value > 0.999f){
+                } else if (value > 0.999f) {
                     1f
-                }else{
+                } else {
                     value
                 }
             }
         var phaseHeat: Float = 0f
-            set(value)  {
+            set(value) {
                 field = if (value < 0.001f) {
                     0f
-                }else if (value > 0.999f){
+                } else if (value > 0.999f) {
                     1f
-                }else{
+                } else {
                     value
                 }
             }
@@ -409,12 +447,18 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         var lastWarmup: Float = 0f
 
         var hit: Float = 0f
+
         // ✅ 添加上次更新时的电力图，用于检测电网变化
         var lastGraph: PowerGraph? = null
-        var lastGraphSize: Int =0
-        var lastGraphID: Int = 0
+        var lastGraphSize: Int = 0
+        var lastGraphID: Int = -1
+
         // ✅ 只在必要时更新节点列表
-        val powerProjectorNodes = Seq<PowerProjectorNode.PowerProjectorNodeBuild>(false, 16, PowerProjectorNode.PowerProjectorNodeBuild::class.java)
+        val powerProjectorNodes = Seq<PowerProjectorNode.PowerProjectorNodeBuild>(
+            false,
+            16,
+            PowerProjectorNode.PowerProjectorNodeBuild::class.java
+        )
 
         var needsUpdate: Boolean = false
 
@@ -433,7 +477,8 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         private val shieldConsumer = shieldConsumer@{ bullet: Bullet ->
             if (bullet.team !== this@PowerProjectorBuild.team &&
                 bullet.type.absorbable &&
-                !bullet.absorbed) {
+                !bullet.absorbed
+            ) {
 
                 val bx = bullet.x
                 val by = bullet.y
@@ -449,7 +494,9 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                     if (bx in selfMinX..selfMaxX && by in selfMinY..selfMaxY) {
                         if (Intersector.isInRegularPolygon(
                                 this@PowerProjector.sides, this@PowerProjectorBuild.x, this@PowerProjectorBuild.y,
-                                realRadius, this@PowerProjector.shieldRotation, bx, by)) {
+                                realRadius, this@PowerProjector.shieldRotation, bx, by
+                            )
+                        ) {
                             handleBulletAbsorb(bullet, this@PowerProjectorBuild.power.graph)
                             return@shieldConsumer
                         }
@@ -483,7 +530,8 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                         // 矩形内才执行昂贵的多边形检测
                         val inPolygon = Intersector.isInRegularPolygon(
                             this@PowerProjector.sides, node.x, node.y,
-                            nodeRadius, this@PowerProjector.shieldRotation, bx, by)
+                            nodeRadius, this@PowerProjector.shieldRotation, bx, by
+                        )
                         if (inPolygon) {
                             handleBulletAbsorb(bullet, node.power.graph)
                             return@shieldConsumer
@@ -498,11 +546,16 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
          */
         private fun handleBulletAbsorb(bullet: Bullet, graph: PowerGraph) {
             bullet.absorb()
-            this@PowerProjector.hitSound.at(bullet.x, bullet.y, 1f + Mathf.range(0.1f), this@PowerProjector.hitSoundVolume)
+            this@PowerProjector.hitSound.at(
+                bullet.x,
+                bullet.y,
+                1f + Mathf.range(0.1f),
+                this@PowerProjector.hitSoundVolume
+            )
             this@PowerProjector.absorbEffect.at(bullet)
             this.hit = 1f
             val powerStored = this.power.graph.lastPowerStored
-            val damage = bullet.type.shieldDamage(bullet)*this@PowerProjector.shieldDamagedMultiplier
+            val damage = bullet.type.shieldDamage(bullet) * this@PowerProjector.shieldDamagedMultiplier
             val surplus = powerStored - damage
             when {
                 surplus > 0 -> graph.transferPower(-damage)
@@ -515,6 +568,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                     this@PowerProjector.shieldBreakEffect.at(x, y, realRadius(), team.color)
                     this@PowerProjector.breakSound.at(x, y)
                 }
+
                 surplus < 0 -> {
                     graph.transferPower(-powerStored)
 
@@ -625,16 +679,20 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
 
             phaseHeat = Mathf.lerpDelta(phaseHeat, Mathf.num(phaseValid).toFloat(), 0.1f)
 
-            if(phaseValid && enabled && !shouldDisable && timer(timerUse, phaseUseTime / timeScale) && efficiency > 0 && power.status > 0){
+            if (phaseValid && enabled && !shouldDisable && timer(
+                    timerUse,
+                    phaseUseTime / timeScale
+                ) && efficiency > 0 && power.status > 0
+            ) {
                 consume()
-                Fx.reactorsmoke.at(x + Mathf.range(Vars.tilesize / 2f), y + Mathf.range(Vars.tilesize / 2f))
+                Fx.reactorsmoke.at(x + Mathf.range(Vars.tilesize), y + Mathf.range(Vars.tilesize))
 
             }
 
             radscl = Mathf.lerpDelta(radscl, warmup, 0.05f)
             warmup = Mathf.lerpDelta(warmup, efficiency, 0.1f)
 
-            if(hit > 0f){
+            if (hit > 0f) {
                 hit -= 1f / 5f * Time.delta
             }
 
@@ -651,6 +709,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                     is PowerProjectorBuild if it != this && it.enabled && !it.shouldDisable && it.realRadius() > 0f -> {
                         shouldDisable = true
                     }
+
                     is PowerProjectorNode.PowerProjectorNodeBuild if !it.dead -> {
                         powerProjectorNodes.add(it)
 
@@ -688,30 +747,34 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
             nodeBoundsArr = boundsArr
         }
 
-        fun breakShield(){
-            this.power.graph.batteries.forEach { if (!it.dead) {
-                if (isDestroyBattery) {
-                    it.kill()
+        fun breakShield() {
+            this.power.graph.batteries.forEach {
+                if (!it.dead) {
+                    if (isDestroyBattery) {
+                        it.kill()
+                    }
+                    this.power.graph.batteries.remove(it)
                 }
-                this.power.graph.batteries.remove(it)
-            }  }
+            }
 
             val needRemove = arrayListOf<Building>()
-            this.power.graph.all.forEach { if (it is PowerNodeBuild && !it.dead) {
-                if (it is PowerProjectorNode.PowerProjectorNodeBuild){
-                    if (isDestroyProjectorNode) {
-                        it.kill()
-                        needRemove.add(it)
-                        shieldBreakEffect.at(it.x, it.y, realRadius() * it.radiusScl, team.color)
-                        breakSound.at(it.x, it.y)
-                    }
-                }else {
-                    if (isDestroyNode) {
-                        it.kill()
-                        needRemove.add(it)
+            this.power.graph.all.forEach {
+                if (it is PowerNodeBuild && !it.dead) {
+                    if (it is PowerProjectorNode.PowerProjectorNodeBuild) {
+                        if (isDestroyProjectorNode) {
+                            it.kill()
+                            needRemove.add(it)
+                            shieldBreakEffect.at(it.x, it.y, realRadius() * it.radiusScl, team.color)
+                            breakSound.at(it.x, it.y)
+                        }
+                    } else {
+                        if (isDestroyNode) {
+                            it.kill()
+                            needRemove.add(it)
+                        }
                     }
                 }
-            } }
+            }
             needRemove.forEach { this.power.graph.all.remove(it) }
 
 //            val queue = ArrayDeque<Building>()
@@ -738,8 +801,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         }
 
 
-
-        fun deflectBullets(){
+        fun deflectBullets() {
             val radius = realRadius()
 
 
@@ -759,6 +821,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
             val count = nodeCount
             val boundsArr = nodeBoundsArr
             if (count > 0 && boundsArr != null) {
+
                 for (i in 0 until count) {
                     val boundsIdx = i * 4
                     val nodeMinX = boundsArr[boundsIdx]
@@ -787,8 +850,8 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
 
 
         override fun absorbExplosion(ex: Float, ey: Float, damage: Float): Boolean {
-            val absorb =  Intersector.isInRegularPolygon(sides, x, y, realRadius(), shieldRotation, ex, ey)
-            if(absorb){
+            val absorb = Intersector.isInRegularPolygon(sides, x, y, realRadius(), shieldRotation, ex, ey)
+            if (absorb) {
                 absorbEffect.at(ex, ey)
                 hit = 1f
             }
@@ -805,7 +868,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         }
 
         override fun sense(sensor: LAccess): Double {
-            if(sensor == LAccess.shield) return ((!enabled || shouldDisable) ifTrue 0.0)
+            if (sensor == LAccess.shield) return ((!enabled || shouldDisable) ifTrue 0.0)
                 ?: (power.graph.lastPowerStored.toDouble()).coerceAtLeast(0.0)
             return super.sense(sensor)
         }
@@ -813,7 +876,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         override fun draw() {
             super.draw()
 
-            if(enabled && !shouldDisable && efficiency > 0 && power.status > 0){
+            if (enabled && !shouldDisable && efficiency > 0 && power.status > 0) {
                 Draw.alpha(power.graph.lastPowerStored / power.graph.lastCapacity * 0.75f)
                 Draw.z(Layer.blockAdditive)
                 Draw.blend(Blending.additive)
@@ -827,21 +890,22 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
 
         }
 
-        fun drawShield(){
+        fun drawShield() {
             val radius = realRadius()
 
-            if(radius > 0.001f){
+            if (radius > 0.001f) {
 
                 Draw.color(team.color, Color.white, Mathf.clamp(hit))
 
-                if(renderer.animateShields){
+                if (renderer.animateShields) {
                     // 动画护盾
                     Draw.z(Layer.shields + 0.001f * hit)
                     Fill.poly(x, y, sides, radius, shieldRotation)
                     powerProjectorNodes.forEach {
-                        Fill.poly(it.x, it.y, sides, radius*it.radiusScl, shieldRotation)
+                        Fill.poly(it.x, it.y, sides, radius * it.radiusScl, shieldRotation)
                     }
-                }else{
+                    Draw.reset()
+                } else {
                     Draw.z(Layer.shields)
                     Lines.stroke(1.5f)
                     Draw.alpha(0.09f + Mathf.clamp(0.08f * hit))
@@ -851,16 +915,13 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
                     powerProjectorNodes.forEach {
                         Lines.stroke(1.5f)
                         Draw.alpha(0.09f + Mathf.clamp(0.08f * hit))
-                        Fill.poly(it.x, it.y, sides, radius*it.radiusScl, shieldRotation)
+                        Fill.poly(it.x, it.y, sides, radius * it.radiusScl, shieldRotation)
                         Draw.alpha(1f)
-                        Lines.poly(it.x, it.y, sides, radius*it.radiusScl, shieldRotation)
+                        Lines.poly(it.x, it.y, sides, radius * it.radiusScl, shieldRotation)
                     }
                     Draw.reset()
                 }
             }
-
-
-            Draw.reset()
         }
 
         override fun acceptItem(source: Building?, item: Item?): Boolean {
@@ -868,11 +929,12 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
         }
 
         override fun getMaximumAccepted(item: Item?): Int {
-            return 3 * itemCapacitiesBase[item?.id?.toInt() ?: 0] * (powerProjectorNodes.size * perNodeConsumption + 1).toInt()
+            return 3 * itemCapacitiesBase[item?.id?.toInt()
+                ?: 0] * (powerProjectorNodes.size * perNodeConsumption + 1).toInt()
         }
 
 
-        override fun write(write: Writes){
+        override fun write(write: Writes) {
             super.write(write)
             write.f(radscl)
             write.f(warmup)
@@ -883,7 +945,7 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
             }
         }
 
-        override fun read(read: Reads, revision: Byte){
+        override fun read(read: Reads, revision: Byte) {
             super.read(read, revision)
             radscl = read.f()
             warmup = read.f()
@@ -891,11 +953,11 @@ open class PowerProjector(name: String): Block(name), EntropyBlock {
             val size = read.i()
             powerProjectorNodes.clear()
             (0 until size).forEach { _ ->
-                powerProjectorNodes.add(Vars.world.build(read.i())as PowerProjectorNode.PowerProjectorNodeBuild)
+                powerProjectorNodes.add(Vars.world.build(read.i()) as PowerProjectorNode.PowerProjectorNodeBuild)
             }
             // ✅ 读取后重新验证列表
             lastGraph = null
-            lastGraphID =0
+            lastGraphID = -1
         }
     }
 

@@ -1,5 +1,5 @@
 package entropy.event
 
 class NamedEvent<T>(val name: String) : EntropyEvent<T>() {
-    override fun getKey(): Any = name as Any
+    override fun getKey(): String = name
 }

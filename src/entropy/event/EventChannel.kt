@@ -1,26 +1,26 @@
 package entropy.event
 
-class EventChannel {
-    private val events = mutableMapOf<Any, EntropyEvent<*>>()
+class EventChannel<U> {
+    private val events = mutableMapOf<U, EntropyEvent<*>>()
 
-    fun <T> register(event: EntropyEvent<T>) {
-        events[event.getKey()] = event
+    fun <T> register(key: U, event: EntropyEvent<T>) {
+        events[key] = event
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getEvent(key: Any): EntropyEvent<T>? {
+    fun <T> getEvent(key: U): EntropyEvent<T>? {
         return events[key] as? EntropyEvent<T>
     }
 
-    fun getOrRegister(key: Any, create: () -> EntropyEvent<*>): EntropyEvent<*> {
+    fun getOrRegister(key: U, create: () -> EntropyEvent<*>): EntropyEvent<*> {
         return events.getOrPut(key) { create() }
     }
 
-    fun unregister(key: Any) {
+    fun unregister(key: U) {
         events.remove(key)
     }
 
-    fun hasEvent(name: String): Boolean = name in events
+    fun hasEvent(key: U): Boolean = key in events
 
     fun clear() {
         events.clear()

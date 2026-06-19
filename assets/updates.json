@@ -1,12 +1,19 @@
 {
-    "0.0.0": [
-        {
-            "information": "完善模组基本信息",
-            "date": "2026.5.24"
-        },
-        {
-        "information":"添加icon，感谢Nieobie",
-        "date":"2026.5.31"
-        }
-    ]
+  "0.0.0": {
+    "2026.5.24": {
+      "information": "完善模组基本信息"
+    },
+    "2026.5.31": {
+      "information": "添加icon，感谢Nieobie"
+    },
+    "2026.6.1": {
+      "information": "电网力墙"
+    },
+    "2026.6.2": {
+      "information": "完善电网力墙"
+    },
+    "2026.6.3": {
+      "information": "完善护盾旋转角度"
+    }
+  }
 }

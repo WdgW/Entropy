@@ -38,7 +38,7 @@ class Entropy : Mod() {
             } catch (e: Exception) {
                 Log.warn("[Entropy] Failed to parse custom contents: ${e.message}")
             }
-            entropyModMeta = null;
+            entropyModMeta = null
         }
 
 
@@ -158,6 +158,7 @@ class Entropy : Mod() {
         }
 
         override fun toString(): String {
+            "test".log()
             return "LoadRun(mod=${mod.name}," +
                     "\ntype=$type" +
                     "\nfile=${file.nameWithoutExtension()}," +
@@ -166,6 +167,3 @@ class Entropy : Mod() {
     }
 
 }
-
-
-
