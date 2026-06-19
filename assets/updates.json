@@ -14,6 +14,24 @@
     },
     "2026.6.3": {
       "information": "完善护盾旋转角度"
+    },
+    "2026.6.4": {
+      "information": "1.电网力墙测试\n2.写json解析"
+    },
+    "2026.6.5": {
+      "information": "完善电网力墙"
+    },
+    "2026.6.6": {
+      "information": "完善电网力墙"
+    },
+    "2026.6.8": {
+      "information": "1.完善电网力墙\n2.写json解析"
+    },
+    "2026.6.9": {
+      "information": "写json解析"
+    },
+    "2026.6.19": {
+      "information": "1.调整updates.json\n2.调整电网力墙的特效,贴图\n3.Test电网力墙消耗调整,不再消耗塑钢\n4.调整event相关的类\n5.新增ValidatingMutableSeq.kt\n6.新增ItemFactories.kt"
     }
   }
 }
