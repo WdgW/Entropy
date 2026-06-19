@@ -822,6 +822,7 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
             val boundsArr = nodeBoundsArr
             if (count > 0 && boundsArr != null) {
 
+                @Suppress("EmptyRange")
                 for (i in 0 until count) {
                     val boundsIdx = i * 4
                     val nodeMinX = boundsArr[boundsIdx]
