@@ -225,16 +225,16 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
     }
 
     fun stack(region: TextureRegion, amount: Int, content: UnlockableContent, tooltip: Boolean): Stack {
-        val stack = Stack();
+        val stack = Stack()
 
         stack.add(Table { o ->
-            o.left();
-            o.add(Image(region)).size(32f).scaling(Scaling.fit);
+            o.left()
+            o.add(Image(region)).size(32f).scaling(Scaling.fit)
         })
 
         if (amount != 0) {
             stack.add(Table { t ->
-                t.left().bottom();
+                t.left().bottom()
                 t.add(
                     "${
                         if (amount >= 1000) {
@@ -243,14 +243,14 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
                             amount.toString()
                         }
                     }+${arc.util.Strings.autoFixed(amount * perNodeConsumption, 3)}N"
-                ).name("stack amount").style(Styles.outlineLabel);
-                t.pack();
+                ).name("stack amount").style(Styles.outlineLabel)
+                t.pack()
             })
         }
 
-        withTooltip(stack, content, tooltip);
+        withTooltip(stack, content, tooltip)
 
-        return stack;
+        return stack
     }
 
     fun displayItem(item: Item, amount: Int, timePeriod: Float, showName: Boolean): Table {
@@ -299,13 +299,13 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
                 Stat.input, if (stats.timePeriod < 0) {
                     StatValue { table ->
                         items.forEach { stack ->
-                            table.add(displayItemPercent(stack.item, stack.amount, true)).padRight(5f);
+                            table.add(displayItemPercent(stack.item, stack.amount, true)).padRight(5f)
                         }
                     }
                 } else {
                     StatValue { table ->
                         items.forEach { stack ->
-                            table.add(displayItem(stack.item, stack.amount, stats.timePeriod, true)).padRight(5f);
+                            table.add(displayItem(stack.item, stack.amount, stats.timePeriod, true)).padRight(5f)
                         }
                     }
                 })
@@ -321,7 +321,7 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
         }
         super.setStats()
 
-//        stats.add(booster ? Stat.booster : Stat.input, stats.timePeriod < 0 ? StatValues.items(items) : StatValues.items(stats.timePeriod, items));
+//        stats.add(booster ? Stat.booster : Stat.input, stats.timePeriod < 0 ? StatValues.items(items) : StatValues.items(stats.timePeriod, items))
 
 //        table.table(Cons {
 //                c: arc.scene.ui.layout.Table? -> var i: kotlin.Int = 0
@@ -925,7 +925,7 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
         }
 
         override fun acceptItem(source: Building?, item: Item?): Boolean {
-            return this.block.consumesItem(item) && this.items.get(item) < this.getMaximumAccepted(item);
+            return this.block.consumesItem(item) && this.items.get(item) < this.getMaximumAccepted(item)
         }
 
         override fun getMaximumAccepted(item: Item?): Int {
