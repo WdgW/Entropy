@@ -1,7 +1,7 @@
 package entropy.event
 
 class EventChannel<U> {
-    private val events = mutableMapOf<U, EntropyEvent<*>>()
+    val events = mutableMapOf<U, EntropyEvent<*>>()
 
     fun <T> register(key: U, event: EntropyEvent<T>) {
         events[key] = event

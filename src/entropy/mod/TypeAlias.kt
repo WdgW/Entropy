@@ -10,6 +10,7 @@ import entropy.mod.Parser.Companion.toHashMap
  */
 class TypeAlias(val typeAliasFile: Fi) {
     val typeAliasMap = HashMap<String, Class<*>>()
+
     init {
         val lines = typeAliasFile.readString().toHashMap()
         if (lines != null) {
@@ -22,6 +23,7 @@ class TypeAlias(val typeAliasFile: Fi) {
                     "$value 不是字符串".tALog()
                     continue
                 }
+                //TODO ClassMap.getClass 有改动
                 val classType = ClassMap.getClass(value)
                 if (classType == null) {
                     "$value 不存在".tALog()
@@ -32,10 +34,12 @@ class TypeAlias(val typeAliasFile: Fi) {
             }
         }
     }
+
     fun String.tALog() = " [TypeAlias] ${typeAliasFile.name()} $this".pLog()
     override fun toString(): String {
         return typeAliasMap.toString()
     }
+
     fun get(typeName: String) = get(typeName, null)
     fun get(typeName: String, defaultValue: Class<*>? = null) = typeAliasMap[typeName] ?: defaultValue
 }

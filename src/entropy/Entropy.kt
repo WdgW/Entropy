@@ -4,11 +4,10 @@ import arc.files.Fi
 import arc.struct.Seq
 import arc.util.Log
 import arc.util.serialization.Json
-import entropy.mod.EntropyModMeta
+import entropy.mod.*
 import entropy.mod.Parser.Companion.check
 import entropy.mod.Parser.Companion.pLog
 import entropy.mod.Parser.Companion.toJsonValue
-import entropy.mod.TypeAlias
 import mindustry.Vars
 import mindustry.mod.Mod
 import mindustry.mod.Mods.LoadedMod
@@ -17,6 +16,7 @@ import entropy.EntropyContentType as ECT
 class Entropy : Mod() {
     companion object {
         val mod: LoadedMod by lazy { Vars.mods.getMod(Entropy::class.java) }
+        val modName: String by lazy { mod.name }
         val contentRoot: Fi by lazy { mod.root.child("content") }
         val modJsonFi: Fi by lazy {
             if (mod.root.child("mod.json").exists()) mod.root.child("mod.json") else mod.root.child("mod.hjson")
@@ -89,7 +89,16 @@ class Entropy : Mod() {
                 }
 
                 if (jsonValue.isObject) {
+//                    json.readString().pLog()
                     check(jsonValue, json.path(), typeAlias).ifTrue { continue@loop }
+                    val (classType, constructor) = jsonValue["type"]?.asString()?.let { ClassMap[it] } ?: continue
+                    classType.pLog()
+                    val parser = ParserMap[classType] ?: continue
+                    val obj = constructor(jsonValue, json.path()) ?: continue
+                    @Suppress("UNCHECKED_CAST")
+                    (parser as Parser<Any>).parse(obj, json.path(), arrayOf(modName))
+
+
                 } else if (jsonValue.isArray) {
                     for ((index, item) in jsonValue.withIndex()) {
                         check(item, "${json.path()}[$index]", typeAlias).ifTrue { continue@loop }

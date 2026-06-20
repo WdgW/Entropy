@@ -18,7 +18,7 @@ object Test {
         modJsonFi.readString().log()
         PowerProjector("电网力墙").apply {
             requirements(
-                Category.defense,
+                Category.effect,
                 ItemStack.with(
                     Items.lead,
                     2000,
@@ -48,7 +48,7 @@ object Test {
         }
         PowerProjectorNode("电力护盾节点").apply {
             requirements(
-                Category.defense,
+                Category.effect,
                 ItemStack.with(Items.copper, 1000, Items.beryllium, 500, Items.phaseFabric, 300, Items.lead, 1000)
             )
             radiusScl = 0.6f

@@ -52,6 +52,8 @@ import mindustry.world.blocks.power.PowerNode.PowerNodeBuild
 import mindustry.world.consumers.*
 import mindustry.world.meta.*
 import mindustry.world.meta.StatValues.withTooltip
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * 将电力作为护盾
@@ -338,63 +340,7 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
 
         if (consItems && itemConsumer is ConsumeItems) {
             stats.remove(Stat.booster)
-//            stats.add(Stat.booster, StatValues.itemBoosters("+{0} " + StatUnit.shieldHealth.localized(), stats.timePeriod, phaseShieldBoost, phaseRadiusBoost, (itemConsumer as ConsumeItems).items))
 
-//            stats.add(Stat.booster) { table: arc.scene.ui.layout.Table ->
-//                table.row()
-//                table.table { c: arc.scene.ui.layout.Table ->
-//                    for (liquid in Vars.content.liquids()) {
-//                        if (!consumesLiquid(liquid)) continue
-//
-//                        c.table(mindustry.ui.Styles.grayPanel) { b: arc.scene.ui.layout.Table ->
-//                            b.image(liquid.uiIcon).size(40f).pad(10f).left().scaling(Scaling.fit)
-//                                .with { i: Image? ->
-//                                    StatValues.withTooltip<Image?>(
-//                                        i,
-//                                        liquid,
-//                                        false
-//                                    )
-//                                }
-//                            b.table { info: arc.scene.ui.layout.Table ->
-//                                info.add(liquid.localizedName).left().row()
-//                                info.add(
-//                                    arc.util.Strings.autoFixed(
-//                                        coolantConsumption * 60f,
-//                                        2
-//                                    ) + StatUnit.perSecond.localized()
-//                                ).left().color(Color.lightGray)
-//
-//                            }
-//
-////                            val liquidHeat: kotlin.Float = (1f + (liquid.heatCapacity - 0.4f) * 0.9f)
-////                            val regenBoost: kotlin.Float =
-////                                ((cooldownNormal * (cooldownLiquid * liquidHeat)) - cooldownNormal) * 60f
-////                            val cooldownBoost: kotlin.Float =
-////                                (shieldHealth / (cooldownBrokenBase * (cooldownLiquid * liquidHeat)) - shieldHealth / cooldownBrokenBase) / 60f
-//
-////                            b.table { bt: arc.scene.ui.layout.Table ->
-////                                bt.right().defaults().padRight(3f).left()
-////                                bt.add(
-////                                    "[lightgray]+" + Core.bundle.format(
-////                                        "bar.regenerationrate",
-////                                        arc.util.Strings.autoFixed(regenBoost, 2)
-////                                    )
-////                                ).pad(5f).row()
-////                                bt.add(
-////                                    Core.bundle.format(
-////                                        "ability.stat.cooldown",
-////                                        arc.util.Strings.autoFixed(cooldownBoost, 2)
-////                                    )
-////                                ).pad(5f)
-////
-////                            }.right().grow().pad(10f).padRight(15f)
-//
-//                        }.growX().pad(5f).row()
-//                    }
-//                }.growX().colspan(table.columns)
-//                table.row()
-//
-//            }
         }
     }
 
@@ -453,22 +399,16 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
         var lastGraphSize: Int = 0
         var lastGraphID: Int = -1
 
-        // ✅ 只在必要时更新节点列表
-        val powerProjectorNodes = Seq<PowerProjectorNode.PowerProjectorNodeBuild>(
-            false,
-            16,
-            PowerProjectorNode.PowerProjectorNodeBuild::class.java
-        )
-
         var needsUpdate: Boolean = false
 
         var shouldDisable: Boolean = false
 
         // ✅ 节点缓存，只在电网更新时更新
-        var nodeCount: Int = 0
-        var nodePosArr: IntArray? = null
-        var nodeRadiusArr: FloatArray? = null
-        var nodeBoundsArr: FloatArray? = null // [minX, maxX, minY, maxY] * nodeCount
+        val powerProjectorNodes = Seq<PowerProjectorNode.PowerProjectorNodeBuild>(
+            false,
+            16,
+            PowerProjectorNode.PowerProjectorNodeBuild::class.java
+        )
 
         /**
          * 优化的子弹检测回调
@@ -503,29 +443,18 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
                     }
 
                     // 检测所有节点护盾
-                    val count = this@PowerProjectorBuild.nodeCount
-                    if (count <= 0) return@shieldConsumer
-                    val posArr = this@PowerProjectorBuild.nodePosArr!!
-                    val radiusArr = this@PowerProjectorBuild.nodeRadiusArr!!
-                    val boundsArr = this@PowerProjectorBuild.nodeBoundsArr!!
 
-                    for (i in 0 until count) {
-                        val nodePos = posArr[i]
-                        val nodeRadius = radiusArr[i]
-
-                        val node = Vars.world.build(nodePos) as? PowerProjectorNode.PowerProjectorNodeBuild ?: continue
+                    for (node in powerProjectorNodes) {
+                        val nodeRadius = node.realRadius()
 
                         if (nodeRadius <= 0f) continue
 
-                        val boundsIdx = i * 4
                         // 先做矩形粗检测，快速过滤掉不在范围内的子弹
-                        val minX = boundsArr[boundsIdx]
-                        val maxX = boundsArr[boundsIdx + 1]
-                        val minY = boundsArr[boundsIdx + 2]
-                        val maxY = boundsArr[boundsIdx + 3]
-                        if (bx !in minX..maxX || by !in minY..maxY) {
-                            continue
-                        }
+                        val minX = node.x - nodeRadius
+                        val maxX = node.x + nodeRadius
+                        val minY = node.y - nodeRadius
+                        val maxY = node.y + nodeRadius
+                        if (bx !in minX..maxX || by !in minY..maxY) continue
 
                         // 矩形内才执行昂贵的多边形检测
                         val inPolygon = Intersector.isInRegularPolygon(
@@ -611,11 +540,6 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
             lastGraph = null
             powerProjectorNodes.clear()
             shouldDisable = false
-            // 清理缓存
-            nodeCount = 0
-            nodePosArr = null
-            nodeRadiusArr = null
-            nodeBoundsArr = null
         }
 
         override fun inFogTo(viewer: Team?): Boolean = false
@@ -716,35 +640,6 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
                     }
                 }
             }
-
-            // ✅ 同时更新缓存数组
-            updateNodeCache()
-        }
-
-        // ✅ 更新节点缓存
-        private fun updateNodeCache() {
-            val nodeSize = powerProjectorNodes.size
-            val posArr = IntArray(nodeSize)
-            val radiusArr = FloatArray(nodeSize)
-            val boundsArr = FloatArray(nodeSize * 4)
-            val radius = realRadius()
-
-            for ((idx, node) in powerProjectorNodes.withIndex()) {
-                val nodeRadius = radius * node.radiusScl
-                posArr[idx] = node.pos()
-                radiusArr[idx] = nodeRadius
-
-                val boundsIdx = idx * 4
-                boundsArr[boundsIdx] = node.x - nodeRadius
-                boundsArr[boundsIdx + 1] = node.x + nodeRadius
-                boundsArr[boundsIdx + 2] = node.y - nodeRadius
-                boundsArr[boundsIdx + 3] = node.y + nodeRadius
-            }
-
-            nodeCount = nodeSize
-            nodePosArr = posArr
-            nodeRadiusArr = radiusArr
-            nodeBoundsArr = boundsArr
         }
 
         fun breakShield() {
@@ -818,26 +713,24 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
             var minY = y - radius
             var maxY = y + radius
 
-            val count = nodeCount
-            val boundsArr = nodeBoundsArr
-            if (count > 0 && boundsArr != null) {
-
-                @Suppress("EmptyRange")
-                for (i in 0 until count) {
-                    val boundsIdx = i * 4
-                    val nodeMinX = boundsArr[boundsIdx]
-                    val nodeMaxX = boundsArr[boundsIdx + 1]
-                    val nodeMinY = boundsArr[boundsIdx + 2]
-                    val nodeMaxY = boundsArr[boundsIdx + 3]
 
 
-                    // 取更小的min，更大的max
-                    minX = minX.coerceAtMost(nodeMinX)
-                    maxX = maxX.coerceAtLeast(nodeMaxX)
-                    minY = minY.coerceAtMost(nodeMinY)
-                    maxY = maxY.coerceAtLeast(nodeMaxY)
-                }
+
+            for (node in powerProjectorNodes) {
+                val nodeMinX = node.x - node.radiusScl * radius
+                val nodeMaxX = node.x + node.radiusScl * radius
+                val nodeMinY = node.y - node.radiusScl * radius
+                val nodeMaxY = node.y + node.radiusScl * radius
+
+
+                // 取更小的min，更大的max
+
+                minX = min(minX, nodeMinX)
+                maxX = max(maxX, nodeMaxX)
+                minY = min(minY, nodeMinY)
+                maxY = max(maxY, nodeMaxY)
             }
+
 
 
             Groups.bullet.intersect(
@@ -860,10 +753,9 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
         }
 
         fun realRadius(): Float {
-            // 临时调试：直接返回固定半径
             val r = (radius + phaseHeat * phaseRadiusBoost) * radscl
-            if (r < 0.1f) {
-                return 0f // 临时：返回固定半径
+            if (r < 0.01f) {
+                return 0f
             }
             return r
         }
@@ -890,6 +782,7 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
             }
 
         }
+
 
         fun drawShield() {
             val radius = realRadius()
@@ -960,6 +853,11 @@ open class PowerProjector(name: String) : Block(name), EntropyBlock {
             lastGraph = null
             lastGraphID = -1
         }
+
+        fun PowerProjectorNode.PowerProjectorNodeBuild.realRadius(): Float {
+            return this@PowerProjectorBuild.realRadius() * radiusScl
+        }
     }
+
 
 }

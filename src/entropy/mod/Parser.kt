@@ -2,17 +2,20 @@
 
 package entropy.mod
 
+import arc.graphics.Color
 import arc.util.serialization.Json
 import arc.util.serialization.JsonReader
 import arc.util.serialization.JsonValue
 import arc.util.serialization.Jval
 import entropy.log
 import entropy.mod.ParserMap.register
+import entropy.mod.special.MultiItem
 import mindustry.Vars
 import mindustry.ctype.Content
 import mindustry.ctype.ContentType
 import mindustry.ctype.MappableContent
 import mindustry.ctype.UnlockableContent
+import mindustry.type.Item
 
 abstract class Parser<T>(val typeClass: Class<T>) {
     companion object {
@@ -55,12 +58,12 @@ abstract class Parser<T>(val typeClass: Class<T>) {
                 return true
             }
             val typeName = type.toString()
-            val classType = typeAlias.get(typeName, ClassMap.getClass(typeName))
+            val classType = ClassMap.getClass(typeName)
             if (classType == null) {
                 "[$jsonPath] 中type字段$typeName 不存在".pLog()
                 return true
             }
-            val content = ParserMap.get(classType)
+            val content = ParserMap[classType]
             if (content == null) {
                 "[$jsonPath] $typeName 不存在解析器".pLog()
                 return true
@@ -70,7 +73,7 @@ abstract class Parser<T>(val typeClass: Class<T>) {
     }
 
     init {
-        register(typeClass, this)
+        register(this)
     }
 
     /**
@@ -84,32 +87,32 @@ abstract class Parser<T>(val typeClass: Class<T>) {
      *
      * 3.一般只对对象类型的属性进行解析
      */
-    abstract fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>)
+    abstract fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String> = emptyArray())
 
-    fun parse(obj: T, str: String, availableNamespace: Array<String>) =
-        parse(obj, str.toJsonValue()!!, availableNamespace)
+    fun parse(obj: T, str: String, availableNamespace: Array<String> = emptyArray()) =
+        parse(obj, str.toJsonValue()!!, "", availableNamespace)
 
     abstract class ContentParser<T : Content>(typeClass: Class<T>) : Parser<T>(typeClass) {
-        override fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>) {
+        override fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String>) {
             if (jsonValue.isNull) return
             jsonValue.remove("id")
+            jsonValue.remove("type")
         }
     }
 
     abstract class MappableContentParser<T : MappableContent>(typeClass: Class<T>) : ContentParser<T>(typeClass) {
-        override fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>) {
-            super.parse(obj, jsonValue, availableNamespace)
+        override fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String>) {
+            super.parse(obj, jsonValue, jsonPath, availableNamespace)
             if (jsonValue.isNull) return
             jsonValue.remove("name")
         }
     }
 
-    abstract class UnlockableContentParser<T : UnlockableContent>(typeClass: Class<T>) :
-        MappableContentParser<T>(typeClass) {
+    abstract class UnlockableContentParser<T : UnlockableContent>(typeClass: Class<T>) : MappableContentParser<T>(typeClass) {
 //        val fields = mapOf("shownPlanets" to )
 
-        override fun parse(obj: T, jsonValue: JsonValue, availableNamespace: Array<String>) {
-            super.parse(obj, jsonValue, availableNamespace)
+        override fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String>) {
+            super.parse(obj, jsonValue, jsonPath, availableNamespace)
             if (jsonValue.isNull) return
             val shownPlanets = jsonValue.remove("shownPlanets") ?: return
             if (shownPlanets.isNull) return
@@ -130,7 +133,75 @@ abstract class Parser<T>(val typeClass: Class<T>) {
                     }
                 }
             }
-
         }
+    }
+
+    class ItemParser<T : Item>(typeClass: Class<T>) : UnlockableContentParser<T>(typeClass) {
+        override fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String>) {
+            super.parse(obj, jsonValue, jsonPath, availableNamespace)
+            if (jsonValue.isNull) return
+            //无需特殊处理的
+        }
+    }
+
+    class MultiItemParser<T : MultiItem>(typeClass: Class<T>) : Parser<T>(typeClass) {
+        override fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String>) {
+            if (jsonValue.isNull) return
+            jsonValue.remove("type")
+            val items = jsonValue.get("items") ?: return
+            when {
+                items.isNull || items.size <= 0 -> {
+                    "[$jsonPath] 中items字段为空".pLog()
+                }
+
+                items.isArray -> {
+                    val itemArray = Array<Item?>(items.size) { null }
+
+                    items.forEachIndexed { index, it ->
+                        if (!it.isObject || it.size <= 0) return@forEachIndexed
+                        val name = it.remove("name")
+
+                        if (checkFieldIsNull(name, jsonPath, index)) return
+                        val colorField = it.remove("color")
+                        var color = Color(Color.black)
+                        if (!checkFieldIsNull(colorField, jsonPath, index)) color = Color.valueOf(colorField.asString())
+                        val item = Item(name.asString(), color)
+                        itemArray[index] = item
+                        if (it.isNull || it.size <= 0) return@forEachIndexed
+                        json.readFields(item, it)
+                    }
+
+                    obj.items = itemArray
+                }
+
+                items.isObject -> {
+                    val itemArray = Array<Item?>(items.size) { null }
+
+                    items.forEachIndexed { index, it ->
+                        if (!it.isObject || it.size <= 0) return@forEachIndexed
+                        val name = it.name ?: return@forEachIndexed
+                        val colorField = it.remove("color")
+                        var color = Color(Color.black)
+                        if (!checkFieldIsNull(colorField, jsonPath, index)) color = Color.valueOf(colorField.asString())
+                        val item = Item(name, color)
+                        itemArray[index] = item
+                        if (it.isNull || it.size <= 0) return@forEachIndexed
+                        json.readFields(item, it)
+                    }
+
+                    obj.items = itemArray
+                }
+            }
+        }
+
+        fun checkFieldIsNull(name: JsonValue?, jsonPath: String, index: Int): Boolean {
+            if (name == null || name.isNull) {
+                "[$jsonPath] 中items字段 第${index}个元素 中没有name字段或者name字段为空".pLog()
+                return true
+            }
+            return false
+        }
+
+
     }
 }
