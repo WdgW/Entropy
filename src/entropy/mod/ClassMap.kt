@@ -10,12 +10,7 @@ import entropy.world.PowerProjectorNode
  * 类型映射表，提供类型安全的类注册和获取
  */
 object ClassMap {
-    private val classMap = HashMap<String, ClassInfo>()
-
-    private data class ClassInfo(
-        val classType: Class<*>,
-        val constructor: (jsonValue: JsonValue, jsonPath: String) -> Any?
-    )
+    private val classMap = HashMap<String, Pair<Class<*>, (jsonValue: JsonValue, jsonPath: String) -> Any?>>()
 
     @Suppress("UNCHECKED_CAST")
     fun <T> addClass(
@@ -24,13 +19,13 @@ object ClassMap {
         constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
     ): Boolean {
         if (classMap.containsKey(name)) return false
-        classMap[name] = ClassInfo(classType) { jsonValue, jsonPath ->
+        classMap[name] = Pair(classType) { jsonValue, jsonPath ->
             constructor(jsonValue, jsonPath)
         }
         //首字母小写
         val lowerName = name.firstCharLowerCase()
         if (lowerName != name) {
-            classMap[lowerName] = ClassInfo(classType) { jsonValue, jsonPath ->
+            classMap[lowerName] = Pair(classType) { jsonValue, jsonPath ->
                 constructor(jsonValue, jsonPath)
             }
         }
@@ -40,35 +35,36 @@ object ClassMap {
     /**
      * 获取类的Class类型
      */
-    fun getClass(name: String): Class<*>? = classMap[name]?.classType
+    fun getClass(name: String): Class<*>? = classMap[name]?.first
 
     /**
      * 获取构造函数
      */
     @Suppress("UNCHECKED_CAST")
     fun <T> getConstructor(name: String): ((jsonValue: JsonValue, jsonPath: String) -> T?)? {
-        return classMap[name]?.constructor as? (JsonValue, String) -> T?
+        return classMap[name]?.second as? (JsonValue, String) -> T?
     }
 
     fun hasClass(name: String): Boolean = name in classMap
 
-    fun removeClass(name: String) = classMap.remove(name)
+    fun removeClass(name: String) {
+        classMap.remove(name)
+    }
 
     fun clear() = classMap.clear()
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T> register(
+    inline fun <reified T> register(
         name: String,
-        constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
+        noinline constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
     ): Boolean {
         if (classMap.containsKey(name)) return false
-        classMap[name] = ClassInfo(T::class.java) { jsonValue, jsonPath ->
+        classMap[name] = Pair(T::class.java) { jsonValue, jsonPath ->
             constructor(jsonValue, jsonPath)
         }
         //首字母小写
         val lowerName = name.firstCharLowerCase()
         if (lowerName != name) {
-            classMap[lowerName] = ClassInfo(T::class.java) { jsonValue, jsonPath ->
+            classMap[lowerName] = Pair(T::class.java) { jsonValue, jsonPath ->
                 constructor(jsonValue, jsonPath)
             }
         }
