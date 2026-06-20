@@ -6,41 +6,78 @@ import entropy.mod.special.MultiItem
 import entropy.world.PowerProjector
 import entropy.world.PowerProjectorNode
 
+/**
+ * 类型映射表，提供类型安全的类注册和获取
+ */
 object ClassMap {
-    val classMap = HashMap<String, Pair<Class<*>, (jsonValue: JsonValue, jsonPath: String) -> Any?>>()
-    fun <T> addClass(name: String, classType: Class<T>, constructor: (jsonValue: JsonValue, jsonPath: String) -> T?): Boolean {
+    private val classMap = HashMap<String, ClassInfo>()
+
+    private data class ClassInfo(
+        val classType: Class<*>,
+        val constructor: (jsonValue: JsonValue, jsonPath: String) -> Any?
+    )
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> addClass(
+        name: String,
+        classType: Class<T>,
+        constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
+    ): Boolean {
         if (classMap.containsKey(name)) return false
-        classMap[name] = Pair(classType, constructor)
+        classMap[name] = ClassInfo(classType) { jsonValue, jsonPath ->
+            constructor(jsonValue, jsonPath)
+        }
+        //首字母小写
+        val lowerName = name.firstCharLowerCase()
+        if (lowerName != name) {
+            classMap[lowerName] = ClassInfo(classType) { jsonValue, jsonPath ->
+                constructor(jsonValue, jsonPath)
+            }
+        }
         return true
     }
 
-    operator fun get(name: String) = classMap[name]
+    operator fun get(name: String): ClassInfo? = classMap[name]
 
-    operator fun get(name: String, default: Pair<Class<*>, (jsonValue: JsonValue, jsonPath: String) -> Any?>) = classMap[name] ?: default
+    @Suppress("UNCHECKED_CAST")
+    fun <T> get(name: String, default: ClassInfo): ClassInfo = classMap[name] ?: default
 
-    fun getClass(name: String) = classMap[name]?.first
+    fun getClass(name: String): Class<*>? = classMap[name]?.classType
 
-    fun getConstructor(name: String) = classMap[name]?.second
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getConstructor(name: String): ((jsonValue: JsonValue, jsonPath: String) -> T?)? {
+        return classMap[name]?.constructor as? (JsonValue, String) -> T?
+    }
 
-    fun hasClass(name: String) = this[name] != null
+    fun hasClass(name: String): Boolean = name in classMap
 
     fun removeClass(name: String) = classMap.remove(name)
 
     fun clear() = classMap.clear()
 
-    inline fun <reified T> register(name: String, noinline constructor: (jsonValue: JsonValue, jsonPath: String) -> T?): Boolean {
+    inline fun <reified T> register(
+        name: String,
+        noinline constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
+    ): Boolean {
         if (classMap.containsKey(name)) return false
-        classMap[name] = Pair(T::class.java, constructor)
+        classMap[name] = ClassInfo(T::class.java) { jsonValue, jsonPath ->
+            constructor(jsonValue, jsonPath)
+        }
         //首字母小写
-        classMap[name.firstCharLowerCase()] = Pair(T::class.java, constructor)
+        val lowerName = name.firstCharLowerCase()
+        if (lowerName != name) {
+            classMap[lowerName] = ClassInfo(T::class.java) { jsonValue, jsonPath ->
+                constructor(jsonValue, jsonPath)
+            }
+        }
         return true
     }
 
-    fun String.firstCharLowerCase() = if (isEmpty()) this else replaceFirstChar { it.lowercase() }
-
+    private fun String.firstCharLowerCase(): String =
+        if (isEmpty()) this else replaceFirstChar { it.lowercaseChar() }
 
     init {
-        register("PowerProjectorNode") { jsonValue, jsonPath ->
+        register<PowerProjectorNode>("PowerProjectorNode") { jsonValue, jsonPath ->
             if (jsonValue.isNull || jsonValue.size <= 0) return@register null
             val nameValue = jsonValue.remove("name")
             if (nameValue == null || nameValue.isNull || !nameValue.isString) {
@@ -52,9 +89,9 @@ object ClassMap {
                 "$jsonPath 中name字段为空".pLog()
                 return@register null
             }
-            return@register PowerProjectorNode(name)
+            PowerProjectorNode(name)
         }
-        register("PowerProjector") { jsonValue, jsonPath ->
+        register<PowerProjector>("PowerProjector") { jsonValue, jsonPath ->
             if (jsonValue.isNull || jsonValue.size <= 0) return@register null
             val nameValue = jsonValue.remove("name")
             if (nameValue == null || nameValue.isNull || !nameValue.isString) {
@@ -66,9 +103,9 @@ object ClassMap {
                 "$jsonPath 中name字段为空".pLog()
                 return@register null
             }
-            return@register PowerProjector(name)
+            PowerProjector(name)
         }
-        register("MultiItem") { _, _ -> MultiItem() }
+        register<MultiItem>("MultiItem") { _, _ -> MultiItem() }
         "_______".pLog()
     }
 }

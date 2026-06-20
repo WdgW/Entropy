@@ -89,8 +89,25 @@ abstract class Parser<T>(val typeClass: Class<T>) {
      */
     abstract fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String> = emptyArray())
 
-    fun parse(obj: T, str: String, availableNamespace: Array<String> = emptyArray()) =
-        parse(obj, str.toJsonValue()!!, "", availableNamespace)
+    /**
+     * 从字符串解析，重载方法
+     * @throws NullPointerException 当json字符串解析失败时
+     */
+    fun parse(obj: T, str: String, availableNamespace: Array<String> = emptyArray()) {
+        val jsonValue = str.toJsonValue()
+            ?: throw NullPointerException("JSON解析失败: $str")
+        parse(obj, jsonValue, "", availableNamespace)
+    }
+
+    /**
+     * 从字符串解析，安全版本
+     * @return 是否解析成功
+     */
+    fun parseOrNull(obj: T, str: String, availableNamespace: Array<String> = emptyArray()): Boolean {
+        val jsonValue = str.toJsonValue() ?: return false
+        parse(obj, jsonValue, "", availableNamespace)
+        return true
+    }
 
     abstract class ContentParser<T : Content>(typeClass: Class<T>) : Parser<T>(typeClass) {
         override fun parse(obj: T, jsonValue: JsonValue, jsonPath: String, availableNamespace: Array<String>) {

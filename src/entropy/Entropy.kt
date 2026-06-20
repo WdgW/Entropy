@@ -91,10 +91,11 @@ class Entropy : Mod() {
                 if (jsonValue.isObject) {
 //                    json.readString().pLog()
                     check(jsonValue, json.path(), typeAlias).ifTrue { continue@loop }
-                    val (classType, constructor) = jsonValue["type"]?.asString()?.let { ClassMap[it] } ?: continue
-                    classType.pLog()
-                    val parser = ParserMap[classType] ?: continue
-                    val obj = constructor(jsonValue, json.path()) ?: continue
+                    val className = jsonValue["type"]?.asString() ?: continue
+                    val classInfo = ClassMap[className] ?: continue
+                    classInfo.classType.pLog()
+                    val parser = ParserMap[classInfo.classType] ?: continue
+                    val obj = classInfo.constructor(jsonValue, json.path()) ?: continue
                     @Suppress("UNCHECKED_CAST")
                     (parser as Parser<Any>).parse(obj, json.path(), arrayOf(modName))
 
