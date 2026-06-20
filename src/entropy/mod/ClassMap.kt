@@ -10,7 +10,7 @@ import entropy.world.PowerProjectorNode
  * 类型映射表，提供类型安全的类注册和获取
  */
 object ClassMap {
-    private val classMap = HashMap<String, Pair<Class<*>, (jsonValue: JsonValue, jsonPath: String) -> Any?>>()
+    internal val classMap = HashMap<String, Pair<Class<*>, (jsonValue: JsonValue, jsonPath: String) -> Any?>>()
 
     @Suppress("UNCHECKED_CAST")
     fun <T> addClass(
@@ -19,15 +19,11 @@ object ClassMap {
         constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
     ): Boolean {
         if (classMap.containsKey(name)) return false
-        classMap[name] = Pair(classType) { jsonValue, jsonPath ->
-            constructor(jsonValue, jsonPath)
-        }
+        classMap[name] = Pair(classType, constructor)
         //首字母小写
         val lowerName = name.firstCharLowerCase()
         if (lowerName != name) {
-            classMap[lowerName] = Pair(classType) { jsonValue, jsonPath ->
-                constructor(jsonValue, jsonPath)
-            }
+            classMap[lowerName] = Pair(classType, constructor)
         }
         return true
     }
@@ -58,20 +54,13 @@ object ClassMap {
         noinline constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
     ): Boolean {
         if (classMap.containsKey(name)) return false
-        classMap[name] = Pair(T::class.java) { jsonValue, jsonPath ->
-            constructor(jsonValue, jsonPath)
-        }
+        classMap[name] = Pair(T::class.java, constructor)
         //首字母小写
-        val lowerName = name.firstCharLowerCase()
-        if (lowerName != name) {
-            classMap[lowerName] = Pair(T::class.java) { jsonValue, jsonPath ->
-                constructor(jsonValue, jsonPath)
-            }
-        }
+        classMap[name.firstCharLowerCase()] = Pair(T::class.java, constructor)
         return true
     }
 
-    private fun String.firstCharLowerCase(): String =
+    internal fun String.firstCharLowerCase(): String =
         if (isEmpty()) this else replaceFirstChar { it.lowercaseChar() }
 
     init {
