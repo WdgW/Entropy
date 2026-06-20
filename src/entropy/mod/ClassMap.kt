@@ -37,13 +37,14 @@ object ClassMap {
         return true
     }
 
-    operator fun get(name: String): ClassInfo? = classMap[name]
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> get(name: String, default: ClassInfo): ClassInfo = classMap[name] ?: default
-
+    /**
+     * 获取类的Class类型
+     */
     fun getClass(name: String): Class<*>? = classMap[name]?.classType
 
+    /**
+     * 获取构造函数
+     */
     @Suppress("UNCHECKED_CAST")
     fun <T> getConstructor(name: String): ((jsonValue: JsonValue, jsonPath: String) -> T?)? {
         return classMap[name]?.constructor as? (JsonValue, String) -> T?
@@ -55,9 +56,10 @@ object ClassMap {
 
     fun clear() = classMap.clear()
 
-    inline fun <reified T> register(
+    @Suppress("UNCHECKED_CAST")
+    fun <T> register(
         name: String,
-        noinline constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
+        constructor: (jsonValue: JsonValue, jsonPath: String) -> T?
     ): Boolean {
         if (classMap.containsKey(name)) return false
         classMap[name] = ClassInfo(T::class.java) { jsonValue, jsonPath ->
